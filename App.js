@@ -12,8 +12,8 @@ import SplashScreen from 'react-native-splash-screen';
 
 import 'react-native-gesture-handler';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+
+
 
 
 
@@ -35,11 +35,12 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import {Provider as AuthProvider} from './context/AuthContext.js';
 
 // Screens
-import OnboardingScreen from './screens/OnboardingScreen';
+import Navigator from './Navigator';
 
-const Stack = createStackNavigator()
+
 
 const Section = ({children, title}): Node => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -69,20 +70,18 @@ const Section = ({children, title}): Node => {
 
 const App: () => Node = () => {
   const isDarkMode = useColorScheme() === 'dark';
-useEffect(() => {
-  SplashScreen.hide()
-  
-}, [])
+  useEffect(() => {
+    SplashScreen.hide()
+    
+  }, [])
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator headerMode="none">
-        <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <AuthProvider>
+      <Navigator/>
+    </AuthProvider>
   );
 };
 

@@ -8,6 +8,8 @@ import {Context as AuthContext} from './context/AuthContext';
 // Screens
 import Login from './screens/Login';
 import HomeScreen from './screens/HomeScreen';
+import AddABusiness from './screens/AddABusiness';
+import Menu from './screens/Menu';
 
 function OnboardingStack(){
     const Onboard = createStackNavigator()
@@ -33,9 +35,11 @@ function MainStack(){
     const Main = createStackNavigator()
     return(
         <NavigationContainer>
-        <Main.Navigator headerMode="none">
-            <Main.Screen name="HomeScreen" component={HomeScreen} />
-        </Main.Navigator>
+            <Main.Navigator headerMode="none">
+                <Main.Screen name="HomeScreen" component={HomeScreen} />
+                <Main.Screen name="AddABusiness" component={AddABusiness} />
+                <Main.Screen name="Menu" component={Menu} />
+            </Main.Navigator>
         </NavigationContainer>
     )
 }

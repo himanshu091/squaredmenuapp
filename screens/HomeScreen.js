@@ -1,12 +1,14 @@
 import React from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
+import AddNewButton from '../components/AddNewButton'
+import RestaurantCard from '../components/RestaurantCard'
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
     return (
         <SafeAreaView>
             <View>
-                <ImageBackground source={require('../assets/images/banners/lands.png')} style={styles.banner} resizeMode="cover">
+                <ImageBackground source={require('../assets/images/banners/lands.png')} style={styles.banner} resizeMode="stretch">
                     <TouchableOpacity style={styles.bell}><Image source={require('../assets/images/icons/bell.png')}/></TouchableOpacity>
                     <View style={styles.logoContainer}>
                         <Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo}/>
@@ -20,14 +22,9 @@ const HomeScreen = () => {
                         </View>
                     </View>
                 </ImageBackground>
-                <TouchableOpacity style={styles.card}>
-                    <View style={styles.subBox}>
-                        <Image source={require('../assets/images/icons/plus.png')} style={styles.plus} />
-                    </View>
-                    <Text style={styles.new}>Add New</Text>
-                </TouchableOpacity>
+                <RestaurantCard name='Menu' navigation={navigation}/>
+                <AddNewButton name='AddABusiness' navigation={navigation}/>
             </View>
-            
         </SafeAreaView>
     )
 }
@@ -38,7 +35,8 @@ const styles = StyleSheet.create({
     banner:{
         position: 'relative',
         width: widthPercentageToDP(100),
-        height: heightPercentageToDP(30)
+        height: heightPercentageToDP(30),
+        marginBottom: 30
     },
     logoContainer:{
         display:'flex',
@@ -64,39 +62,12 @@ const styles = StyleSheet.create({
         flexBasis: widthPercentageToDP(60),
     },
     name:{
-        lineHeight: heightPercentageToDP(5),
+        lineHeight: 38,
         fontFamily: 'Poppins Medium',
         fontStyle: 'normal',
         fontSize: 37,
         color: '#FFFFFF'
     },
-    card:{
-        backgroundColor: '#fff',
-        borderRadius: 17,
-        width: widthPercentageToDP(84),
-        height: 115,
-        padding: 10,
-        marginHorizontal: widthPercentageToDP(8),
-        marginTop: 40,
-        elevation: 2,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center'
-    },
-    subBox: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 97,
-        height: '100%',
-        backgroundColor:'#635CC910',
-        borderRadius: 10,
-    },
-    new:{
-        fontFamily: 'Poppins Medium',
-        color: '#635CC9',
-        fontSize: 15,
-        marginLeft: 15
-    }
+    
 
 })

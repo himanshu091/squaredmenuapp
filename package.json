@@ -24,7 +24,10 @@
     "react-native-screens": "^2.18.1",
     "react-native-splash-screen": "^3.2.0",
     "react-native-svg": "^12.1.0",
+<<<<<<< HEAD
     "react-native-svg-transformer": "^0.14.3",
+=======
+>>>>>>> 33edc4399f174c4b074d987c3e1732f00f8bfd37
     "react-native-swipe-gestures": "^1.0.5",
     "react-native-vector-icons": "^8.1.0"
   },

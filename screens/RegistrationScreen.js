@@ -11,19 +11,22 @@ import {
   
 } from 'react-native';
 import {Button} from 'react-native-elements'
+import Bg1 from '../assets/images/banners/bg1.svg'
+
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
-import Bg1 from '../assets/images/banners/bg1.svg'
 
-const Login = ({navigation}) => {
+const RegistrationScreen = () => {
+    const [name, onChangeName] = React.useState(null);
+    const [number, onChangeNumber] = React.useState(null);
     const [email, onChangeEmail] = React.useState(null);
     const [password, onChangePassword] = React.useState(null);
   return (
     <ScrollView>
-      <Bg1
+  <Bg1
   height={hp('40%')}
   width={wp('100%')}
     style={{
@@ -34,9 +37,11 @@ const Login = ({navigation}) => {
     
     
     />
-    
+     
+     
+       
         <View style={styles.topElements}>
-          <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('RegistrationScreen')}>
+          <TouchableOpacity style={styles.button}>
             <Image
               source={require('../assets/images/topbar/back.png')}
               style={styles.button_image}
@@ -50,15 +55,33 @@ const Login = ({navigation}) => {
         </View>
 
         <View style={styles.heading}>
-          <Text style={styles.headingText}>Welcome Back</Text>
+          <Text style={styles.headingText}>Welcome to Squared Menu</Text>
         </View>
-      
+    
     <View style={styles.inputFields}>
+    <TextInput
+        style={styles.input}
+        onChangeText={onChangeName}
+        value={name}
+        placeholder="name"
+        textAlign="center"
+        placeholderTextColor="#635CC9"
+        
+      />
     <TextInput
         style={styles.input}
         onChangeText={onChangeEmail}
         value={email}
-        placeholder="email / contact number"
+        placeholder="email"
+        textAlign="center"
+        placeholderTextColor="#635CC9"
+        
+      />
+       <TextInput
+        style={styles.input}
+        onChangeText={onChangeNumber}
+        value={number}
+        placeholder="contact number"
         textAlign="center"
         placeholderTextColor="#635CC9"
         
@@ -74,16 +97,17 @@ const Login = ({navigation}) => {
       />
      <Button
   
-          title="Login"
+          title="Register"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
           containerStyle={{marginTop:10}} 
          
         />
-        <Text style={styles.forgotText}>Forgot password?</Text>
-        <Text style={styles.forgotText}>or login using</Text>
+        
+        <Text style={styles.forgotText}>or register using</Text>
       <SocialMediaIcon/>
-      <Text style={styles.bottomText}>I don't have an account</Text>
+      <Text style={styles.bottomText}>Register using promo code</Text>
+      <Text style={styles.registerText}>Policy and T&C</Text>
         
     </View>
 
@@ -91,11 +115,11 @@ const Login = ({navigation}) => {
   );
 };
 
-export default Login;
+export default RegistrationScreen;
 
 const styles = StyleSheet.create({
   heading: {
-
+ 
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
     marginBottom: 40,
@@ -104,8 +128,8 @@ const styles = StyleSheet.create({
   headingText: {
     color: 'white',
     fontFamily: 'Poppins Medium',
-    fontSize: 37,
-    width: wp('50%'),
+    fontSize: 30,
+    width: wp('60%'),
     lineHeight: 50 * 0.75,
     paddingTop: 40 - 35 * 0.75,
   },
@@ -172,5 +196,12 @@ marginTop:hp('8%')
     marginVertical:40,
     fontSize:15,
     fontFamily:"Poppins Medium"
+  },
+  registerText:{
+    fontSize:15,
+    color:"#757575",
+    fontFamily:"Poppins Regular",
+    textAlign:'center',
+    marginVertical:10 
   }
 });

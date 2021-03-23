@@ -1,13 +1,27 @@
 import React from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
-import Svg, { Circle, ClipPath, Defs, Path, Image as ImageSVG, Rect, Ellipse, Polygon, G, RadialGradient, Stop } from 'react-native-svg'
-
+import HeaderSVG from '../components/HeaderSVG'
+import MenuButtons from '../components/MenuButtons'
+import NewMenuButton from '../components/NewMenuButton'
+const data = [
+    {
+        title: "Breakfast Menu",
+        uri: "https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+    },
+    {
+        title: "Lunch Menu",
+        uri: "https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
+    },
+    
+]
 const Menu = ({navigation}) => {
     return (
         <SafeAreaView>
-            <View>
-                <ImageBackground source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
+            <View style={{minHeight:heightPercentageToDP(100)}}>
+            <ScrollView>
+                <HeaderSVG uri="https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"/>
+                <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
                     <TouchableOpacity 
                         style={styles.bell}
                         onPress={()=>navigation.goBack()}
@@ -20,47 +34,13 @@ const Menu = ({navigation}) => {
                             <Text style={styles.name}>Silema Menus</Text>
                         </View>
                     </View>
-                </ImageBackground>
-                {/* <Svg
-                    width={widthPercentageToDP(100)}
-                    height={heightPercentageToDP(30)}
-                    // viewBox="-16 -16 544 544"
-                    >
-                    <Path d="M160 218.5C96 243.5 44.5 179 0 208.5V0H375V180C284 236 294.855 165.822 160 218.5Z" fill="#635CC9"/>
-                    
-                </Svg> */}
-                <Svg width={widthPercentageToDP(100)} height={160}>
-                    <Defs>
-                        <ClipPath id="clip">
-                            <Path d="M160 218.5C96 243.5 44.5 179 0 208.5V0H375V180C284 236 294.855 165.822 160 218.5Z" fill="#635CC9"/>
-                        </ClipPath>
-                    </Defs>
-                    {/* <Rect x="0" y="0" width="160" height="160" fill="red" clipPath="#clip" /> */}
-                    <ImageSVG x="0" y="0" width={widthPercentageToDP(100)} height="160" href={{ uri: 'https://image.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-260nw-1725825019.jpg' }} clipPath="#clip" />
-                </Svg>
-                <Svg height={heightPercentageToDP(30)} width={widthPercentageToDP(100)}>
-                    <Defs>
-                        <RadialGradient
-                        id="grad"
-                        cx="50%"
-                        cy="50%"
-                        rx="50%"
-                        ry="50%"
-                        fx="50%"
-                        fy="50%"
-                        gradientUnits="userSpaceOnUse"
-                        >
-                        <Stop offset="0%" stopColor="#ff0" stopOpacity="1" />
-                        <Stop offset="100%" stopColor="#00f" stopOpacity="1" />
-                        </RadialGradient>
-                        <ClipPath id="clip">
-                        <Path d="M160 218.5C96 243.5 44.5 179 0 208.5V0H375V180C284 236 294.855 165.822 160 218.5Z" fill="#635CC9"/>
-
-                        {/* <Path d="M160 218.5C96 243.5 44.5 179 0 208.5V0H375V180C284 236 294.855 165.822 160 218.5Z" fill="#635CC9"/> */}
-                        </ClipPath>
-                    </Defs>
-                    <ImageSVG x="0" y="0" width={widthPercentageToDP(100)} height="160" href={{ uri: 'https://image.shutterstock.com/image-photo/mountains-under-mist-morning-amazing-260nw-1725825019.jpg' }} clipPath="#clip" />
-                </Svg>
+                </View>
+               {data && data.map((item, idx) => {
+                   return <MenuButtons key={idx} title={item.title} uri={item.uri}/>
+               })}
+                
+               <NewMenuButton/>
+            </ScrollView>
             </View>
         </SafeAreaView>
     )
@@ -72,7 +52,8 @@ const styles = StyleSheet.create({
     banner:{
         position: 'relative',
         width: widthPercentageToDP(100),
-        height: heightPercentageToDP(30)
+        height: heightPercentageToDP(30),
+        marginBottom: 25
     },
     logoContainer:{
         display:'flex',
@@ -95,13 +76,16 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     nameContainer:{
-        flexBasis: widthPercentageToDP(100),
+        flexBasis: widthPercentageToDP(66),
+        flexDirection:'row'
     },
     name:{
+        flexWrap:'wrap',
         fontFamily: 'Poppins Medium',
         fontStyle: 'normal',
         fontSize: 37,
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        lineHeight:40
     },
     card:{
         backgroundColor: '#fff',

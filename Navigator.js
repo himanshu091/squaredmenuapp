@@ -44,8 +44,8 @@ function Navigator() {
     const {state} = React.useContext(AuthContext);
     return (
         <>
-            {state.new_device  ? (<OnboardingStack/>):(
-                !state.token?(<AuthStack/>):(<MainStack/>)
+            {!state.new_device  ? (<OnboardingStack/>):(
+                state.token?(<AuthStack/>):(<MainStack/>)
             )}
         </>
     )

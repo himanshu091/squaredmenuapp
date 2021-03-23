@@ -8,12 +8,9 @@ import {Context as AuthContext} from './context/AuthContext';
 // Screens
 import Login from './screens/Login';
 import HomeScreen from './screens/HomeScreen';
-<<<<<<< HEAD
 import RegistrationScreen from './screens/RegistrationScreen';
-=======
 import AddABusiness from './screens/AddABusiness';
 import Menu from './screens/Menu';
->>>>>>> 33edc4399f174c4b074d987c3e1732f00f8bfd37
 
 function OnboardingStack(){
     const Onboard = createStackNavigator()
@@ -53,8 +50,8 @@ function Navigator() {
     const {state} = React.useContext(AuthContext);
     return (
         <>
-            {state.new_device  ? (<OnboardingStack/>):(
-                !state.token?(<AuthStack/>):(<MainStack/>)
+            {!state.new_device  ? (<OnboardingStack/>):(
+                state.token?(<AuthStack/>):(<MainStack/>)
             )}
         </>
     )

@@ -19,22 +19,22 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 
-const RegistrationScreen = ({navigation}) => {
+const RegisterPromoCode = ({navigation}) => {
     const [name, onChangeName] = React.useState(null);
+    const [promocode, onChangePromocode] = React.useState(null);
     const [number, onChangeNumber] = React.useState(null);
     const [email, onChangeEmail] = React.useState(null);
     const [password, onChangePassword] = React.useState(null);
   return (
     <ScrollView>
   <Bg1
-  height={hp('40%')}
+  height={hp('70%')}
   width={wp('100%')}
     style={{
       position: 'absolute',
         
     }}
     resizeMode="stretch"
-    
     
     />
      
@@ -57,8 +57,7 @@ const RegistrationScreen = ({navigation}) => {
         <View style={styles.heading}>
           <Text style={styles.headingText}>Welcome to Squared Menu</Text>
         </View>
-    
-    <View style={styles.inputFields}>
+        <View style={styles.inputFields}>
     <TextInput
         style={styles.input}
         onChangeText={onChangeName}
@@ -95,14 +94,15 @@ const RegistrationScreen = ({navigation}) => {
         placeholderTextColor="#635CC9"
         
       />
-     <Button
+      <Button
   
-          title="Register"
-          titleStyle={{ fontSize: 15 }}
-          buttonStyle={styles.btn1}
-          containerStyle={{marginTop:10}} 
-         
-        />
+  title="Register"
+  titleStyle={{ fontSize: 15 }}
+  buttonStyle={styles.btn1}
+  containerStyle={{marginTop:40}} 
+  onPress={()=>navigation.navigate('TrialScreen')}
+ 
+/>
         
         <Text style={styles.forgotText}>or register using</Text>
       <SocialMediaIcon/>
@@ -110,12 +110,12 @@ const RegistrationScreen = ({navigation}) => {
       <Text style={styles.registerText}>Policy and T&C</Text>
         
     </View>
-
+    
     </ScrollView>
   );
 };
 
-export default RegistrationScreen;
+export default RegisterPromoCode;
 
 const styles = StyleSheet.create({
   heading: {

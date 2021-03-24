@@ -8,12 +8,12 @@ import {Context as AuthContext} from './context/AuthContext';
 // Screens
 import Login from './screens/Login';
 import HomeScreen from './screens/HomeScreen';
-<<<<<<< HEAD
-import RegistrationScreen from './screens/RegistrationScreen';
-=======
 import AddABusiness from './screens/AddABusiness';
 import Menu from './screens/Menu';
->>>>>>> 33edc4399f174c4b074d987c3e1732f00f8bfd37
+import RegistrationScreen from './screens/RegistrationScreen';
+import RegisterPromoCode from './screens/RegisterPromoCode';
+import TrialScreen from './screens/TrialScreen';
+
 
 function OnboardingStack(){
     const Onboard = createStackNavigator()
@@ -32,6 +32,8 @@ function AuthStack(){
             <Auth.Navigator headerMode="none">
                 <Auth.Screen name="Login" component={Login} />
                 <Auth.Screen name="RegistrationScreen" component={RegistrationScreen} />
+                <Auth.Screen name="RegisterPromoCode" component={RegisterPromoCode} />
+                <Auth.Screen name="TrialScreen" component={TrialScreen} />
             </Auth.Navigator>
         </NavigationContainer>
     )

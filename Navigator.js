@@ -12,6 +12,11 @@ import RegistrationScreen from './screens/RegistrationScreen';
 import AddABusiness from './screens/AddABusiness';
 import Menu from './screens/Menu';
 import MenuList from './screens/MenuList';
+import TrialScreen from './screens/TrialScreen';
+import RegisterPromoCode from './screens/RegisterPromoCode'
+import ThankYouRegistration from './screens/ThankYouRegistration';
+import ThankYouPurchase from './screens/ThankYouPurchase';
+
 
 function OnboardingStack(){
     const Onboard = createStackNavigator()
@@ -30,6 +35,10 @@ function AuthStack(){
             <Auth.Navigator headerMode="none">
                 <Auth.Screen name="Login" component={Login} />
                 <Auth.Screen name="RegistrationScreen" component={RegistrationScreen} />
+                <Auth.Screen name="RegisterPromoCode" component={RegisterPromoCode} />
+                <Auth.Screen name="TrialScreen" component={TrialScreen} />
+                <Auth.Screen name="ThankYouRegistration" component={ThankYouRegistration} />
+                <Auth.Screen name="ThankYouPurchase" component={ThankYouPurchase} />
             </Auth.Navigator>
         </NavigationContainer>
     )
@@ -52,7 +61,7 @@ function Navigator() {
     const {state} = React.useContext(AuthContext);
     return (
         <>
-            {!state.new_device  ? (<OnboardingStack/>):(
+            {state.new_device  ? (<OnboardingStack/>):(
                 state.token?(<AuthStack/>):(<MainStack/>)
             )}
         </>

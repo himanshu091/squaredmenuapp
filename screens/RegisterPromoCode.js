@@ -19,8 +19,9 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 
-const RegistrationScreen = ({navigation}) => {
+const RegisterPromoCode = ({navigation}) => {
     const [name, onChangeName] = React.useState(null);
+    const [promocode, onChangePromocode] = React.useState(null);
     const [number, onChangeNumber] = React.useState(null);
     const [email, onChangeEmail] = React.useState(null);
     const [password, onChangePassword] = React.useState(null);
@@ -34,7 +35,6 @@ const RegistrationScreen = ({navigation}) => {
         
     }}
     resizeMode="stretch"
-    
     
     />
      
@@ -57,8 +57,7 @@ const RegistrationScreen = ({navigation}) => {
         <View style={styles.heading}>
           <Text style={styles.headingText}>Welcome to Squared Menu</Text>
         </View>
-    
-    <View style={styles.inputFields}>
+        <View style={styles.inputFields}>
     <TextInput
         style={styles.input}
         onChangeText={onChangeName}
@@ -95,28 +94,37 @@ const RegistrationScreen = ({navigation}) => {
         placeholderTextColor="#635CC9"
         
       />
-     <Button
-  
-          title="Register"
-          titleStyle={{ fontSize: 15 }}
-          buttonStyle={styles.btn1}
-          containerStyle={{marginTop:10}} 
-          onPress={()=>navigation.navigate('ThankYouRegistration')}
-         
-        />
+        <TextInput
+        style={styles.input}
+        onChangeText={onChangePromocode}
+        value={promocode}
+        placeholder="promocode"
+        textAlign="center"
+        placeholderTextColor="#635CC9"
         
-        <Text style={styles.forgotText}>or register using</Text>
-      <SocialMediaIcon/>
-      <Text onPress={()=>navigation.navigate('RegisterPromoCode')} style={styles.bottomText}>Register using promo code</Text>
-      <Text style={styles.registerText}>Policy and T&C</Text>
+      />
+      
+      <Button
+  
+  title="Register"
+  titleStyle={{ fontSize: 15 }}
+  buttonStyle={styles.btn1}
+  containerStyle={{marginTop:40}} 
+  onPress={()=>navigation.navigate('TrialScreen')}
+ 
+/>
+        
+    
+      <Text onPress={()=>navigation.navigate('RegisterPromoCode')} style={styles.bottomText}>Register with promo code</Text>
+      
         
     </View>
-
+    
     </ScrollView>
   );
 };
 
-export default RegistrationScreen;
+export default RegisterPromoCode;
 
 const styles = StyleSheet.create({
   heading: {

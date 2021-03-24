@@ -8,11 +8,11 @@ import {Context as AuthContext} from './context/AuthContext';
 // Screens
 import Login from './screens/Login';
 import HomeScreen from './screens/HomeScreen';
+import RegistrationScreen from './screens/RegistrationScreen';
 import AddABusiness from './screens/AddABusiness';
 import Menu from './screens/Menu';
-import RegistrationScreen from './screens/RegistrationScreen';
-import RegisterPromoCode from './screens/RegisterPromoCode';
 import TrialScreen from './screens/TrialScreen';
+import RegisterPromoCode from './screens/RegisterPromoCode'
 
 
 function OnboardingStack(){
@@ -55,8 +55,8 @@ function Navigator() {
     const {state} = React.useContext(AuthContext);
     return (
         <>
-            {state.new_device  ? (<OnboardingStack/>):(
-                !state.token?(<AuthStack/>):(<MainStack/>)
+            {!state.new_device  ? (<OnboardingStack/>):(
+                state.token?(<AuthStack/>):(<MainStack/>)
             )}
         </>
     )

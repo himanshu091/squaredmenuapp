@@ -16,6 +16,7 @@ import TrialScreen from './screens/TrialScreen';
 import RegisterPromoCode from './screens/RegisterPromoCode'
 import ThankYouRegistration from './screens/ThankYouRegistration';
 import ThankYouPurchase from './screens/ThankYouPurchase';
+import MenuPreview from './screens/MenuPreview';
 
 
 function OnboardingStack(){
@@ -52,6 +53,7 @@ function MainStack(){
                 <Main.Screen name="AddABusiness" component={AddABusiness} />
                 <Main.Screen name="Menu" component={Menu} />
                 <Main.Screen name="MenuList" component={MenuList} />
+                <Main.Screen name="MenuPreview" component={MenuPreview} />
             </Main.Navigator>
         </NavigationContainer>
     )
@@ -61,7 +63,7 @@ function Navigator() {
     const {state} = React.useContext(AuthContext);
     return (
         <>
-            {state.new_device  ? (<OnboardingStack/>):(
+            {!state.new_device  ? (<OnboardingStack/>):(
                 state.token?(<AuthStack/>):(<MainStack/>)
             )}
         </>

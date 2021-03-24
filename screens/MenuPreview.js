@@ -2,7 +2,9 @@ import React from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import HeaderSVG from '../components/HeaderSVG'
-import MenuSection from '../components/MenuSection'
+import MenuButtons from '../components/MenuButtons'
+import NewMenuButton from '../components/NewMenuButton'
+import SubMenu from '../components/SubMenu'
 const data = [
     {   
         sectionName: "Sweet",
@@ -62,45 +64,36 @@ const data = [
     },
 
 ]
-const MenuList = ({navigation}) => {
+const MenuPreview = ({navigation}) => {
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{backgroundColor:'#fff', flex:1}}>
             <ScrollView>
                 <HeaderSVG uri="https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"/>
                 <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
-                    <TouchableOpacity 
+                    {/* <TouchableOpacity 
                         style={styles.bell}
                         onPress={()=>navigation.goBack()}
                     >
                         <Image source={require('../assets/images/onboarding/next.png')}/>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
-                            <Text style={styles.name}>Silema Restaurant</Text>
-                            <Text style={styles.menuName}>Breakfast</Text>
+                            <Text style={styles.name}>Name of the restaurant</Text>
                         </View>
-                        <TouchableOpacity style={styles.previewBTN} onPress={()=>navigation.navigate('MenuPreview')}>
-                            <Text style={styles.preview}>Preview</Text>
-                        </TouchableOpacity>
                     </View>
                 </View>
-                {
-                    data && data.map((menu, idx) => {
-                        return <MenuSection key={idx} sectionName={menu.sectionName} itemList={menu.itemList}/>
-                    })
-                }
-               
-                <TouchableOpacity style={styles.newSection}>
-                    <Text style={styles.sectionName}>Add Section</Text>
-                    <Image style={styles.plus} source={require('../assets/images/icons/plus.png')}/>
-                </TouchableOpacity>
+                <View style={styles.mainBody}>
+                    <Text style={styles.menuName}>Breakfast</Text>
+                    <SubMenu dish_name="Croissant"/>
+                    <SubMenu dish_name="Pizza"/>
+                </View>
             </ScrollView>
         </SafeAreaView>
     )
 }
 
-export default MenuList
+export default MenuPreview
 
 const styles = StyleSheet.create({
     banner:{
@@ -130,18 +123,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     nameContainer:{
-        flexBasis: widthPercentageToDP(66),
-        flexDirection:'column'
+        flexBasis: widthPercentageToDP(70),
+        flexDirection:'row'
     },
     name:{
-        flexWrap:'wrap',
-        fontFamily: 'Poppins Medium',
-        fontStyle: 'normal',
-        fontSize: 21,
-        color: '#FFFFFF',
-        lineHeight:40
-    },
-    menuName:{
         flexWrap:'wrap',
         fontFamily: 'Poppins Medium',
         fontStyle: 'normal',
@@ -149,61 +134,12 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         lineHeight:40
     },
-    card:{
-        backgroundColor: '#fff',
-        borderRadius: 17,
-        width: widthPercentageToDP(84),
-        height: 115,
-        padding: 10,
-        marginHorizontal: widthPercentageToDP(8),
-        marginTop: 40,
-        elevation: 2,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center'
+    mainBody:{
+        marginHorizontal: 28
     },
-    previewBTN:{
-        backgroundColor: '#fff',
-        paddingHorizontal: 18,
-        paddingVertical: 7,
-        borderRadius:23
-    },
-    preview:{
+    menuName:{
+        color:'#000',
         fontFamily: 'Poppins Medium',
-        fontSize: 16,
-        color: '#635CC9'
-    },
-    subBox: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: 97,
-        height: '100%',
-        backgroundColor:'#635CC910',
-        borderRadius: 10,
-
-    },
-    newSection:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems:'center',
-        paddingHorizontal: 15,
-        paddingTop: 20,
-        paddingBottom: 16,
-        backgroundColor: '#fff',
-        marginHorizontal: 25,
-        borderRadius: 17,
-        marginBottom: 50,
-        elevation: 2
-    },
-    plus:{
-        height: 13,
-        width: 13,
-    },
-    sectionName:{
-        fontFamily: 'Poppins Regular',
-        color: '#635CC9',
-        fontSize: 15
+        fontSize: 37
     }
-
 })

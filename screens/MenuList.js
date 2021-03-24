@@ -15,7 +15,7 @@ const data = [
     },
     
 ]
-const Menu = ({navigation}) => {
+const MenuList = ({navigation}) => {
     return (
         <SafeAreaView>
             <View style={{minHeight:heightPercentageToDP(100)}}>
@@ -31,25 +31,26 @@ const Menu = ({navigation}) => {
                     
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
-                            <Text style={styles.name}>Silema Menus</Text>
+                            <Text style={styles.name}>Silema Restaurant</Text>
+                            <Text style={styles.menuName}>Breakfast</Text>
                         </View>
+                        <TouchableOpacity style={styles.previewBTN}>
+                            <Text style={styles.preview}>Preview</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
-               {data && data.map((item, idx) => {
-                   return <MenuButtons key={idx} title={item.title} uri={item.uri} onPress={()=>{navigation.navigate('MenuList')}}/>
-               })}
-                
-               <NewMenuButton/>
+               
+                <TouchableOpacity style={styles.newSection}>
+                    <Text style={styles.sectionName}>Add Section</Text>
+                    <Image source={require('../assets/images/icons/plus.png')}/>
+                </TouchableOpacity>
             </ScrollView>
-            <TouchableOpacity style={styles.qrbutton}>
-                <Image source={require('../assets/images/icons/qr.png')}/>
-            </TouchableOpacity>
             </View>
         </SafeAreaView>
     )
 }
 
-export default Menu
+export default MenuList
 
 const styles = StyleSheet.create({
     banner:{
@@ -80,9 +81,17 @@ const styles = StyleSheet.create({
     },
     nameContainer:{
         flexBasis: widthPercentageToDP(66),
-        flexDirection:'row'
+        flexDirection:'column'
     },
     name:{
+        flexWrap:'wrap',
+        fontFamily: 'Poppins Medium',
+        fontStyle: 'normal',
+        fontSize: 21,
+        color: '#FFFFFF',
+        lineHeight:40
+    },
+    menuName:{
         flexWrap:'wrap',
         fontFamily: 'Poppins Medium',
         fontStyle: 'normal',
@@ -103,6 +112,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center'
     },
+    previewBTN:{
+        backgroundColor: '#fff',
+        paddingHorizontal: 18,
+        paddingVertical: 7,
+        borderRadius:23
+    },
+    preview:{
+        fontFamily: 'Poppins Medium',
+        fontSize: 16,
+        color: '#635CC9'
+    },
     subBox: {
         display: 'flex',
         justifyContent: 'center',
@@ -112,20 +132,5 @@ const styles = StyleSheet.create({
         backgroundColor:'#635CC910',
         borderRadius: 10,
     },
-    new:{
-        fontFamily: 'Poppins Medium',
-        color: '#635CC9',
-        fontSize: 15,
-        marginLeft: 15
-    },
-    qrbutton:{
-        position: 'absolute',
-        right: 25,
-        top: heightPercentageToDP(84),
-        backgroundColor: '#fff',
-        padding: 22,
-        borderRadius: 100,
-        elevation: 5
-    }
 
 })

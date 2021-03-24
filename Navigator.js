@@ -11,6 +11,7 @@ import HomeScreen from './screens/HomeScreen';
 import RegistrationScreen from './screens/RegistrationScreen';
 import AddABusiness from './screens/AddABusiness';
 import Menu from './screens/Menu';
+import MenuList from './screens/MenuList';
 
 function OnboardingStack(){
     const Onboard = createStackNavigator()
@@ -41,6 +42,7 @@ function MainStack(){
                 <Main.Screen name="HomeScreen" component={HomeScreen} />
                 <Main.Screen name="AddABusiness" component={AddABusiness} />
                 <Main.Screen name="Menu" component={Menu} />
+                <Main.Screen name="MenuList" component={MenuList} />
             </Main.Navigator>
         </NavigationContainer>
     )

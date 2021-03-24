@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -17,10 +17,11 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
-
+import {Context as AuthContext} from '../context/AuthContext';
 const Login = ({navigation}) => {
     const [email, onChangeEmail] = React.useState(null);
     const [password, onChangePassword] = React.useState(null);
+    const {state, signin} = useContext(AuthContext);
   return (
     <ScrollView>
       <Bg1
@@ -73,7 +74,7 @@ const Login = ({navigation}) => {
         
       />
      <Button
-  
+          onPress={signin}
           title="Login"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}

@@ -76,7 +76,7 @@ const MenuPreview = ({navigation}) => {
                     >
                         <Image source={require('../assets/images/onboarding/next.png')}/>
                     </TouchableOpacity> */}
-                    
+                    <View style={styles.logo}><Image source={require('../assets/images/logoinapp/logoflat.png')} /></View>
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
                             <Text style={styles.name}>Name of the restaurant</Text>
@@ -108,7 +108,11 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         marginTop: heightPercentageToDP(8.5)
     },
-    logo:{},
+    logo:{
+        flexDirection: 'row',
+        justifyContent:'center',
+        marginTop: 20
+    },
     bell:{
         position:'absolute',
         top: heightPercentageToDP(5),
@@ -116,7 +120,7 @@ const styles = StyleSheet.create({
         transform: [{ rotate: '180deg'}]
     },
     info:{
-        marginTop:heightPercentageToDP(14),
+        marginTop:heightPercentageToDP(14)-40,
         paddingHorizontal: 20,
         display:'flex',
         flexDirection: 'row',

@@ -10,7 +10,7 @@ import {
   TextInput,
 } from 'react-native';
 import {Button} from 'react-native-elements';
-import Bg2 from '../assets/images/banners/bg2.svg';
+import Bg3 from '../assets/images/banners/bg3.svg';
 
 import {
   widthPercentageToDP as wp,
@@ -18,14 +18,14 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 
-const TrialScreen = ({navigation}) => {
+const ThankYouPurchase = ({navigation}) => {
   const [name, onChangeName] = React.useState(null);
   const [number, onChangeNumber] = React.useState(null);
   const [email, onChangeEmail] = React.useState(null);
   const [password, onChangePassword] = React.useState(null);
   return (
     <ScrollView>
-      <Bg2
+      <Bg3
         height={hp('100%')}
         width={wp('100%')}
         style={{
@@ -34,92 +34,67 @@ const TrialScreen = ({navigation}) => {
         resizeMode="stretch"
       />
 
-      <View style={styles.topElements}>
-        <TouchableOpacity style={styles.button}>
-          <Image
-            source={require('../assets/images/topbar/back.png')}
-            style={styles.button_image}
-          />
-        </TouchableOpacity>
-      
-        <TouchableOpacity>
-          <Text style={styles.skipText}>Skip</Text>
-        </TouchableOpacity>
-      </View>
       <View style={styles.logoflat}>
-          <Image source={require('../assets/images/logoinapp/logoflat.png')} />
+          <Image source={require('../assets/images/icons/thankyou.png')} />
         </View>
 
       <View style={styles.heading}>
-        <Text style={styles.headingText}>Welcome to Squared Menu</Text>
+        <Text style={styles.headingText}>Thank You </Text>
+        <Text style={styles.contentHeadingText}>
+        Payment has been successfully done, your transaction number is
+        </Text>
+        <Text style={styles.transictionID}>
+        Txn321435465
+        </Text>
+
       </View>
       <View style={styles.content}>
+      <Image source={require('../assets/images/icons/hand.png')} />
         <Text style={styles.contentHeadingText}>
-          Get the full potential of SquaredMenu.
+        
+        Now get the full potential of SquaredMenu.
         </Text>
-        <View style={styles.imageTextView}>
-          <Image source={require('../assets/images/icons/camera.png')} />
-          <Text style={styles.contentText}>
-            10+ Customized Menu Templates 
-          </Text>
-        </View>
-        <View style={styles.imageTextView}>
-          <Image source={require('../assets/images/icons/pen.png')} />
-          <Text style={styles.contentText}>
-          Custom Images & Thumbnails for your
-            Menu Items
-          </Text>
-        </View>
-        <View style={styles.imageTextView}>
-          <Image source={require('../assets/images/icons/nuts.png')} />
-          <Text style={styles.contentText}>
-          Unlimited Future Upgrades for FREE!
-          </Text>
-        </View>
+     
       </View>
 
       <View style={styles.inputFields}>
         <Button
-          title="Try it for Free for 7 Days"
+          title="Go Home"
           titleStyle={{fontSize: 15}}
           buttonStyle={styles.btn1}
-          containerStyle={{marginTop: 10}}
-          onPress={()=>navigation.navigate('ThankYouPurchase')}
+        
         />
 
         <View style={styles.bottomView}>
           <Text
             onPress={() => navigation.navigate('RegisterPromoCode')}
             style={styles.bottomText}>
-            Policy and T&C
+            Download Receipt
           </Text>
-          <Text
-            onPress={() => navigation.navigate('RegisterPromoCode')}
-            style={styles.bottomText}>
-            $4.99/month after*
-          </Text>
+        
         </View>
       </View>
     </ScrollView>
   );
 };
 
-export default TrialScreen;
+export default ThankYouPurchase;
 
 const styles = StyleSheet.create({
   heading: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-start',
+  
     marginBottom: 40,
-    marginLeft: 15,
+    
+
   },
   headingText: {
     color: 'white',
-    fontFamily: 'Poppins Medium',
-    fontSize: 30,
-    width: wp('60%'),
+    fontFamily: 'Poppins SemiBold',
+    fontSize: 37,
+    width: wp('100%'),
     lineHeight: 50 * 0.75,
     paddingTop: 40 - 35 * 0.75,
+    textAlign:'center'
   },
 
   topElements: {
@@ -132,7 +107,8 @@ const styles = StyleSheet.create({
   },
   logoflat: {
     alignItems:"center",
-    marginBottom:60
+    marginTop:80,
+    marginBottom:20
   },
   button_image: {
     height: 42,
@@ -188,7 +164,10 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   content:{
-marginHorizontal:15
+marginHorizontal:15,
+display:'flex',
+alignItems:'center',
+marginTop:10
   },
   contentText:{
     color: '#fff',
@@ -203,8 +182,17 @@ marginHorizontal:15
     
   },
   contentHeadingText:{
-    color: '#fff',
+    color: '#C6C4EB',
     fontSize: 18,
     fontFamily: 'Poppins Medium',
+    textAlign:'center',
+    marginHorizontal:30,
+    marginVertical:10
+  },
+  transictionID:{
+    color: '#fff',
+    fontSize: 24,
+    fontFamily: 'Poppins Medium',
+    textAlign:'center'
   }
 });

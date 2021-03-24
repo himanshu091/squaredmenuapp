@@ -28,7 +28,7 @@ const RegisterPromoCode = ({navigation}) => {
   return (
     <ScrollView>
   <Bg1
-  height={hp('70%')}
+  height={hp('40%')}
   width={wp('100%')}
     style={{
       position: 'absolute',
@@ -94,6 +94,16 @@ const RegisterPromoCode = ({navigation}) => {
         placeholderTextColor="#635CC9"
         
       />
+        <TextInput
+        style={styles.input}
+        onChangeText={onChangePromocode}
+        value={promocode}
+        placeholder="promocode"
+        textAlign="center"
+        placeholderTextColor="#635CC9"
+        
+      />
+      
       <Button
   
   title="Register"
@@ -104,10 +114,9 @@ const RegisterPromoCode = ({navigation}) => {
  
 />
         
-        <Text style={styles.forgotText}>or register using</Text>
-      <SocialMediaIcon/>
-      <Text onPress={()=>navigation.navigate('RegisterPromoCode')} style={styles.bottomText}>Register using promo code</Text>
-      <Text style={styles.registerText}>Policy and T&C</Text>
+    
+      <Text onPress={()=>navigation.navigate('RegisterPromoCode')} style={styles.bottomText}>Register with promo code</Text>
+      
         
     </View>
     

@@ -101,6 +101,7 @@ const RegistrationScreen = ({navigation}) => {
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
           containerStyle={{marginTop:10}} 
+          onPress={()=>navigation.navigate('ThankYouRegistration')}
          
         />
         

@@ -1,10 +1,12 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import HeaderSVG from '../components/HeaderSVG'
 import MenuButtons from '../components/MenuButtons'
 import NewMenuButton from '../components/NewMenuButton'
 import SubMenu from '../components/SubMenu'
+import RBSheet from "react-native-raw-bottom-sheet";
+import ThemeChooser from '../components/ThemeChooser'
 const data = [
     {   
         sectionName: "Sweet",
@@ -65,6 +67,7 @@ const data = [
 
 ]
 const MenuPreview = ({navigation}) => {
+    const refRBSheet = useRef();
     return (
         <SafeAreaView style={{backgroundColor:'#fff', flex:1}}>
             <ScrollView>
@@ -89,6 +92,29 @@ const MenuPreview = ({navigation}) => {
                     <SubMenu dish_name="Pizza"/>
                 </View>
             </ScrollView>
+            <View style={styles.container}>
+                <TouchableOpacity style={styles.brushImage} onPress={()=>{refRBSheet.current.open()}}>
+                    <View style={styles.round}><Image source={require('../assets/images/icons/brush.png')} style={styles.brush}/></View>
+                </TouchableOpacity>
+            </View>
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                // minClosingHeight={1000}
+
+                animationType='slide'
+                customStyles={{
+                wrapper: {
+                    backgroundColor: "transparent"
+                },
+                draggableIcon: {
+                    backgroundColor: "#fff"
+                }
+                }}
+            >
+                <ThemeChooser action={()=>{refRBSheet.current.close()}}/>
+            </RBSheet>
         </SafeAreaView>
     )
 }
@@ -112,6 +138,18 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent:'center',
         marginTop: 20
+    },
+    nameContainer:{
+        flexBasis: widthPercentageToDP(66),
+        flexDirection:'column'
+    },
+    name:{
+        flexWrap:'wrap',
+        fontFamily: 'Poppins Medium',
+        fontStyle: 'normal',
+        fontSize: 21,
+        color: '#FFFFFF',
+        lineHeight:40
     },
     bell:{
         position:'absolute',
@@ -145,5 +183,30 @@ const styles = StyleSheet.create({
         color:'#000',
         fontFamily: 'Poppins Medium',
         fontSize: 37
+    },
+    container:{
+        backgroundColor: '#f0effa',
+        paddingBottom: 0,
+        position: 'absolute',
+        width: '100%',
+        bottom: 0
+    },
+    brushImage:{
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: -35,
+        // marginBottom: 20
+        
+    },
+    round:{
+        borderRadius: 40,
+        backgroundColor: '#f0effa',
+        padding: 10,
+        elevation: 5
+    },
+    brush:{
+        height: 50,
+        width: 50,
+        resizeMode: 'contain'
     }
 })

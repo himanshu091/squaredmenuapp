@@ -17,6 +17,7 @@ import RegisterPromoCode from './screens/RegisterPromoCode'
 import ThankYouRegistration from './screens/ThankYouRegistration';
 import ThankYouPurchase from './screens/ThankYouPurchase';
 import MenuPreview from './screens/MenuPreview';
+import QR from './screens/QR';
 
 
 function OnboardingStack(){
@@ -54,6 +55,7 @@ function MainStack(){
                 <Main.Screen name="Menu" component={Menu} />
                 <Main.Screen name="MenuList" component={MenuList} />
                 <Main.Screen name="MenuPreview" component={MenuPreview} />
+                <Main.Screen name="QR" component={QR} />
             </Main.Navigator>
         </NavigationContainer>
     )

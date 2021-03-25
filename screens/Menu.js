@@ -41,7 +41,7 @@ const Menu = ({navigation}) => {
                 
                <NewMenuButton/>
             </ScrollView>
-            <TouchableOpacity style={styles.qrbutton}>
+            <TouchableOpacity style={styles.qrbutton} onPress={()=>navigation.navigate('QR')}>
                 <Image source={require('../assets/images/icons/qr.png')}/>
             </TouchableOpacity>
             </View>

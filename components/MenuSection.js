@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const MenuSection = ({sectionName, itemList}) => {
+const MenuSection = ({sectionName, itemList, addNew}) => {
     return (
         <View style={styles.mainContainer}>
             <View style={styles.sectionHeader}>
@@ -31,7 +31,7 @@ const MenuSection = ({sectionName, itemList}) => {
                 </View>
             })}
             <View style={styles.bar}></View>
-            <TouchableOpacity style={styles.newSection}>
+            <TouchableOpacity style={styles.newSection} onPress={addNew}>
                 <Text style={styles.sectionName}>Add New Item</Text>
                 <Image style={styles.plus} source={require('../assets/images/icons/plus.png')}/>
             </TouchableOpacity>

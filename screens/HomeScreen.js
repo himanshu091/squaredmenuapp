@@ -17,9 +17,9 @@ const HomeScreen = ({navigation}) => {
                         <View style={styles.nameContainer}>
                             <Text style={styles.name}>Your Business</Text>
                         </View>
-                        <View>
+                        <TouchableOpacity onPress={()=>navigation.navigate('UserProfile')}>
                             <Image source={require('../assets/images/profile/user.png')}/>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </ImageBackground>
                 <RestaurantCard name='Menu' navigation={navigation}/>

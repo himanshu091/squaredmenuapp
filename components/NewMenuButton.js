@@ -2,9 +2,9 @@ import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
-const NewMenuButton = ({navigation, uri, title}) => {
+const NewMenuButton = ({navigation, uri, title,action}) => {
     return (
-        <TouchableOpacity style={styles.card} onPress={()=>{}}>
+        <TouchableOpacity style={styles.card} onPress={action}>
                 <View style={styles.subBox}>
                     <Image source={require('../assets/images/icons/plus.png')} style={styles.plus} />
                 </View>

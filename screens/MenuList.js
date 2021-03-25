@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import HeaderSVG from '../components/HeaderSVG'
 import MenuSection from '../components/MenuSection'
+import RBSheet from "react-native-raw-bottom-sheet";
+import AddNewItem from '../components/AddNewItem'
 const data = [
     {   
         sectionName: "Sweet",
@@ -63,6 +65,7 @@ const data = [
 
 ]
 const MenuList = ({navigation}) => {
+    const refRBSheet = useRef();
     return (
         <SafeAreaView>
             <ScrollView>
@@ -87,7 +90,7 @@ const MenuList = ({navigation}) => {
                 </View>
                 {
                     data && data.map((menu, idx) => {
-                        return <MenuSection key={idx} sectionName={menu.sectionName} itemList={menu.itemList}/>
+                        return <MenuSection key={idx} sectionName={menu.sectionName} itemList={menu.itemList} addNew={() => refRBSheet.current.open()}/>
                     })
                 }
                
@@ -96,6 +99,27 @@ const MenuList = ({navigation}) => {
                     <Image style={styles.plus} source={require('../assets/images/icons/plus.png')}/>
                 </TouchableOpacity>
             </ScrollView>
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                // height={80}
+                animationType='slide'
+                customStyles={{
+                    container: {
+                        ...styles.container,
+                        height: 370
+                      },
+                wrapper: {
+                    backgroundColor: "#00000025"
+                },
+                draggableIcon: {
+                    backgroundColor: "#fff"
+                }
+                }}
+            >
+                <AddNewItem closeFunc={() => refRBSheet.current.close()}/>
+            </RBSheet>
         </SafeAreaView>
     )
 }

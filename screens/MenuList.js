@@ -90,7 +90,7 @@ const MenuList = ({navigation}) => {
                 </View>
                 {
                     data && data.map((menu, idx) => {
-                        return <MenuSection key={idx} sectionName={menu.sectionName} itemList={menu.itemList} addNew={() => refRBSheet.current.open()}/>
+                        return <MenuSection key={idx} sectionName={menu.sectionName} itemList={menu.itemList} addNew={() => refRBSheet.current.open()} navigation={navigation}/>
                     })
                 }
                

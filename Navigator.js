@@ -21,6 +21,8 @@ import UserProfile from './screens/UserProfile';
 import EditProfile from './screens/EditProfile';
 import EditMenu from './screens/EditMenu';
 import QR from './screens/QR';
+import DishDetail from './screens/DishDetail';
+import EditDish from './screens/EditDish';
 
 
 function OnboardingStack(){
@@ -63,6 +65,8 @@ function MainStack(){
                 <Main.Screen name="EditProfile" component={EditProfile} />
                 <Main.Screen name="EditMenu" component={EditMenu} />
                 <Main.Screen name="QR" component={QR} />
+                <Main.Screen name="DishDetail" component={DishDetail} />
+                <Main.Screen name="EditDish" component={EditDish} />
             </Main.Navigator>
         </NavigationContainer>
     )

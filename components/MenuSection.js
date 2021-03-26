@@ -1,7 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const MenuSection = ({sectionName, itemList, addNew}) => {
+const MenuSection = ({sectionName, itemList, addNew, navigation}) => {
     return (
         <View style={styles.mainContainer}>
             <View style={styles.sectionHeader}>
@@ -13,7 +13,7 @@ const MenuSection = ({sectionName, itemList, addNew}) => {
             {itemList.map((menu, idx0) => {
                 return <View key={idx0} style={styles.menuItem}>
                     <View style={styles.menuSubItem}>
-                        <Text style={styles.itemName}>{menu.itemName}</Text>
+                        <TouchableOpacity onPress={()=>navigation.navigate('DishDetail')}><Text style={styles.itemName}>{menu.itemName}</Text></TouchableOpacity>
                         {!menu.varient && <Text style={styles.cost}>${parseFloat(menu.cost).toFixed(2)}</Text>}
                     </View>
                     

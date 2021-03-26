@@ -17,6 +17,9 @@ import RegisterPromoCode from './screens/RegisterPromoCode'
 import ThankYouRegistration from './screens/ThankYouRegistration';
 import ThankYouPurchase from './screens/ThankYouPurchase';
 import MenuPreview from './screens/MenuPreview';
+import UserProfile from './screens/UserProfile';
+import EditProfile from './screens/EditProfile';
+import EditMenu from './screens/EditMenu';
 import QR from './screens/QR';
 
 
@@ -41,6 +44,7 @@ function AuthStack(){
                 <Auth.Screen name="TrialScreen" component={TrialScreen} />
                 <Auth.Screen name="ThankYouRegistration" component={ThankYouRegistration} />
                 <Auth.Screen name="ThankYouPurchase" component={ThankYouPurchase} />
+               
             </Auth.Navigator>
         </NavigationContainer>
     )
@@ -55,6 +59,9 @@ function MainStack(){
                 <Main.Screen name="Menu" component={Menu} />
                 <Main.Screen name="MenuList" component={MenuList} />
                 <Main.Screen name="MenuPreview" component={MenuPreview} />
+                <Main.Screen name="UserProfile" component={UserProfile} />
+                <Main.Screen name="EditProfile" component={EditProfile} />
+                <Main.Screen name="EditMenu" component={EditMenu} />
                 <Main.Screen name="QR" component={QR} />
             </Main.Navigator>
         </NavigationContainer>

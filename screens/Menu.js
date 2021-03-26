@@ -39,7 +39,7 @@ const Menu = ({navigation}) => {
                    return <MenuButtons key={idx} title={item.title} uri={item.uri} onPress={()=>{navigation.navigate('MenuList')}}/>
                })}
                 
-               <NewMenuButton/>
+               <NewMenuButton action={()=>navigation.navigate('EditMenu')}/>
             </ScrollView>
             <TouchableOpacity style={styles.qrbutton} onPress={()=>navigation.navigate('QR')}>
                 <Image source={require('../assets/images/icons/qr.png')}/>

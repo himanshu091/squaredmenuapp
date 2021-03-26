@@ -11,6 +11,26 @@ import i4 from '../assets/images/onboarding/part4.png'
 const slideImages = [
     i1, i2, i3, i4
 ]
+const data = [
+    {
+        heading: "Create a menu",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        heading: "Add Sections & Items",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        heading: "Add Allergens",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+        heading: "Print QR Code",
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+
+    
+]
 const config = {
     velocityThreshold: 0.3,
     directionalOffsetThreshold: 80
@@ -42,6 +62,10 @@ const OnboardingScreen = ({navigation}) => {
                 {/* {slide !== 0 && <TouchableOpacity style={styles.button_back} onPress={()=>setslide(slide-1)}>
                     <Image source={require('../assets/images/onboarding/next.png')} style={styles.button_image}/>
                 </TouchableOpacity>} */}
+                <View style={styles.textContent}>
+                    <Text style={styles.heading}>{data[slide].heading}</Text>
+                    <Text style={styles.content}>{data[slide].content}</Text>
+                </View>
                 <View style={styles.start_button_container}>
                     {slide === 3 && <TouchableOpacity style={styles.start_button} onPress={()=>{beginAuth()}}>
                         <Text style={styles.text}>Let's Start</Text>
@@ -113,5 +137,25 @@ const styles = StyleSheet.create({
     },
     text:{
         fontFamily:'Poppins Bold'
+    },
+    textContent:{
+        position: 'absolute',
+        top: hp(57),
+        width: '100%',
+        flexDirection: 'column',
+        justifyContent: 'center'
+    },
+    heading:{
+        textAlign: 'center',
+        fontSize: 27,
+        fontFamily: 'Poppins Bold',
+        color: '#fff'
+    },
+    content:{
+        textAlign: 'center',
+        fontSize: 14,
+        fontFamily: 'Poppins Light',
+        color: '#fff',
+        paddingHorizontal: 40
     }
 })

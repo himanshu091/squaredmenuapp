@@ -17,8 +17,7 @@ const data = [
 ]
 const Menu = ({navigation}) => {
     return (
-        <SafeAreaView>
-            <View style={{minHeight:heightPercentageToDP(100)}}>
+        <SafeAreaView style={{flex: 1}}>
             <ScrollView>
                 <HeaderSVG uri="https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"/>
                 <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
@@ -40,11 +39,11 @@ const Menu = ({navigation}) => {
                })}
                 
                <NewMenuButton action={()=>navigation.navigate('EditMenu')}/>
+               <View style={{marginBottom: 150}}></View>
             </ScrollView>
             <TouchableOpacity style={styles.qrbutton} onPress={()=>navigation.navigate('QR')}>
                 <Image source={require('../assets/images/icons/qr.png')}/>
             </TouchableOpacity>
-            </View>
         </SafeAreaView>
     )
 }

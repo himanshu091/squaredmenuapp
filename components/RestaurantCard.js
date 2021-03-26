@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
         color: '#635CC9',
         fontFamily: 'Poppins Medium',
         fontSize: 24,
-        lineHeight: 25
+        lineHeight: 28 * 0.75,
+        paddingTop: 40 - 35 * 0.75,
     },
     address:{
         flexWrap: 'wrap',

@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Poppins Medium',
     fontSize: 37,
-    width: wp('50%'),
+    
     lineHeight: 50 * 0.75,
     paddingTop: 40 - 35 * 0.75,
   },

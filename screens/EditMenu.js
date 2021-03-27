@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext,useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,6 +10,7 @@ import {
   TextInput,
 } from 'react-native';
 import {Button} from 'react-native-elements';
+import ToggleSwitch from 'toggle-switch-react-native'
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -21,6 +22,7 @@ import {Context as AuthContext} from '../context/AuthContext';
 const EditMenu = ({navigation}) => {
   const [menu, onChangeMenu] = React.useState(null);
   const [note, onChangeNote] = React.useState(null)
+  const [isOn, setisOn] = useState(false)
 
   const {state, signin} = useContext(AuthContext);
   return (
@@ -43,21 +45,21 @@ const EditMenu = ({navigation}) => {
       <View style={styles.topElements}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('RegistrationScreen')}>
+          onPress={() => navigation.goBack()}>
           <Image
             source={require('../assets/images/topbar/back.png')}
             style={styles.button_image}
           />
         </TouchableOpacity>
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('RegistrationScreen')}>
           <Image
             source={require('../assets/images/icons/edit2.png')}
             style={styles.button_image}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
 
@@ -93,8 +95,18 @@ const EditMenu = ({navigation}) => {
         placeholderTextColor="#000000"
         
       />
-    
+    <View style={styles.bottomSection}>   
     <View style={styles.switch}>
+<Text style={styles.activeText}>Active</Text>
+<ToggleSwitch
+                        isOn={isOn}
+                        onColor="#635CC9"
+                        offColor="#635CC920"
+                       
+                        labelStyle={{ color: "black", fontFamily: 'Poppins Medium'}}
+                        size='medium'
+                        onToggle={() => setisOn(!isOn)}
+                    />
 
     </View>
      <Button
@@ -102,10 +114,13 @@ const EditMenu = ({navigation}) => {
           title="Salva"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
-          containerStyle={{marginTop:80}} 
+          containerStyle={{marginTop:20}} 
          
         />
+       </View>
+ 
       </View>
+
     </ScrollView>
   );
 };
@@ -269,7 +284,17 @@ const styles = StyleSheet.create({
       alignItems:'center'
   },
   switch:{
-      
+flexDirection:'row',
+justifyContent:'space-between',
+alignItems:'center'
+  },
+  activeText:{
+      fontSize:18,
+      fontFamily:'Poppins Regular',
+      color:"#000000"
+  },
+  bottomSection:{
+      marginTop:hp(25)
   }
   
 });

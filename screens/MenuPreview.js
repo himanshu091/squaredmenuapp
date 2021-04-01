@@ -7,6 +7,7 @@ import NewMenuButton from '../components/NewMenuButton'
 import SubMenu from '../components/SubMenu'
 import RBSheet from "react-native-raw-bottom-sheet";
 import ThemeChooser from '../components/ThemeChooser'
+import { WebView } from 'react-native-webview';
 const data = [
     {   
         sectionName: "Sweet",
@@ -70,51 +71,7 @@ const MenuPreview = ({navigation}) => {
     const refRBSheet = useRef();
     return (
         <SafeAreaView style={{backgroundColor:'#fff', flex:1}}>
-            <ScrollView>
-                <HeaderSVG uri="https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"/>
-                <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
-                    {/* <TouchableOpacity 
-                        style={styles.bell}
-                        onPress={()=>navigation.goBack()}
-                    >
-                        <Image source={require('../assets/images/onboarding/next.png')}/>
-                    </TouchableOpacity> */}
-                    <View style={styles.logo}><Image source={require('../assets/images/logoinapp/logoflat.png')} /></View>
-                    <View style={styles.info}>
-                        <View style={styles.nameContainer}>
-                            <Text style={styles.name}>Name of the restaurant</Text>
-                        </View>
-                    </View>
-                </View>
-                <View style={styles.mainBody}>
-                    <Text style={styles.menuName}>Breakfast</Text>
-                    <SubMenu dish_name="Croissant"/>
-                    <SubMenu dish_name="Pizza"/>
-                </View>
-            </ScrollView>
-            <View style={styles.container}>
-                <TouchableOpacity style={styles.brushImage} onPress={()=>{refRBSheet.current.open()}}>
-                    <View style={styles.round}><Image source={require('../assets/images/icons/brush.png')} style={styles.brush}/></View>
-                </TouchableOpacity>
-            </View>
-            <RBSheet
-                ref={refRBSheet}
-                closeOnDragDown={true}
-                closeOnPressMask={false}
-                // minClosingHeight={1000}
-
-                animationType='slide'
-                customStyles={{
-                wrapper: {
-                    backgroundColor: "transparent"
-                },
-                draggableIcon: {
-                    backgroundColor: "#fff"
-                }
-                }}
-            >
-                <ThemeChooser action={()=>{refRBSheet.current.close()}}/>
-            </RBSheet>
+           <WebView source={{ uri:'http://ctportfolio.in/squaredmenu/home_0.html'}} />
         </SafeAreaView>
     )
 }

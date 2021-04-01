@@ -1,4 +1,4 @@
-import React, {useContext,useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -10,7 +10,7 @@ import {
   TextInput,
 } from 'react-native';
 import {Button} from 'react-native-elements';
-import ToggleSwitch from 'toggle-switch-react-native'
+import ToggleSwitch from 'toggle-switch-react-native';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -21,25 +21,25 @@ import Bg1 from '../assets/images/banners/backgroundimage.svg';
 import {Context as AuthContext} from '../context/AuthContext';
 const EditMenu = ({navigation}) => {
   const [menu, onChangeMenu] = React.useState(null);
-  const [note, onChangeNote] = React.useState(null)
-  const [isOn, setisOn] = useState(false)
+  const [note, onChangeNote] = React.useState(null);
+  const [isOn, setisOn] = useState(false);
 
   const {state, signin} = useContext(AuthContext);
   return (
     <ScrollView>
-        <TouchableOpacity>
-      <Bg1
-        height={hp(30)}
-        width={wp('100%')}
-        style={{
-          position: 'absolute',
-          top:0,
-          left:0,
-          right:0
-        }}
-    marginTop={-4}
-        resizeMode="cover"
-      />
+      <TouchableOpacity>
+        <Bg1
+          height={hp(30)}
+          width={wp('100%')}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+          }}
+          marginTop={-4}
+          resizeMode="cover"
+        />
       </TouchableOpacity>
 
       <View style={styles.topElements}>
@@ -62,65 +62,52 @@ const EditMenu = ({navigation}) => {
         </TouchableOpacity> */}
       </View>
 
-
       <View style={styles.inputFields}>
-      
-          <View style={styles.editMenu}>
+        <View style={styles.editMenu}>
           <TextInput
-        fontSize={48}
-        fontFamily={"Poppins Medium"}
-        onChangeText={onChangeMenu}
-        value={menu}
-        width={wp(60)}
-        multiline={true}
-        placeholder="Silema Menu"
-        opacity={ 0.3}
-        placeholderTextColor="#000000"
-        
-      />
-      <Image
-      
-      source={require('../assets/images/icons/delete.png')}
-      
-      />
-      </View>
-       <TextInput
-        fontSize={15}
-     
-        fontFamily={"Poppins Regular"}
-        onChangeText={onChangeNote}
-        value={note}
-        placeholder="Notes"
-        opacity={ 0.3}
-        placeholderTextColor="#000000"
-        
-      />
-    <View style={styles.bottomSection}>   
-    <View style={styles.switch}>
-<Text style={styles.activeText}>Active</Text>
-<ToggleSwitch
-                        isOn={isOn}
-                        onColor="#635CC9"
-                        offColor="#635CC920"
-                       
-                        labelStyle={{ color: "black", fontFamily: 'Poppins Medium'}}
-                        size='medium'
-                        onToggle={() => setisOn(!isOn)}
-                    />
-
-    </View>
-     <Button
-          onPress={signin}
-          title="Salva"
-          titleStyle={{ fontSize: 15 }}
-          buttonStyle={styles.btn1}
-          containerStyle={{marginTop:20}} 
-         
+            fontSize={48}
+            fontFamily={'Poppins Medium'}
+            onChangeText={onChangeMenu}
+            value={menu}
+            width={wp(60)}
+            multiline={true}
+            placeholder="Silema Menu"
+            opacity={0.3}
+            placeholderTextColor="#000000"
+          />
+          <Image source={require('../assets/images/icons/delete.png')} />
+        </View>
+        <TextInput
+          fontSize={15}
+          fontFamily={'Poppins Regular'}
+          onChangeText={onChangeNote}
+          value={note}
+          placeholder="Notes"
+          opacity={0.3}
+          placeholderTextColor="#000000"
         />
-       </View>
- 
-      </View>
+        <View style={styles.bottomSection}>
+          <View style={styles.switch}>
+            <Text style={styles.activeText}>Active</Text>
+            <ToggleSwitch
+              isOn={isOn}
+              onColor="#635CC9"
+              offColor="#635CC920"
+              labelStyle={{color: 'black', fontFamily: 'Poppins Medium'}}
+              size="medium"
+              onToggle={() => setisOn(!isOn)}
+            />
+          </View>
+          <Button
+            onPress={() => navigation.goBack()}
+            title="Salva"
+            titleStyle={{fontSize: 15}}
+            buttonStyle={styles.btn1}
+            containerStyle={{marginTop: 20}}
 
+          />
+        </View>
+      </View>
     </ScrollView>
   );
 };
@@ -134,22 +121,20 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     marginLeft: 15,
   },
-  btn1:{
-            
-    backgroundColor: "#635CC9",
+  btn1: {
+    backgroundColor: '#635CC9',
     borderRadius: 50,
-    marginHorizontal:15,
-    height:50,
-    shadowColor: "rgba(239, 54, 81, 0.35)",
+    marginHorizontal: 15,
+    height: 50,
+    shadowColor: 'rgba(239, 54, 81, 0.35)',
     shadowOffset: {
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.50,
+    shadowOpacity: 0.5,
     shadowRadius: 5.84,
 
     elevation: 5,
-    
   },
   headingText: {
     color: 'white',
@@ -176,7 +161,7 @@ const styles = StyleSheet.create({
     width: 42,
   },
   inputFields: {
-    marginHorizontal:15,
+    marginHorizontal: 15,
     marginTop: hp('15%'),
   },
   input: {
@@ -215,86 +200,82 @@ const styles = StyleSheet.create({
     lineHeight: 60 * 0.75,
     paddingTop: 40 - 35 * 0.75,
   },
-  smallText:{
+  smallText: {
     fontSize: 15,
     color: '#000000',
-    fontFamily: 'Poppins Regular', 
-    marginVertical:10
+    fontFamily: 'Poppins Regular',
+    marginVertical: 10,
   },
-  smallHeadingText:{
+  smallHeadingText: {
     fontSize: 15,
     color: '#000000',
     fontFamily: 'Poppins Bold',
   },
-  smallSubHeadingText:{
+  smallSubHeadingText: {
     fontSize: 15,
     color: '#B3B3B3',
-    fontFamily: 'Poppins Regular', 
+    fontFamily: 'Poppins Regular',
   },
-  featuresView:{
-      marginVertical:10
+  featuresView: {
+    marginVertical: 10,
   },
-  membershipView:{
-    flexDirection:'row',
-    alignItems:'center',
-      justifyContent:'space-between'
+  membershipView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
-  renewView:{
-      backgroundColor:"#e4e4e4",
-      padding:10,
-      
-      
+  renewView: {
+    backgroundColor: '#e4e4e4',
+    padding: 10,
   },
-  renewText:{
-      textAlign:'right',
-      fontFamily: 'Poppins Medium', 
-      fontSize: 11,
+  renewText: {
+    textAlign: 'right',
+    fontFamily: 'Poppins Medium',
+    fontSize: 11,
     color: '#000000',
-    opacity:.5
+    opacity: 0.5,
   },
-  renewDateText:{
-    textAlign:'right',
-    fontFamily: 'Poppins Bold', 
+  renewDateText: {
+    textAlign: 'right',
+    fontFamily: 'Poppins Bold',
 
     fontSize: 11,
-  color: '#000000',
-  opacity:.5
+    color: '#000000',
+    opacity: 0.5,
   },
-  share:{
-      flexDirection:'row',
-      justifyContent:'space-between'
-
+  share: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
-  smallShareText:{
+  smallShareText: {
     fontSize: 15,
     color: '#B3B3B3',
     fontFamily: 'Poppins Regular',
-    flexWrap:'wrap',
-    width:wp(70)
+    flexWrap: 'wrap',
+    width: wp(70),
   },
-  smallBottomText:{
+  smallBottomText: {
     fontSize: 15,
     color: '#B3B3B3',
     fontFamily: 'Poppins Regular',
-    marginVertical:20
+    marginVertical: 20,
   },
-  editMenu:{
-      flexDirection:'row',
-      justifyContent:'space-between',
-      alignItems:'center'
+  editMenu: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  switch:{
-flexDirection:'row',
-justifyContent:'space-between',
-alignItems:'center'
+  switch: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
-  activeText:{
-      fontSize:18,
-      fontFamily:'Poppins Regular',
-      color:"#000000"
+  activeText: {
+    fontSize: 18,
+    fontFamily: 'Poppins Regular',
+    color: '#000000',
   },
-  bottomSection:{
-      marginTop:hp(25)
-  }
-  
+  bottomSection: {
+    marginTop: hp(25),
+  },
 });

@@ -36,7 +36,7 @@ const UserProfile = ({navigation}) => {
       <View style={styles.topElements}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('RegistrationScreen')}>
+          onPress={()=>navigation.goBack()}>
           <Image
             source={require('../assets/images/topbar/back.png')}
             style={styles.button_image}

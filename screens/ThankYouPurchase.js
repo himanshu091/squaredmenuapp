@@ -62,6 +62,7 @@ const ThankYouPurchase = ({navigation}) => {
           title="Go Home"
           titleStyle={{fontSize: 15}}
           buttonStyle={styles.btn1}
+          onPress={()=>navigation.navigate('Login')}
         
         />
 

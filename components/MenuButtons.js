@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
-const MenuButtons = ({onPress, uri, title}) => {
+const MenuButtons = ({onPress, uri, title,navigation}) => {
     return (
         <View style={styles.card}>
             <TouchableOpacity onPress={onPress} style={styles.part1}>
@@ -11,7 +11,7 @@ const MenuButtons = ({onPress, uri, title}) => {
                 </View>
                 <Text style={styles.new}>{title}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{}}>
+            <TouchableOpacity onPress={()=>{navigation.navigate('EditMenu')}}>
                 <Image source={require('../assets/images/icons/edit.png')}/>
             </TouchableOpacity>
         </View>

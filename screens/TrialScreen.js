@@ -35,10 +35,11 @@ const TrialScreen = ({navigation}) => {
       />
 
       <View style={styles.topElements}>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button}   onPress={()=>navigation.goBack()}>
           <Image
             source={require('../assets/images/topbar/back.png')}
             style={styles.button_image}
+          
           />
         </TouchableOpacity>
       

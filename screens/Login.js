@@ -84,7 +84,7 @@ const Login = ({navigation}) => {
         <Text style={styles.forgotText}>Forgot password?</Text>
         <Text style={styles.forgotText}>or login using</Text>
       <SocialMediaIcon/>
-      <Text style={styles.bottomText}>I don't have an account</Text>
+      <Text style={styles.bottomText} onPress={()=>navigation.navigate('RegistrationScreen')} >I don't have an account</Text>
         
     </View>
 
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   inputFields:{
 marginVertical:15,
-marginTop:hp('8%')
+marginTop:hp('15%')
   },
   input: {
     height: 50,

@@ -35,7 +35,7 @@ const Menu = ({navigation}) => {
                     </View>
                 </View>
                {data && data.map((item, idx) => {
-                   return <MenuButtons key={idx} title={item.title} uri={item.uri} onPress={()=>{navigation.navigate('MenuList')}}/>
+                   return <MenuButtons key={idx} navigation={navigation} title={item.title} uri={item.uri} onPress={()=>{navigation.navigate('MenuList')}}/>
                })}
                 
                <NewMenuButton action={()=>navigation.navigate('EditMenu')}/>

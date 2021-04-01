@@ -41,7 +41,7 @@ const AddABusiness = ({navigation}) => {
     />
     
         <View style={styles.topElements}>
-          <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('RegistrationScreen')}>
+          <TouchableOpacity style={styles.button}     onPress={()=>navigation.goBack()}>
             <Image
               source={require('../assets/images/topbar/back.png')}
               style={styles.button_image}
@@ -125,7 +125,7 @@ const AddABusiness = ({navigation}) => {
           title="Add"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
-          containerStyle={{marginTop:10}} 
+          containerStyle={{marginVertical:15}} 
          
         />
             

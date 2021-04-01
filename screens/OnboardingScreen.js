@@ -8,6 +8,7 @@ import i1 from '../assets/images/onboarding/part1.png'
 import i2 from '../assets/images/onboarding/part2.png'
 import i3 from '../assets/images/onboarding/part3.png'
 import i4 from '../assets/images/onboarding/part4.png'
+import { storeToken } from '../store';
 const slideImages = [
     i1, i2, i3, i4
 ]
@@ -37,7 +38,7 @@ const config = {
   };
 const OnboardingScreen = ({navigation}) => {
     const [slide, setslide] = useState(0)
-    const {state, beginAuth} = useContext(AuthContext);
+    
     const showPreviousSlide = () => {
         if(slide > 0){
             setslide(slide-1)
@@ -47,6 +48,9 @@ const OnboardingScreen = ({navigation}) => {
         if(slide < 3){
             setslide(slide+1)
         }
+    }
+    const beginAuth = async () => {
+        await storeToken({email:"", name:"", token:null, user_id:"", new_device: false})
     }
     return (
         <SafeAreaView>

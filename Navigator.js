@@ -1,5 +1,5 @@
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import OnboardingScreen from './screens/OnboardingScreen';
@@ -23,6 +23,7 @@ import EditMenu from './screens/EditMenu';
 import QR from './screens/QR';
 import DishDetail from './screens/DishDetail';
 import EditDish from './screens/EditDish';
+import { getToken } from './store';
 
 
 function OnboardingStack(){
@@ -73,12 +74,24 @@ function MainStack(){
 }
 
 function Navigator() {
-    const {state} = React.useContext(AuthContext);
+    const [loading, setloading] = useState(true)
+    const [userData, setuserData] = useState(null)
+    useEffect(async () => {
+        const res = await getToken()
+        if(res){
+
+            setloading(false)
+        }else{
+            setloading(false)
+        }
+    }, [])
     return (
         <>
-            {state.new_device  ? (<OnboardingStack/>):(
-                !state.token?(<AuthStack/>):(<MainStack/>)
-            )}
+            {!loading && <>
+                {!userData ? (<OnboardingStack/>):(
+                    userData.token?(<AuthStack/>):(<MainStack/>)
+                )}
+            </>}
         </>
     )
 }

@@ -8,85 +8,109 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  
+  ToastAndroid,
+
 } from 'react-native';
-import {Button} from 'react-native-elements'
+import { Button } from 'react-native-elements'
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
-import {Context as AuthContext} from '../context/AuthContext';
-const Login = ({navigation}) => {
-    const [email, onChangeEmail] = React.useState(null);
-    const [password, onChangePassword] = React.useState(null);
-    const {state, signin} = useContext(AuthContext);
+import { Context as AuthContext } from '../context/AuthContext';
+import {login} from '../api';
+import { storeToken } from '../store';
+
+const Login = ({ navigation }) => {
+  const [email, onChangeEmail] = React.useState(null);
+  const [password, onChangePassword] = React.useState(null);
+  const { state, signin } = useContext(AuthContext);
+  const startLogin = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('email', 'wasim@coretechies.com');
+    bodyFormData.append('password', 'Pass@123');
+    const res = await login(bodyFormData)
+    if(res.data.status){
+      await storeToken({email:res.data.email, name:res.data.name, token:res.data.token, user_id:res.data.user_id, new_device: false})
+      ToastAndroid.showWithGravity(
+        res.data.message,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      )
+    }else{
+        ToastAndroid.showWithGravity(
+          res.data.message,
+          ToastAndroid.LONG,
+          ToastAndroid.BOTTOM
+        )
+    }
+  }
   return (
     <ScrollView>
       <Bg1
-  height={hp('40%')}
-  width={wp('100%')}
-    style={{
-      position: 'absolute',
-        
-    }}
-    resizeMode="stretch"
-    
-    
-    />
-    
-        <View style={styles.topElements}>
-          <TouchableOpacity style={styles.button} onPress={()=>navigation.navigate('RegistrationScreen')}>
-            <Image
-              source={require('../assets/images/topbar/back.png')}
-              style={styles.button_image}
-            />
-          </TouchableOpacity>
-          <View style={styles.logoflat}>
-            <Image
-              source={require('../assets/images/logoinapp/logoflat.png')}
-            />
-          </View>
-        </View>
+        height={hp('40%')}
+        width={wp('100%')}
+        style={{
+          position: 'absolute',
 
-        <View style={styles.heading}>
-          <Text style={styles.headingText}>Welcome Back</Text>
+        }}
+        resizeMode="stretch"
+
+
+      />
+
+      <View style={styles.topElements}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RegistrationScreen')}>
+          <Image
+            source={require('../assets/images/topbar/back.png')}
+            style={styles.button_image}
+          />
+        </TouchableOpacity>
+        <View style={styles.logoflat}>
+          <Image
+            source={require('../assets/images/logoinapp/logoflat.png')}
+          />
         </View>
-      
-    <View style={styles.inputFields}>
-    <TextInput
-        style={styles.input}
-        onChangeText={onChangeEmail}
-        value={email}
-        placeholder="email / contact number"
-        textAlign="center"
-        placeholderTextColor="#635CC9"
-        
-      />
-       <TextInput
-        style={styles.input}
-        onChangeText={onChangePassword}
-        value={password}
-        placeholder="password"
-        textAlign="center"
-        placeholderTextColor="#635CC9"
-        
-      />
-     <Button
-          onPress={signin}
+      </View>
+
+      <View style={styles.heading}>
+        <Text style={styles.headingText}>Welcome Back</Text>
+      </View>
+
+      <View style={styles.inputFields}>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeEmail}
+          value={email}
+          placeholder="email / contact number"
+          textAlign="center"
+          placeholderTextColor="#635CC9"
+
+        />
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangePassword}
+          value={password}
+          placeholder="password"
+          textAlign="center"
+          placeholderTextColor="#635CC9"
+
+        />
+        <Button
+          onPress={startLogin}
           title="Login"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
-          containerStyle={{marginTop:10}} 
-         
+          containerStyle={{ marginTop: 10 }}
+
         />
         <Text style={styles.forgotText}>Forgot password?</Text>
         <Text style={styles.forgotText}>or login using</Text>
-      <SocialMediaIcon/>
-      <Text style={styles.bottomText} onPress={()=>navigation.navigate('RegistrationScreen')} >I don't have an account</Text>
-        
-    </View>
+        <SocialMediaIcon />
+        <Text style={styles.bottomText} onPress={() => navigation.navigate('RegistrationScreen')} >I don't have an account</Text>
+
+      </View>
 
     </ScrollView>
   );
@@ -106,7 +130,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Poppins Medium',
     fontSize: 37,
-    
+
     lineHeight: 50 * 0.75,
     paddingTop: 40 - 35 * 0.75,
   },
@@ -126,36 +150,36 @@ const styles = StyleSheet.create({
     height: 42,
     width: 42,
   },
-  inputFields:{
-marginVertical:15,
-marginTop:hp('15%')
+  inputFields: {
+    marginVertical: 15,
+    marginTop: hp('15%')
   },
   input: {
     height: 50,
-    marginVertical:5,
-    marginHorizontal:40,
+    marginVertical: 5,
+    marginHorizontal: 40,
     borderWidth: 1,
-    borderRadius:25,
-    fontSize:15,
-    backgroundColor:"#E7E6F3",
-    borderColor:"#E7E6F3",
-   
-    
+    borderRadius: 25,
+    fontSize: 15,
+    backgroundColor: "#E7E6F3",
+    borderColor: "#E7E6F3",
+
+
 
   },
-  forgotText:{
-      fontSize:15,
-      color:"#757575",
-      fontFamily:"Poppins Regular",
-      textAlign:'center',
-      marginVertical:20
+  forgotText: {
+    fontSize: 15,
+    color: "#757575",
+    fontFamily: "Poppins Regular",
+    textAlign: 'center',
+    marginVertical: 20
   },
-  btn1:{
-            
+  btn1: {
+
     backgroundColor: "#635CC9",
     borderRadius: 50,
-    marginHorizontal:40,
-    height:50,
+    marginHorizontal: 40,
+    height: 50,
     shadowColor: "rgba(239, 54, 81, 0.35)",
     shadowOffset: {
       width: 0,
@@ -165,13 +189,13 @@ marginTop:hp('15%')
     shadowRadius: 5.84,
 
     elevation: 5,
-    
+
   },
-  bottomText:{
-    color:"#635CC9",
-    textAlign:'center',
-    marginVertical:40,
-    fontSize:15,
-    fontFamily:"Poppins Medium"
+  bottomText: {
+    color: "#635CC9",
+    textAlign: 'center',
+    marginVertical: 40,
+    fontSize: 15,
+    fontFamily: "Poppins Medium"
   }
 });

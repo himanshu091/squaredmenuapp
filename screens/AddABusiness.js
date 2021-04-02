@@ -17,14 +17,12 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
-import {Context as AuthContext} from '../context/AuthContext';
 const AddABusiness = ({navigation}) => {
     const [name, onChangeName] = React.useState(null);
     const [address, onChangeAddress] = React.useState(null);
     const [states, onChangeState] = React.useState(null);
     const [city, onChangeCity] = React.useState(null);
     const [table, onChangeTable] = React.useState(null);
-    const {state, signin} = useContext(AuthContext);
   return (
     <ScrollView>
       <Bg1
@@ -121,7 +119,7 @@ const AddABusiness = ({navigation}) => {
       <Text style={styles.locationText}>Locate me</Text>
       </View>
      <Button
-          onPress={signin}
+          onPress={()=>{}}
           title="Add"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}

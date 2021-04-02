@@ -7,6 +7,16 @@
  */
 
 import React ,{useEffect} from 'react';
+import { Provider } from 'react-redux';
+import {createStore, applyMiddleware, combineReducers, compose} from 'redux';
+import { PersistGate } from 'redux-persist/integration/react'
+import { persistStore, persistReducer } from 'redux-persist'
+import thunk from 'redux-thunk';
+
+
+import authReducer from './store/reducers/authReducer'
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import type {Node} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
@@ -35,41 +45,28 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import {Provider as AuthProvider} from './context/AuthContext.js';
 
 // Screens
 import Navigator from './Navigator';
 
 
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
 
-const App: () => Node = () => {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
+  const rootReducer = combineReducers({
+    auth: authReducer,
+  })
+  
+  const persistConfig = {
+    key: 'squaredmenu',
+    storage:AsyncStorage,
+  }
+  const persistedReducer = persistReducer(persistConfig, rootReducer)
+  const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
+  const store = createStore(persistedReducer, composeEnhancers(applyMiddleware(thunk)))
+  let persistor = persistStore(store)
+  console.log("persiistor", store.getState())
   useEffect(() => {
     SplashScreen.hide()
     
@@ -79,9 +76,12 @@ const App: () => Node = () => {
   };
 
   return (
-    <AuthProvider>
-      <Navigator/>
-    </AuthProvider>
+    
+    <Provider store={store}>
+      <PersistGate loading={true} persistor={persistor}>
+        <Navigator/>
+      </PersistGate>
+    </Provider>
   );
 };
 

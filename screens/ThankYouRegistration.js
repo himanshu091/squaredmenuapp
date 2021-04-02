@@ -17,12 +17,16 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
+import { verifyEmail } from '../store/action';
+import { connect } from 'react-redux';
 
-const ThankYouRegistration = ({navigation}) => {
-  const [name, onChangeName] = React.useState(null);
-  const [number, onChangeNumber] = React.useState(null);
-  const [email, onChangeEmail] = React.useState(null);
-  const [password, onChangePassword] = React.useState(null);
+const ThankYouRegistration = ({navigation, verifyEmail, user_id}) => {
+  const resendVerification = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    const res = await verifyEmail(bodyFormData)
+    alert(res)
+  }
   return (
     <ScrollView>
       <Bg3
@@ -62,7 +66,7 @@ const ThankYouRegistration = ({navigation}) => {
 
         <View style={styles.bottomView}>
           <Text
-            onPress={() => navigation.navigate('RegisterPromoCode')}
+            onPress={resendVerification}
             style={styles.bottomText}>
            Resend Verification Link
           </Text>
@@ -72,8 +76,12 @@ const ThankYouRegistration = ({navigation}) => {
     </ScrollView>
   );
 };
-
-export default ThankYouRegistration;
+const mapStateToProps = state => {
+  return {
+    user_id: state.auth.user_id
+  }
+}
+export default connect(mapStateToProps,{verifyEmail})(ThankYouRegistration);
 
 const styles = StyleSheet.create({
   heading: {

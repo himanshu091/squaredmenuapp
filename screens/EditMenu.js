@@ -18,13 +18,11 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/backgroundimage.svg';
-import {Context as AuthContext} from '../context/AuthContext';
 const EditMenu = ({navigation}) => {
   const [menu, onChangeMenu] = React.useState(null);
   const [note, onChangeNote] = React.useState(null);
   const [isOn, setisOn] = useState(false);
 
-  const {state, signin} = useContext(AuthContext);
   return (
     <ScrollView>
       <TouchableOpacity>

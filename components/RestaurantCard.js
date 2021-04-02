@@ -1,16 +1,24 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
-const RestaurantCard = ({navigation, name}) => {
+const RestaurantCard = ({navigation, name, data}) => {
     return (
         <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate(name)}>
             <View style={styles.subBox}>
-                <Image source={require('../assets/images/icons/thumbnail.png')} style={styles.thumbnail} />
+                <FastImage
+                    style={styles.thumbnail}
+                    source={{
+                        uri: data.logo,
+                        priority: FastImage.priority.normal,
+                    }}
+                    resizeMode={FastImage.resizeMode.contain}
+                />
             </View>
             <View style={styles.info}>
-                <View style={styles.parentText}><Text style={styles.name}>Sliema Restaurant</Text></View>
-                <View style={styles.parentText}><Text style={styles.address}>Triq Moroni Cremona, 26100 CR</Text></View>
+                <View style={styles.parentText}><Text style={styles.name}>{data.name}</Text></View>
+                <View style={styles.parentText}><Text style={styles.address}>{data.address}</Text></View>
             </View>
             
         </TouchableOpacity>

@@ -18,12 +18,54 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
+import { register } from '../store/action';
+import { connect } from 'react-redux';
+import { ToastAndroid } from 'react-native';
 
-const RegistrationScreen = ({navigation}) => {
-    const [name, onChangeName] = React.useState(null);
-    const [number, onChangeNumber] = React.useState(null);
-    const [email, onChangeEmail] = React.useState(null);
-    const [password, onChangePassword] = React.useState(null);
+const RegistrationScreen = ({navigation, register}) => {
+    const [name, onChangeName] = React.useState("");
+    const [number, onChangeNumber] = React.useState("");
+    const [email, onChangeEmail] = React.useState("");
+    const [password, onChangePassword] = React.useState("");
+    const [error, setError] = React.useState("");
+    
+    const beginRegitration = async () => {
+      if(name.trim().length < 1){
+        setError("Enter Name")
+        return
+      }else if(email.trim().length < 1){
+        setError("Enter Email")
+        return
+      }else if(password.trim().length < 1){
+        setError("Enter Password")
+        return
+      }else if(number.trim().length < 1){
+        setError("Enter Contact Number")
+        return
+      }
+      var bodyFormData = new FormData();
+      bodyFormData.append('name', name);
+      bodyFormData.append('phone', number);
+      bodyFormData.append('email', email);
+      bodyFormData.append('password', password);
+
+      const res = await register(bodyFormData)
+      // navigation.navigate('ThankYouRegistration')
+      if(res.data.status){
+        ToastAndroid.showWithGravity(
+          res.data.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        )
+        navigation.navigate('ThankYouRegistration')
+      }else{
+          ToastAndroid.showWithGravity(
+            res.data.message,
+            ToastAndroid.LONG,
+            ToastAndroid.BOTTOM
+          )
+      }
+    }
   return (
     <ScrollView>
   <Bg1
@@ -60,6 +102,7 @@ const RegistrationScreen = ({navigation}) => {
         </View>
     
     <View style={styles.inputFields}>
+      <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{error}</Text>
     <TextInput
         style={styles.input}
         onChangeText={onChangeName}
@@ -102,7 +145,7 @@ const RegistrationScreen = ({navigation}) => {
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
           containerStyle={{marginTop:10}} 
-          onPress={()=>navigation.navigate('ThankYouRegistration')}
+          onPress={()=>beginRegitration()}
          
         />
         
@@ -117,7 +160,7 @@ const RegistrationScreen = ({navigation}) => {
   );
 };
 
-export default RegistrationScreen;
+export default connect(null, {register})(RegistrationScreen);
 
 const styles = StyleSheet.create({
   heading: {
@@ -152,8 +195,8 @@ const styles = StyleSheet.create({
     width: 42,
   },
   inputFields:{
-marginVertical:15,
-marginTop:hp('8%')
+marginVertical:12,
+marginTop:hp('6%')
   },
   input: {
     height: 50,

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   StyleSheet,
   Text,
@@ -18,21 +18,36 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
-import { Context as AuthContext } from '../context/AuthContext';
-import {login} from '../api';
-import { storeToken } from '../store';
+import { login } from '../store/action';
+import { connect } from 'react-redux';
+import { getBaseOs,getModel,getDeviceName } from 'react-native-device-info';
+import { Platform } from 'react-native';
 
-const Login = ({ navigation }) => {
-  const [email, onChangeEmail] = React.useState(null);
-  const [password, onChangePassword] = React.useState(null);
-  const { state, signin } = useContext(AuthContext);
+const Login = ({ navigation,login }) => {
+  const [email, onChangeEmail] = React.useState("");
+  const [password, onChangePassword] = React.useState("");
+  const [error, setError] = React.useState("");
+  
   const startLogin = async () => {
+    if(email.trim().length < 1){
+      setError("Enter Email")
+      return
+    }else if(password.trim().length < 1){
+      setError("Enter Password")
+      return
+    }
+    let device_os = Platform.OS;
+    let device_model = await getModel();
+    let device_name = await getDeviceName();
     var bodyFormData = new FormData();
-    bodyFormData.append('email', 'wasim@coretechies.com');
-    bodyFormData.append('password', 'Pass@123');
+    bodyFormData.append('email', email);
+    bodyFormData.append('password', password);
+    bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
+    bodyFormData.append('device_name', device_name);
+    bodyFormData.append('device_modal', device_model);
+    bodyFormData.append('device_os', device_os);
     const res = await login(bodyFormData)
     if(res.data.status){
-      await storeToken({email:res.data.email, name:res.data.name, token:res.data.token, user_id:res.data.user_id, new_device: false})
       ToastAndroid.showWithGravity(
         res.data.message,
         ToastAndroid.SHORT,
@@ -79,6 +94,7 @@ const Login = ({ navigation }) => {
       </View>
 
       <View style={styles.inputFields}>
+        <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{error}</Text>
         <TextInput
           style={styles.input}
           onChangeText={onChangeEmail}
@@ -116,7 +132,7 @@ const Login = ({ navigation }) => {
   );
 };
 
-export default Login;
+export default connect(null, {login})(Login);
 
 const styles = StyleSheet.create({
   heading: {
@@ -152,7 +168,7 @@ const styles = StyleSheet.create({
   },
   inputFields: {
     marginVertical: 15,
-    marginTop: hp('15%')
+    marginTop: hp('14%')
   },
   input: {
     height: 50,

@@ -17,86 +17,101 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/backgroundimage.svg';
-import {Context as AuthContext} from '../context/AuthContext';
-const EditProfile = ({navigation}) => {
-  const [old, onChangeOld] = React.useState(null);
-  const [confirm, onChangeConfirm] = React.useState(null)
-  const [newpassword, onChangeNewPassword] = React.useState(null);
-  const {state, signin} = useContext(AuthContext);
+import { connect } from 'react-redux';
+import { changePassword } from '../store/action';
+import { ToastAndroid } from 'react-native';
+
+const EditProfile = ({navigation, changePassword, name, user_id}) => {
+  const [old, onChangeOld] = React.useState("");
+  const [confirm, onChangeConfirm] = React.useState("")
+  const [newpassword, onChangeNewPassword] = React.useState("");
+  const handleSubmit = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('current_pass', old);
+    bodyFormData.append('new_pass', newpassword);
+    bodyFormData.append('user_id', user_id);
+    const res = await changePassword(bodyFormData)
+  
+    ToastAndroid.showWithGravity(
+      res.data.message,
+      ToastAndroid.SHORT,
+      ToastAndroid.BOTTOM
+    )
+  }
   return (
     <ScrollView>
         <TouchableOpacity>
-      <Bg1
-        height={hp(30)}
-        width={wp('100%')}
-        style={{
-          position: 'absolute',
-          top:0,
-          left:0,
-          right:0
-        }}
-    marginTop={-4}
-        resizeMode="cover"
-      />
-      </TouchableOpacity>
-
-      <View style={styles.topElements}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={()=>navigation.goBack()}>
-          <Image
-            source={require('../assets/images/topbar/back.png')}
-            style={styles.button_image}
-          />
+        <Bg1
+          height={hp(30)}
+          width={wp('100%')}
+          style={{
+            position: 'absolute',
+            top:0,
+            left:0,
+            right:0
+          }}
+          marginTop={-4}
+          resizeMode="cover"
+        />
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('RegistrationScreen')}>
-          <Image
-            source={require('../assets/images/icons/edit2.png')}
-            style={styles.button_image}
-          />
-        </TouchableOpacity>
-      </View>
+        <View style={styles.topElements}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={()=>navigation.goBack()}>
+            <Image
+              source={require('../assets/images/topbar/back.png')}
+              style={styles.button_image}
+            />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('RegistrationScreen')}>
+            <Image
+              source={require('../assets/images/icons/edit2.png')}
+              style={styles.button_image}
+            />
+          </TouchableOpacity>
+        </View>
 
 
-      <View style={styles.inputFields}>
-      
-          <Text style={styles.nameText}>Federico Di Gesù</Text>
+        <View style={styles.inputFields}>
+        
+          <Text style={styles.nameText}>{name}</Text>
           <TextInput
-        fontSize={15}
-        fontFamily={"Poppins Regular"}
-        onChangeText={onChangeOld}
-        value={old}
-        placeholder="Old Password"
-        opacity={ 0.3}
-        placeholderTextColor="#000000"
-        
-      />
-       <TextInput
-        fontSize={15}
-        fontFamily={"Poppins Regular"}
-        onChangeText={onChangeNewPassword}
-        value={newpassword}
-        placeholder="New Password"
-        opacity={ 0.3}
-        placeholderTextColor="#000000"
-        
-      />
-       <TextInput
-        fontSize={15}
-        fontFamily={"Poppins Regular"}
-        onChangeText={onChangeConfirm}
-        value={confirm}
-        placeholder="Confirm New Password"
-        opacity={ 0.3}
-        placeholderTextColor="#000000"
-        
-      />
+            fontSize={15}
+            fontFamily={"Poppins Regular"}
+            onChangeText={onChangeOld}
+            value={old}
+            placeholder="Old Password"
+            opacity={ 0.3}
+            placeholderTextColor="#000000"
+            
+          />
+        <TextInput
+          fontSize={15}
+          fontFamily={"Poppins Regular"}
+          onChangeText={onChangeNewPassword}
+          value={newpassword}
+          placeholder="New Password"
+          opacity={ 0.3}
+          placeholderTextColor="#000000"
+          
+        />
+        <TextInput
+          fontSize={15}
+          fontFamily={"Poppins Regular"}
+          onChangeText={onChangeConfirm}
+          value={confirm}
+          placeholder="Confirm New Password"
+          opacity={ 0.3}
+          placeholderTextColor="#000000"
+          
+        />
       
-     <Button
-          onPress={signin}
+        <Button
+          onPress={handleSubmit}
           title="Salva"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
@@ -107,8 +122,13 @@ const EditProfile = ({navigation}) => {
     </ScrollView>
   );
 };
-
-export default EditProfile;
+const mapSatateToProps = state => {
+  return {
+    name: state.auth.name,
+    user_id: state.auth.user_id
+  }
+}
+export default connect(mapSatateToProps,{changePassword})(EditProfile);
 
 const styles = StyleSheet.create({
   heading: {
@@ -197,6 +217,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins Medium',
     lineHeight: 60 * 0.75,
     paddingTop: 40 - 35 * 0.75,
+    textTransform: 'capitalize'
   },
   smallText:{
     fontSize: 15,

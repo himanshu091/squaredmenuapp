@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
+import { connect } from 'react-redux'
 import AddNewButton from '../components/AddNewButton'
 import RestaurantCard from '../components/RestaurantCard'
+import { getRestaurants, logout } from '../store/action'
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation, logout, user_id, getRestaurants}) => {
+    const [data, setdata] = useState(null)
+    useEffect(async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        const res = await getRestaurants(bodyFormData)
+        setdata(res)
+    }, [])
     return (
         <SafeAreaView>
             <View>
@@ -22,14 +31,22 @@ const HomeScreen = ({navigation}) => {
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
-                <RestaurantCard name='Menu' navigation={navigation}/>
+                
+                {data && data.map((item,idx)=>{
+                    return <RestaurantCard key={idx} name='Menu' navigation={navigation} data={item}/>
+                })}
                 <AddNewButton name='AddABusiness' navigation={navigation}/>
+                
             </View>
         </SafeAreaView>
     )
 }
-
-export default HomeScreen
+const mapStataeToProps = state => {
+    return {
+        user_id: state.auth.user_id
+    }
+}
+export default connect(mapStataeToProps, {logout,getRestaurants,getRestaurants})(HomeScreen)
 
 const styles = StyleSheet.create({
     banner:{

@@ -17,11 +17,10 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg';
-import {Context as AuthContext} from '../context/AuthContext';
-const UserProfile = ({navigation}) => {
-  const [email, onChangeEmail] = React.useState(null);
-  const [password, onChangePassword] = React.useState(null);
-  const {state, signin} = useContext(AuthContext);
+import { connect } from 'react-redux';
+import { logout } from '../store/action';
+
+const UserProfile = ({navigation, name, email, logout}) => {
   return (
     <ScrollView>
       <Bg1
@@ -59,8 +58,8 @@ const UserProfile = ({navigation}) => {
 
       <View style={styles.inputFields}>
       
-          <Text style={styles.nameText}>Federico Di Gesù</Text>
-          <Text style={styles.smallText}>federico.digesu@gmail.com</Text>
+          <Text style={styles.nameText}>{name}</Text>
+          <Text style={styles.smallText}>{email}</Text>
           <Text  style={styles.smallText}>**********</Text>
           <View style={styles.featuresView}>
           <Text  style={styles.smallHeadingText}>Go Pro!</Text>
@@ -90,12 +89,18 @@ const UserProfile = ({navigation}) => {
           </TouchableOpacity>
           </View>
         </View>
+        <TouchableOpacity onPress={logout}><Text style={{textAlign:'center'}}>Logout</Text></TouchableOpacity>
       </View>
     </ScrollView>
   );
 };
-
-export default UserProfile;
+const mapStateToProps = state => {
+  return {
+    name: state.auth.name,
+    email: state.auth.email
+  }
+}
+export default connect(mapStateToProps,{logout})(UserProfile);
 
 const styles = StyleSheet.create({
   heading: {
@@ -167,6 +172,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins Medium',
     lineHeight: 60 * 0.75,
     paddingTop: 40 - 35 * 0.75,
+    textTransform: 'capitalize'
   },
   smallText:{
     fontSize: 15,

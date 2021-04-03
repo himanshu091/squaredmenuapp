@@ -23,6 +23,7 @@ import QR from './screens/QR';
 import DishDetail from './screens/DishDetail';
 import EditDish from './screens/EditDish';
 import { connect } from 'react-redux';
+import ForgotPassword from './screens/ForgotPassword';
 
 
 function OnboardingStack(){
@@ -46,6 +47,7 @@ function AuthStack(){
                 <Auth.Screen name="TrialScreen" component={TrialScreen} />
                 <Auth.Screen name="ThankYouRegistration" component={ThankYouRegistration} />
                 <Auth.Screen name="ThankYouPurchase" component={ThankYouPurchase} />
+                <Auth.Screen name="ForgotPassword" component={ForgotPassword} />
                
             </Auth.Navigator>
         </NavigationContainer>

@@ -121,7 +121,7 @@ const Login = ({ navigation,login }) => {
           containerStyle={{ marginTop: 10 }}
 
         />
-        <Text style={styles.forgotText}>Forgot password?</Text>
+        <Text style={styles.forgotText} onPress={() => navigation.navigate('ForgotPassword')}>Forgot password?</Text>
         <Text style={styles.forgotText}>or login using</Text>
         <SocialMediaIcon />
         <Text style={styles.bottomText} onPress={() => navigation.navigate('RegistrationScreen')} >I don't have an account</Text>

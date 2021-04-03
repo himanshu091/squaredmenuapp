@@ -17,12 +17,29 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
+import ImagePicker from 'react-native-image-crop-picker';
+
+
+
+
 const AddABusiness = ({navigation}) => {
     const [name, onChangeName] = React.useState(null);
     const [address, onChangeAddress] = React.useState(null);
     const [states, onChangeState] = React.useState(null);
     const [city, onChangeCity] = React.useState(null);
     const [table, onChangeTable] = React.useState(null);
+   
+    const imagepick = () => {
+      ImagePicker.openPicker({
+        width: 300,
+        height: 400,
+        cropping: true
+      }).then(image => {
+        console.log(image);
+      });
+    }
+  
+    
   return (
     <ScrollView>
       <Bg1
@@ -58,12 +75,15 @@ const AddABusiness = ({navigation}) => {
         </View>
       
     <View style={styles.inputFields}>
-    <View style={styles.imageContainer}>
+    
+            <TouchableOpacity onPress={imagepick} style={styles.imageContainer}>
       <Image
       source={require("../assets/images/icons/imageicon.png")}
       style={styles.imageIcon}
       />
-      </View>
+      </TouchableOpacity>
+    
+
     <TextInput
         style={styles.input}
         onChangeText={onChangeName}

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
+import { connect } from 'react-redux'
 import HeaderSVG from '../components/HeaderSVG'
 import MenuButtons from '../components/MenuButtons'
 import NewMenuButton from '../components/NewMenuButton'
+import { getMenu } from '../store/action'
 const data = [
     {
         title: "Breakfast Menu",
@@ -15,11 +17,20 @@ const data = [
     },
     
 ]
-const Menu = ({navigation}) => {
+const Menu = ({navigation, user_id, token, getMenu, route}) => {
+    const [data, setdata] = useState(null)
+    useEffect(async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('restaurant_id', route.params.restaurant_id);
+        const res = await getMenu(bodyFormData)
+        setdata(res.data.data)
+    }, [])
     return (
         <SafeAreaView style={{flex: 1}}>
             <ScrollView>
-                <HeaderSVG uri="https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"/>
+                <HeaderSVG uri={data && data.restaurant.cover}/>
                 <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
                     <TouchableOpacity 
                         style={styles.bell}
@@ -30,15 +41,15 @@ const Menu = ({navigation}) => {
                     
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
-                            <Text style={styles.name}>Silema Menus</Text>
+                            <Text style={styles.name}>{data && data.restaurant.name}</Text>
                         </View>
                     </View>
                 </View>
-               {data && data.map((item, idx) => {
-                   return <MenuButtons key={idx} navigation={navigation} title={item.title} uri={item.uri} onPress={()=>{navigation.navigate('MenuList')}}/>
+               {data && data.menu.map((item, idx) => {
+                   return <MenuButtons key={idx} navigation={navigation} title={item.name} uri={item.image} data={item} restaurant_id={data.restaurant.name} onPress={()=>{navigation.navigate('MenuList')}}/>
                })}
                 
-               <NewMenuButton action={()=>navigation.navigate('EditMenu')}/>
+               <NewMenuButton action={()=>navigation.navigate('NewMenu',{restaurant_id:route.params.restaurant_id})}/>
                <View style={{marginBottom: 150}}></View>
             </ScrollView>
             <TouchableOpacity style={styles.qrbutton} onPress={()=>navigation.navigate('QR')}>
@@ -47,8 +58,13 @@ const Menu = ({navigation}) => {
         </SafeAreaView>
     )
 }
-
-export default Menu
+const mapStataeToProps = state => {
+    return {
+        user_id: state.auth.user_id,
+        token: state.auth.token
+    }
+}
+export default connect(mapStataeToProps,{getMenu})(Menu)
 
 const styles = StyleSheet.create({
     banner:{

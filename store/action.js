@@ -90,3 +90,58 @@ export const changePassword = (data) => async (dispatch, getState) => {
     })
     return res
 };
+
+export const getMenu = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/get-menus`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    // console.log("GetMenu =>",res.data)
+    return res
+};
+
+export const forgotPassword = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/forgot-password`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Forgot =>",res.data)
+    return res
+};
+
+export const toggleMenuStatus = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/update-menu-status`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Toggle =>",res.data)
+    return res
+};
+
+export const addMenu = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/add-edit-menu`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Add Menu =>",res.data)
+    return res
+};
+
+export const editMenu = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/add-edit-menu`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Edit Menu =>",res.data)
+    return res
+};

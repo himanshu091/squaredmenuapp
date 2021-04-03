@@ -6,11 +6,12 @@ import AddNewButton from '../components/AddNewButton'
 import RestaurantCard from '../components/RestaurantCard'
 import { getRestaurants, logout } from '../store/action'
 
-const HomeScreen = ({navigation, logout, user_id, getRestaurants}) => {
+const HomeScreen = ({navigation, logout, user_id, token, getRestaurants}) => {
     const [data, setdata] = useState(null)
     useEffect(async () => {
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
         const res = await getRestaurants(bodyFormData)
         setdata(res)
     }, [])
@@ -43,7 +44,8 @@ const HomeScreen = ({navigation, logout, user_id, getRestaurants}) => {
 }
 const mapStataeToProps = state => {
     return {
-        user_id: state.auth.user_id
+        user_id: state.auth.user_id,
+        token: state.auth.token
     }
 }
 export default connect(mapStataeToProps, {logout,getRestaurants,getRestaurants})(HomeScreen)

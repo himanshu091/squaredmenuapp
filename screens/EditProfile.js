@@ -87,7 +87,7 @@ const EditProfile = ({navigation, changePassword, name, user_id}) => {
             placeholder="Old Password"
             opacity={ 0.3}
             placeholderTextColor="#000000"
-            
+            secureTextEntry
           />
         <TextInput
           fontSize={15}
@@ -97,7 +97,7 @@ const EditProfile = ({navigation, changePassword, name, user_id}) => {
           placeholder="New Password"
           opacity={ 0.3}
           placeholderTextColor="#000000"
-          
+          secureTextEntry
         />
         <TextInput
           fontSize={15}
@@ -107,7 +107,7 @@ const EditProfile = ({navigation, changePassword, name, user_id}) => {
           placeholder="Confirm New Password"
           opacity={ 0.3}
           placeholderTextColor="#000000"
-          
+          secureTextEntry
         />
       
         <Button

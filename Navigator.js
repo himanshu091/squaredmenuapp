@@ -24,7 +24,11 @@ import DishDetail from './screens/DishDetail';
 import EditDish from './screens/EditDish';
 import { connect } from 'react-redux';
 import ForgotPassword from './screens/ForgotPassword';
+<<<<<<< HEAD
 import LocationTest from './screens/LocationTest';
+=======
+import NewMenu from './screens/NewMenu';
+>>>>>>> a93da8d7847c74cac2a199ac4e3c923808758ca6
 
 
 function OnboardingStack(){
@@ -67,6 +71,7 @@ function MainStack(){
                 <Main.Screen name="UserProfile" component={UserProfile} />
                 <Main.Screen name="EditProfile" component={EditProfile} />
                 <Main.Screen name="EditMenu" component={EditMenu} />
+                <Main.Screen name="NewMenu" component={NewMenu} />
                 <Main.Screen name="QR" component={QR} />
                 <Main.Screen name="DishDetail" component={DishDetail} />
                 <Main.Screen name="EditDish" component={EditDish} />

@@ -102,6 +102,7 @@ const Login = ({ navigation,login }) => {
           placeholder="email / contact number"
           textAlign="center"
           placeholderTextColor="#635CC9"
+          autoCapitalize="none"
 
         />
         <TextInput
@@ -111,6 +112,7 @@ const Login = ({ navigation,login }) => {
           placeholder="password"
           textAlign="center"
           placeholderTextColor="#635CC9"
+          secureTextEntry
 
         />
         <Button

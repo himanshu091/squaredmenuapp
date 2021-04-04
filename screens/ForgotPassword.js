@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,92 +8,107 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  
+
 } from 'react-native';
-import {Button} from 'react-native-elements'
+import { Button } from 'react-native-elements'
 import Bg1 from '../assets/images/banners/bg1.svg'
 
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
-import SocialMediaIcon from '../components/SocialMediaIcon';
+import { connect } from 'react-redux';
+import {forgotPassword} from '../store/action'
+const ForgotPassword = ({ navigation,forgotPassword }) => {
 
-const ForgotPassword = ({navigation}) => {
-
-    const [email, onChangeEmail] = React.useState(null);
-    
+  const [email, onChangeEmail] = React.useState("");
+  const [err, seterr] = useState("")
+  const initiateForgot = async () => {
+    if(email.trim().length<1){
+      seterr("Please enter a valid Email / Phone")
+      return
+    }
+    var bodyFormData = new FormData();
+    bodyFormData.append('email', email);
+    const res = await forgotPassword(bodyFormData)
+    alert(res.data.message)
+    if(res.data.status){
+      navigation.navigate('Login')
+    }
+  }
   return (
     <ScrollView>
-  <Bg1
-  height={hp('40%')}
-  width={wp('100%')}
-    style={{
-      position: 'absolute',
-        
-    }}
-    resizeMode="stretch"
-    
-    />
-     
-     
-       
-        <View style={styles.topElements}>
-          <TouchableOpacity style={styles.button} onPress={()=>navigation.goBack()}>
-            <Image
-              source={require('../assets/images/topbar/back.png')}
-              style={styles.button_image}
-              
-            />
-          </TouchableOpacity>
-          <View style={styles.logoflat}>
-            <Image
-              source={require('../assets/images/logoinapp/logoflat.png')}
-            />
-          </View>
-        </View>
+      <Bg1
+        height={hp('40%')}
+        width={wp('100%')}
+        style={{
+          position: 'absolute',
 
-        <View style={styles.heading}>
-          <Text style={styles.headingText}>Forgot Password ?</Text>
-        </View>
-        <View style={styles.inputFields}>
-    <Text  style={styles.emailText}>Enter your registered email/phone number and we will reset your password</Text>
-    <TextInput
-        style={styles.input}
-        onChangeText={onChangeEmail}
-        value={email}
-        placeholder="Email Address"
-        textAlign="center"
-        placeholderTextColor="#635CC9"
-        
+        }}
+        resizeMode="stretch"
+
       />
-    
-      
-      <Button
-  
-  title="Send Reset Link"
-  titleStyle={{ fontSize: 15 }}
-  buttonStyle={styles.btn1}
-  containerStyle={{marginTop:10}} 
-  onPress={()=>navigation.navigate('TrialScreen')}
- 
-/>
-        
-    
-    
-      
-        
-    </View>
-    
+
+
+
+      <View style={styles.topElements}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+          <Image
+            source={require('../assets/images/topbar/back.png')}
+            style={styles.button_image}
+
+          />
+        </TouchableOpacity>
+        <View style={styles.logoflat}>
+          <Image
+            source={require('../assets/images/logoinapp/logoflat.png')}
+          />
+        </View>
+      </View>
+
+      <View style={styles.heading}>
+        <Text style={styles.headingText}>Forgot Password ?</Text>
+      </View>
+      <View style={styles.inputFields}>
+        <Text style={styles.emailText}>Enter your registered email/phone number and we will reset your password</Text>
+        <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeEmail}
+          value={email}
+          placeholder="Email Address"
+          textAlign="center"
+          placeholderTextColor="#635CC9"
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+
+
+        <Button
+
+          title="Send Reset Link"
+          titleStyle={{ fontSize: 15 }}
+          buttonStyle={styles.btn1}
+          containerStyle={{ marginTop: 10 }}
+          onPress={() => initiateForgot()}
+
+        />
+
+
+
+
+
+      </View>
+
     </ScrollView>
   );
 };
 
-export default ForgotPassword;
+export default connect(null,{forgotPassword})(ForgotPassword);
 
 const styles = StyleSheet.create({
   heading: {
- 
+
     justifyContent: 'flex-end',
     alignItems: 'flex-start',
     marginBottom: 40,
@@ -123,36 +138,36 @@ const styles = StyleSheet.create({
     height: 42,
     width: 42,
   },
-  inputFields:{
-marginVertical:15,
-marginTop:hp('8%')
+  inputFields: {
+    marginVertical: 15,
+    marginTop: hp('8%')
   },
   input: {
     height: 50,
-    marginVertical:5,
-    marginHorizontal:40,
+    marginVertical: 5,
+    marginHorizontal: 40,
     borderWidth: 1,
-    borderRadius:25,
-    fontSize:15,
-    backgroundColor:"#E7E6F3",
-    borderColor:"#E7E6F3",
-   
-    
+    borderRadius: 25,
+    fontSize: 15,
+    backgroundColor: "#E7E6F3",
+    borderColor: "#E7E6F3",
+
+
 
   },
-  forgotText:{
-      fontSize:15,
-      color:"#757575",
-      fontFamily:"Poppins Regular",
-      textAlign:'center',
-      marginVertical:20
+  forgotText: {
+    fontSize: 15,
+    color: "#757575",
+    fontFamily: "Poppins Regular",
+    textAlign: 'center',
+    marginVertical: 20
   },
-  btn1:{
-            
+  btn1: {
+
     backgroundColor: "#635CC9",
     borderRadius: 50,
-    marginHorizontal:40,
-    height:50,
+    marginHorizontal: 40,
+    height: 50,
     shadowColor: "rgba(239, 54, 81, 0.35)",
     shadowOffset: {
       width: 0,
@@ -162,31 +177,31 @@ marginTop:hp('8%')
     shadowRadius: 5.84,
 
     elevation: 5,
-    
+
   },
-  bottomText:{
-    color:"#635CC9",
-    textAlign:'center',
-    marginVertical:40,
-    fontSize:15,
-    fontFamily:"Poppins Medium"
+  bottomText: {
+    color: "#635CC9",
+    textAlign: 'center',
+    marginVertical: 40,
+    fontSize: 15,
+    fontFamily: "Poppins Medium"
   },
-  registerText:{
-    fontSize:15,
-    color:"#757575",
-    fontFamily:"Poppins Regular",
-    textAlign:'center',
-    marginVertical:10 
+  registerText: {
+    fontSize: 15,
+    color: "#757575",
+    fontFamily: "Poppins Regular",
+    textAlign: 'center',
+    marginVertical: 10
   },
-  emailText:{
+  emailText: {
     height: 50,
-    marginVertical:5,
-    marginHorizontal:40,
-    color:"#757575",
-    borderRadius:25,
-    fontSize:15,
-    textAlign:'center'
-  
+    marginVertical: 5,
+    marginHorizontal: 40,
+    color: "#757575",
+    borderRadius: 25,
+    fontSize: 15,
+    textAlign: 'center'
+
 
   }
 });

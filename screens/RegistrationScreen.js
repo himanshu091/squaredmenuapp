@@ -119,7 +119,7 @@ const RegistrationScreen = ({navigation, register}) => {
         placeholder="email"
         textAlign="center"
         placeholderTextColor="#635CC9"
-        
+        autoCapitalize="none"
       />
        <TextInput
         style={styles.input}
@@ -128,7 +128,7 @@ const RegistrationScreen = ({navigation, register}) => {
         placeholder="contact number"
         textAlign="center"
         placeholderTextColor="#635CC9"
-        
+        keyboardType="phone-pad"
       />
        <TextInput
         style={styles.input}
@@ -137,7 +137,7 @@ const RegistrationScreen = ({navigation, register}) => {
         placeholder="password"
         textAlign="center"
         placeholderTextColor="#635CC9"
-        
+        secureTextEntry
       />
      <Button
   

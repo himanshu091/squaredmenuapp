@@ -19,34 +19,41 @@ import {
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/backgroundimage.svg';
 import { connect } from 'react-redux';
-import { editMenu } from '../store/action';
+import { addMenu } from '../store/action';
+import ImagePicker from 'react-native-image-crop-picker';
 
-
-
-const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
-  const [menu, onChangeMenu] = React.useState(route.params.data.name);
+const NewMenu = ({navigation, route, user_id, token, addMenu}) => {
+  const [menu, onChangeMenu] = React.useState(null);
   const [note, onChangeNote] = React.useState(null);
-  const [isOn, setisOn] = useState(route.params.data.active===0?false:true);
-  const [clicked, setclicked] = useState(false)
-  
-  const handleSubmit = async () => {
-      var bodyFormData = new FormData();
-      bodyFormData.append('user_id', user_id);
-      bodyFormData.append('token', token);
-      bodyFormData.append('name', menu);
-      bodyFormData.append('restaurant_id', route.params.restaurant_id);
-      bodyFormData.append('image', "");
-      bodyFormData.append('active', isOn?1:0);
-      bodyFormData.append('menu_id', route.params.data.menu_id);
-      const res = await editMenu(bodyFormData)
-      if(res.data.status){
-          alert(res.data.message)
-          // navigation.goBack()
-      }
+  const [isOn, setisOn] = useState(false);
+  const imagepick = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true
+    }).then(image => {
+      console.log(image);
+    }).catch(err=>{
+        console.log(err)
+    });
   }
+const handleSubmit = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    bodyFormData.append('token', token);
+    bodyFormData.append('name', menu);
+    bodyFormData.append('restaurant_id', route.params.restaurant_id);
+    bodyFormData.append('image', "");
+    bodyFormData.append('active', isOn?1:0);
+    const res = await addMenu(bodyFormData)
+    if(res.data.status){
+        alert(res.data.message)
+        navigation.goBack()
+    }
+}
   return (
     <ScrollView>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={()=>imagepick()} >
         <Bg1
           height={hp(30)}
           width={wp('100%')}
@@ -59,7 +66,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
           marginTop={-4}
           resizeMode="cover"
         />
-      </TouchableOpacity>
+      
 
       <View style={styles.topElements}>
         <TouchableOpacity
@@ -80,11 +87,11 @@ const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
           />
         </TouchableOpacity> */}
       </View>
-
+      </TouchableOpacity>
       <View style={styles.inputFields}>
         <View style={styles.editMenu}>
           <TextInput
-            fontSize={wp(12)}
+            fontSize={48}
             fontFamily={'Poppins Medium'}
             onChangeText={onChangeMenu}
             value={menu}
@@ -118,7 +125,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
             />
           </View>
           <Button
-            onPress={() => handleSubmit()}
+            onPress={handleSubmit}
             title="Salva"
             titleStyle={{fontSize: 15}}
             buttonStyle={styles.btn1}
@@ -130,13 +137,13 @@ const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
     </ScrollView>
   );
 };
-const mapStataeToProps = state => {
-  return{
-    user_id: state.auth.user_id,
-    token: state.auth.token
+const mapStateToProps = state => {
+    return{
+      user_id: state.auth.user_id,
+      token: state.auth.token
+    }
   }
-}
-export default connect(mapStataeToProps,{editMenu})(EditMenu);
+export default connect(mapStateToProps,{addMenu})(NewMenu);
 
 const styles = StyleSheet.create({
   heading: {

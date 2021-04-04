@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, {useState, useEffect}from 'react';
 import {
   StyleSheet,
   Text,
@@ -18,6 +18,7 @@ import {
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
 import ImagePicker from 'react-native-image-crop-picker';
+import Geolocation from '@react-native-community/geolocation';
 
 
 
@@ -37,7 +38,9 @@ const AddABusiness = ({navigation}) => {
       }).then(image => {
         console.log(image);
       });
+      
     }
+    
   
     
   return (
@@ -136,7 +139,7 @@ const AddABusiness = ({navigation}) => {
       source={require("../assets/images/icons/location.png")}
       style={styles.imageIcon}
       />
-      <Text style={styles.locationText}>Locate me</Text>
+      <Text onPress={navigation.navigate('LocationTest')} style={styles.locationText}>Locate me</Text>
       </View>
      <Button
           onPress={()=>{}}

@@ -24,6 +24,7 @@ import DishDetail from './screens/DishDetail';
 import EditDish from './screens/EditDish';
 import { connect } from 'react-redux';
 import ForgotPassword from './screens/ForgotPassword';
+import LocationTest from './screens/LocationTest';
 
 
 function OnboardingStack(){
@@ -69,6 +70,7 @@ function MainStack(){
                 <Main.Screen name="QR" component={QR} />
                 <Main.Screen name="DishDetail" component={DishDetail} />
                 <Main.Screen name="EditDish" component={EditDish} />
+                <Main.Screen name="LocationTest" component={LocationTest} />
             </Main.Navigator>
         </NavigationContainer>
     )

@@ -145,3 +145,15 @@ export const editMenu = (data) => async (dispatch, getState) => {
     console.log("Edit Menu =>",res.data)
     return res
 };
+
+
+export const addNewRestaurant = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/add-edit-restaurant`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Add Restaurant =>",res.data)
+    return res
+};

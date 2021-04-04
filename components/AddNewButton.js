@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         height: 115,
         padding: 10,
         marginHorizontal: widthPercentageToDP(8),
-        marginTop: 10,
+        marginTop: 20,
         elevation: 2,
         display: 'flex',
         flexDirection: 'row',

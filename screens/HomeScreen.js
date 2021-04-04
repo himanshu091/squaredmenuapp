@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { ScrollView } from 'react-native'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import { connect } from 'react-redux'
 import AddNewButton from '../components/AddNewButton'
 import RestaurantCard from '../components/RestaurantCard'
 import { getRestaurants, logout } from '../store/action'
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = ({navigation, logout, user_id, token, getRestaurants}) => {
     const [data, setdata] = useState(null)
@@ -15,8 +17,21 @@ const HomeScreen = ({navigation, logout, user_id, token, getRestaurants}) => {
         const res = await getRestaurants(bodyFormData)
         setdata(res)
     }, [])
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async () => {
+            console.log("Mounted Home")
+            var bodyFormData = new FormData();
+            bodyFormData.append('user_id', user_id);
+            bodyFormData.append('token', token);
+            const res = await getRestaurants(bodyFormData)
+            setdata(res)
+        });
+    
+        return unsubscribe;
+    }, [navigation]);
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{flex:1}}>
+            <ScrollView>
             <View>
                 <ImageBackground source={require('../assets/images/banners/lands.png')} style={styles.banner} resizeMode="stretch">
                     <TouchableOpacity style={styles.bell}><Image source={require('../assets/images/icons/bell.png')}/></TouchableOpacity>
@@ -39,6 +54,8 @@ const HomeScreen = ({navigation, logout, user_id, token, getRestaurants}) => {
                 <AddNewButton name='AddABusiness' navigation={navigation}/>
                 
             </View>
+            <View style={{marginBottom:50}}></View>
+            </ScrollView>
         </SafeAreaView>
     )
 }

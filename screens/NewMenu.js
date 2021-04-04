@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import ToggleSwitch from 'toggle-switch-react-native';
@@ -23,32 +24,57 @@ import { addMenu } from '../store/action';
 import ImagePicker from 'react-native-image-crop-picker';
 
 const NewMenu = ({navigation, route, user_id, token, addMenu}) => {
-  const [menu, onChangeMenu] = React.useState(null);
+  const [menu, onChangeMenu] = React.useState("");
   const [note, onChangeNote] = React.useState(null);
-  const [isOn, setisOn] = useState(false);
+  const [isOn, setisOn] = useState(true);
+  const [photo, onChangephoto] = React.useState(null);
+  const [err, setErr] = React.useState("");
+  const [clicked, setclicked] = React.useState(false);
   const imagepick = () => {
     ImagePicker.openPicker({
       width: 300,
       height: 400,
       cropping: true
     }).then(image => {
-      console.log(image);
+        console.log(image)
+        onChangephoto(image)
     }).catch(err=>{
-        console.log(err)
+        console.log(err);
     });
   }
 const handleSubmit = async () => {
+    if(menu.trim().length < 1){
+        setErr("Enter Valid Menu Name")
+        return
+    }else if(!photo){
+        setErr("Please select an Image")
+        return
+    }
+    setclicked(true)
     var bodyFormData = new FormData();
     bodyFormData.append('user_id', user_id);
     bodyFormData.append('token', token);
     bodyFormData.append('name', menu);
     bodyFormData.append('restaurant_id', route.params.restaurant_id);
-    bodyFormData.append('image', "");
+    bodyFormData.append('image', {
+        name: menu,
+        type: photo.mime,
+        uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+      });
     bodyFormData.append('active', isOn?1:0);
     const res = await addMenu(bodyFormData)
     if(res.data.status){
+        Alert.alert(  
+            'Success',  
+            res.data.message,  
+            [  
+                {text: 'OK', onPress: () => navigation.goBack()},  
+            ]  
+          );
+          setclicked(false)
+    }else{
+        setclicked(false)
         alert(res.data.message)
-        navigation.goBack()
     }
 }
   return (
@@ -89,6 +115,7 @@ const handleSubmit = async () => {
       </View>
       </TouchableOpacity>
       <View style={styles.inputFields}>
+        <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
         <View style={styles.editMenu}>
           <TextInput
             fontSize={48}
@@ -130,7 +157,7 @@ const handleSubmit = async () => {
             titleStyle={{fontSize: 15}}
             buttonStyle={styles.btn1}
             containerStyle={{marginTop: 20}}
-
+            loading={clicked}
           />
         </View>
       </View>

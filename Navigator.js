@@ -24,11 +24,8 @@ import DishDetail from './screens/DishDetail';
 import EditDish from './screens/EditDish';
 import { connect } from 'react-redux';
 import ForgotPassword from './screens/ForgotPassword';
-<<<<<<< HEAD
 import LocationTest from './screens/LocationTest';
-=======
 import NewMenu from './screens/NewMenu';
->>>>>>> a93da8d7847c74cac2a199ac4e3c923808758ca6
 
 
 function OnboardingStack(){

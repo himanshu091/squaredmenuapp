@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
 
 } from 'react-native';
 import { Button } from 'react-native-elements'
@@ -19,51 +20,80 @@ import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
 import ImagePicker from 'react-native-image-crop-picker';
 import Geolocation from '@react-native-community/geolocation';
+import { Platform } from 'react-native';
+import { connect } from 'react-redux';
+import {addNewRestaurant} from '../store/action'
 
 
 
-
-<<<<<<< HEAD
-const AddABusiness = ({navigation}) => {
-    const [name, onChangeName] = React.useState(null);
-    const [address, onChangeAddress] = React.useState(null);
-    const [states, onChangeState] = React.useState(null);
-    const [city, onChangeCity] = React.useState(null);
-    const [table, onChangeTable] = React.useState(null);
-   
-    const imagepick = () => {
-      ImagePicker.openPicker({
-        width: 300,
-        height: 400,
-        cropping: true
-      }).then(image => {
-        console.log(image);
-      });
-      
-    }
-    
-  
-    
-=======
-const AddABusiness = ({ navigation }) => {
-  const [name, onChangeName] = React.useState(null);
-  const [address, onChangeAddress] = React.useState(null);
-  const [states, onChangeState] = React.useState(null);
-  const [city, onChangeCity] = React.useState(null);
-  const [table, onChangeTable] = React.useState(null);
+const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
+  const [name, onChangeName] = React.useState("");
+  const [address, onChangeAddress] = React.useState("");
+  const [states, onChangeState] = React.useState("");
+  const [city, onChangeCity] = React.useState("");
+  const [table, onChangeTable] = React.useState("");
+  const [photo, onChangephoto] = React.useState(null);
+  const [err, setErr] = React.useState("");
+  const [clicked, setclicked] = React.useState(false);
 
   const imagepick = () => {
     ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true
+      width: 1920,
+      height: 1080,
+      cropping: true,
+      includeBase64: true
     }).then(image => {
-      console.log(image);
+      console.log(image)
+      onChangephoto(image)
+    }).catch(err=>{
+      console.log(err);
     });
   }
+  const handleSubmit = async () => {
+    if(name.trim().length < 1){
+      setErr("Enter Valid Name")
+      return
+    }else if(address.trim().length < 1){
+      setErr("Enter Valid Address")
+      return
+    }else if(city.trim().length < 1){
+      setErr("Enter Valid City")
+      return
+    }else if(states.trim().length < 1){
+      setErr("Enter Valid State")
+      return
+    }else if(!photo){
+      setErr("Please select an Image")
+      return
+    }
+    setclicked(true)
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    bodyFormData.append('name', name);
+    bodyFormData.append('address', `${address},${city},${states}`);
+    bodyFormData.append('lat', 81);
+    bodyFormData.append('lng', 85);
+    bodyFormData.append('image', {
+      name: name,
+      type: photo.mime,
+      uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+    });
+    bodyFormData.append('token', token);
+    const res = await addNewRestaurant(bodyFormData)
+    if(res.data.status){
+      Alert.alert(  
+        'Success',  
+        res.data.message,  
+        [  
+            {text: 'OK', onPress: () => navigation.goBack()},  
+        ]  
+      );
+    }else{
+      alert(res.data.message)
+      setclicked(false)
+    }
+  }
 
-
->>>>>>> a93da8d7847c74cac2a199ac4e3c923808758ca6
   return (
     <ScrollView>
       <Bg1
@@ -99,12 +129,12 @@ const AddABusiness = ({ navigation }) => {
 
         <TouchableOpacity onPress={imagepick} style={styles.imageContainer}>
           <Image
-            source={require("../assets/images/icons/imageicon.png")}
+            source={!photo?require("../assets/images/icons/imageicon.png"):{uri:`data:${photo.mime};base64,${photo.data}`}}
             style={styles.imageIcon}
           />
         </TouchableOpacity>
 
-
+        <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
         <TextInput
           style={styles.input}
           onChangeText={onChangeName}
@@ -152,44 +182,32 @@ const AddABusiness = ({ navigation }) => {
         />
 
       </View>
-      <View style={styles.locationContainer}>
-<<<<<<< HEAD
-      <Image
-      source={require("../assets/images/icons/location.png")}
-      style={styles.imageIcon}
-      />
-      <Text onPress={navigation.navigate('LocationTest')} style={styles.locationText}>Locate me</Text>
-      </View>
-     <Button
-          onPress={()=>{}}
-          title="Add"
-          titleStyle={{ fontSize: 15 }}
-          buttonStyle={styles.btn1}
-          containerStyle={{marginVertical:15}} 
-         
-=======
+      <TouchableOpacity style={styles.locationContainer} >
         <Image
           source={require("../assets/images/icons/location.png")}
-          style={styles.imageIcon}
->>>>>>> a93da8d7847c74cac2a199ac4e3c923808758ca6
         />
         <Text style={styles.locationText}>Locate me</Text>
-      </View>
+      </TouchableOpacity>
       <Button
-        onPress={() => { }}
+        onPress={() => { handleSubmit()}}
         title="Add"
         titleStyle={{ fontSize: 15 }}
         buttonStyle={styles.btn1}
         containerStyle={{ marginVertical: 15 }}
-
+        loading={clicked}
       />
 
 
     </ScrollView>
   );
 };
-
-export default AddABusiness;
+const mapStateToProps = state => {
+  return{
+    user_id: state.auth.user_id,
+    token: state.auth.token
+  }
+}
+export default connect(mapStateToProps,{addNewRestaurant})(AddABusiness);
 
 const styles = StyleSheet.create({
   heading: {
@@ -266,7 +284,10 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins Medium"
   },
   imageIcon: {
-
+    height: 80,
+    width: 80,
+    borderRadius: 120,
+    resizeMode: 'cover'
   },
   imageContainer: {
     alignItems: 'center',

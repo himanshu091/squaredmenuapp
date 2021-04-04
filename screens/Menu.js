@@ -27,6 +27,18 @@ const Menu = ({navigation, user_id, token, getMenu, route}) => {
         const res = await getMenu(bodyFormData)
         setdata(res.data.data)
     }, [])
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async () => {
+            var bodyFormData = new FormData();
+            bodyFormData.append('user_id', user_id);
+            bodyFormData.append('token', token);
+            bodyFormData.append('restaurant_id', route.params.restaurant_id);
+            const res = await getMenu(bodyFormData)
+            setdata(res.data.data)
+        });
+    
+        return unsubscribe;
+    }, [navigation]);
     return (
         <SafeAreaView style={{flex: 1}}>
             <ScrollView>

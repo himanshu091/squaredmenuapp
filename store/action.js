@@ -157,3 +157,14 @@ export const addNewRestaurant = (data) => async (dispatch, getState) => {
     console.log("Add Restaurant =>",res.data)
     return res
 };
+
+export const signInAPIGoogle = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/social-media-login`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Login Google =>",res.data)
+    return res
+};

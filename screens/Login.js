@@ -18,16 +18,49 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
-import { login } from '../store/action';
+import { login, signInAPIGoogle } from '../store/action';
 import { connect } from 'react-redux';
 import { getBaseOs,getModel,getDeviceName } from 'react-native-device-info';
 import { Platform } from 'react-native';
-
-const Login = ({ navigation,login }) => {
+import { GoogleSignin } from '@react-native-community/google-signin';
+GoogleSignin.configure({
+  webClientId:"376994443715-40773pi7plbeft2e7ovbe815661gZoqp.apps.googleusercontent.com",
+  offlineAccess: true
+})
+const Login = ({ navigation,login, signInAPIGoogle }) => {
   const [email, onChangeEmail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
   const [error, setError] = React.useState("");
+
+  const [userGoogleInfo, setUserGoogleInfo] = React.useState({});
+  const [loaded, setLoaded] = React.useState(false);
   
+  const signinWithGoogle = async () => {
+    try{
+      await GoogleSignin.hasPlayServices()
+      const userInfo = await GoogleSignin.signIn()
+      setUserGoogleInfo(userInfo)
+      console.log("Google Success =>",userInfo)
+
+      //Begin Signin to API
+      let device_os = Platform.OS;
+      let device_model = await getModel();
+      let device_name = await getDeviceName();
+      var bodyFormData = new FormData();
+      bodyFormData.append('sm_id', 'TEST8676');
+      bodyFormData.append('platform', 'google');
+      bodyFormData.append('name', userInfo.user.name);
+      bodyFormData.append('email', userInfo.user.email);
+      bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
+      bodyFormData.append('device_name', device_name);
+      bodyFormData.append('device_modal', device_model);
+      bodyFormData.append('device_os', device_os);
+      const res = await signInAPIGoogle(bodyFormData)
+    }catch(err){
+      console.log("Error Google Signin =>", err)
+    }
+  }
+
   const startLogin = async () => {
     if(email.trim().length < 1){
       setError("Enter Email")
@@ -125,7 +158,21 @@ const Login = ({ navigation,login }) => {
         />
         <Text style={styles.forgotText} onPress={() => navigation.navigate('ForgotPassword')}>Forgot password?</Text>
         <Text style={styles.forgotText}>or login using</Text>
-        <SocialMediaIcon />
+        <View style={styles.socialMedia}>
+          <TouchableOpacity>
+            <Image
+                style={styles.icon}
+              source={require('../assets/images/icons/facebook.png')}
+              />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={signinWithGoogle}>
+            <Image
+             style={styles.icon}
+
+            source={require('../assets/images/icons/google.png')}
+            />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.bottomText} onPress={() => navigation.navigate('RegistrationScreen')} >I don't have an account</Text>
 
       </View>
@@ -134,7 +181,7 @@ const Login = ({ navigation,login }) => {
   );
 };
 
-export default connect(null, {login})(Login);
+export default connect(null, {login, signInAPIGoogle})(Login);
 
 const styles = StyleSheet.create({
   heading: {
@@ -215,5 +262,15 @@ const styles = StyleSheet.create({
     marginVertical: 40,
     fontSize: 15,
     fontFamily: "Poppins Medium"
-  }
+  },
+  socialMedia:{
+    display:'flex',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center'
+
+},
+icon:{
+    marginHorizontal:10
+}
 });

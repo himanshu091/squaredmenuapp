@@ -42,7 +42,7 @@ const Menu = ({navigation, user_id, token, getMenu, route}) => {
     return (
         <SafeAreaView style={{flex: 1}}>
             <ScrollView>
-                <HeaderSVG uri={data && data.restaurant.cover}/>
+                <HeaderSVG uri={route.params.brandImage}/>
                 <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
                     <TouchableOpacity 
                         style={styles.bell}

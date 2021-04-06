@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  SafeAreaView,
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import Bg3 from '../assets/images/banners/bg3.svg';
@@ -28,15 +29,12 @@ const ThankYouRegistration = ({navigation, verifyEmail, user_id}) => {
     alert(res)
   }
   return (
+    <SafeAreaView style={{flex:1,height:hp('100')}} >
     <ScrollView>
-      <Bg3
-        height={hp('100%')}
-        width={wp('100%')}
-        style={{
-          position: 'absolute',
-        }}
-        resizeMode="stretch"
-      />
+    <ImageBackground 
+    source={require('../assets/images/background/background.png')}
+    style={{width:wp(100),height:hp('100'),marginBottom:100,marginTop:-hp('10'),paddingTop:hp('5')}}
+    >
 
       <View style={styles.logoflat}>
           <Image source={require('../assets/images/icons/thankyou.png')} />
@@ -55,15 +53,16 @@ const ThankYouRegistration = ({navigation, verifyEmail, user_id}) => {
      
 
       <View style={styles.inputFields}>
+        <View style={{paddingTop:hp('10')}}>
         <Button
           title="Login Now"
           titleStyle={{fontSize: 15}}
           buttonStyle={styles.btn1}
-          containerStyle={{marginTop: 10}}
+          containerStyle={{marginTop:hp('10')}}
           onPress={() => navigation.navigate('Login')}
 
         />
-
+        </View>
         <View style={styles.bottomView}>
           <Text
             onPress={resendVerification}
@@ -73,7 +72,10 @@ const ThankYouRegistration = ({navigation, verifyEmail, user_id}) => {
         
         </View>
       </View>
-    </ScrollView>
+     
+     </ImageBackground>
+     </ScrollView>
+    </SafeAreaView>
   );
 };
 const mapStateToProps = state => {
@@ -126,11 +128,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginVertical: 20,
   },
+  
+  
   btn1: {
     backgroundColor: '#635CC9',
     borderRadius: 50,
     marginHorizontal: 40,
-    marginTop: hp('20%'),
+  
+  
     height: 60,
     shadowColor: '#726AE9',
     shadowOffset: {
@@ -165,6 +170,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-evenly',
     marginVertical: 20,
+   
   },
   content:{
 marginHorizontal:15,

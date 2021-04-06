@@ -198,8 +198,8 @@ const styles = StyleSheet.create({
   headingText: {
     color: 'white',
     fontFamily: 'Poppins Medium',
-    fontSize: 30,
-    width: wp('60%'),
+    fontSize: wp('10'),
+    
     lineHeight: 50 * 0.75,
     paddingTop: 40 - 35 * 0.75,
   },
@@ -221,7 +221,8 @@ const styles = StyleSheet.create({
   },
   inputFields:{
 marginVertical:12,
-marginTop:hp('6%')
+marginTop:30
+
   },
   input: {
     height: 50,

@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   headingText: {
     color: 'white',
     fontFamily: 'Poppins Medium',
-    fontSize: 37,
+    fontSize: wp('10'),
 
     lineHeight: 50 * 0.75,
     paddingTop: 40 - 35 * 0.75,
@@ -220,7 +220,7 @@ const styles = StyleSheet.create({
   },
   inputFields: {
     marginVertical: 15,
-    marginTop: hp('14%')
+    marginTop: 90
   },
   input: {
     height: 50,
@@ -240,7 +240,8 @@ const styles = StyleSheet.create({
     color: "#757575",
     fontFamily: "Poppins Regular",
     textAlign: 'center',
-    marginVertical: 20
+    marginTop: 20
+    
   },
   btn1: {
 
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
   bottomText: {
     color: "#635CC9",
     textAlign: 'center',
-    marginVertical: 40,
+    marginVertical: 20,
     fontSize: 15,
     fontFamily: "Poppins Medium"
   },
@@ -270,7 +271,8 @@ const styles = StyleSheet.create({
     display:'flex',
     flexDirection:'row',
     alignItems:'center',
-    justifyContent:'center'
+    justifyContent:'center',
+    marginTop:10
 
 },
 icon:{

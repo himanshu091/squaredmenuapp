@@ -43,6 +43,7 @@ function AuthStack(){
     return(
         <NavigationContainer>
             <Auth.Navigator headerMode="none">
+        
                 <Auth.Screen name="Login" component={Login} />
                 <Auth.Screen name="RegistrationScreen" component={RegistrationScreen} />
                 <Auth.Screen name="RegisterPromoCode" component={RegisterPromoCode} />

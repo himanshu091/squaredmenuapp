@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from 'react-native';
 import {Button} from 'react-native-elements';
 import ToggleSwitch from 'toggle-switch-react-native';
@@ -20,46 +21,83 @@ import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/backgroundimage.svg';
 import { connect } from 'react-redux';
 import { editMenu } from '../store/action';
-
+import ImagePicker from 'react-native-image-crop-picker';
+import FastImage from 'react-native-fast-image';
+import { Platform } from 'react-native';
 
 
 const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
   const [menu, onChangeMenu] = React.useState(route.params.data.name);
-  const [note, onChangeNote] = React.useState(null);
+  const [note, onChangeNote] = React.useState(route.params.data.description);
   const [isOn, setisOn] = useState(route.params.data.active===0?false:true);
+  const [photo, onChangephoto] = React.useState(null);
   const [clicked, setclicked] = useState(false)
-  
+  const [err, setErr] = React.useState(null);
+  const imagepick = () => {
+    ImagePicker.openPicker({
+      width: 375,
+      height: 209,
+      cropping: true,
+      includeBase64: true
+    }).then(image => {
+        // console.log(image)
+        onChangephoto(image)
+    }).catch(err=>{
+        console.log(err);
+    });
+  }
   const handleSubmit = async () => {
+    if(menu.trim().length < 1){
+      setErr("Enter Valid Menu Name")
+      return
+    }else if(note.trim().length < 1){
+      setErr("Please enter Note/Description")
+      return
+    }
+    setclicked(true)
       var bodyFormData = new FormData();
       bodyFormData.append('user_id', user_id);
       bodyFormData.append('token', token);
       bodyFormData.append('name', menu);
+      bodyFormData.append('description', note);
       bodyFormData.append('restaurant_id', route.params.restaurant_id);
-      bodyFormData.append('image', "");
+      if(photo){
+        bodyFormData.append('image', {
+          name: menu,
+          type: photo.mime,
+          uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+        });
+      }
       bodyFormData.append('active', isOn?1:0);
       bodyFormData.append('menu_id', route.params.data.menu_id);
       const res = await editMenu(bodyFormData)
+      setclicked(false)
       if(res.data.status){
-          alert(res.data.message)
-          // navigation.goBack()
-      }
+        Alert.alert(  
+            'Success',  
+            res.data.message,  
+            [  
+                {text: 'OK', onPress: () => navigation.goBack()},  
+            ]  
+          );
+          setclicked(false)
+    }else{
+        setclicked(false)
+        alert(res.data.message)
+    }
   }
   return (
     <ScrollView>
-      <TouchableOpacity>
-        <Bg1
-          height={hp(30)}
-          width={wp('100%')}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-          }}
-          marginTop={-4}
-          resizeMode="cover"
-        />
-      </TouchableOpacity>
+      <TouchableOpacity onPress={imagepick}>
+      {!photo?<FastImage
+                style={styles.altImage}
+                source={{
+                    uri: route.params.data.image,
+                    priority: FastImage.priority.normal,
+                }}
+                resizeMode={FastImage.resizeMode.cover}
+              />:<Image source={{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.altImage} resizeMode="cover" />}
+      
 
       <View style={styles.topElements}>
         <TouchableOpacity
@@ -80,8 +118,10 @@ const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
           />
         </TouchableOpacity> */}
       </View>
-
+      </TouchableOpacity>
       <View style={styles.inputFields}>
+{err && <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
+}
         <View style={styles.editMenu}>
           <TextInput
             fontSize={wp(12)}
@@ -123,7 +163,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
             titleStyle={{fontSize: 15}}
             buttonStyle={styles.btn1}
             containerStyle={{marginTop: 20}}
-
+            loading={clicked}
           />
         </View>
       </View>
@@ -302,4 +342,13 @@ const styles = StyleSheet.create({
   bottomSection: {
     marginTop: hp(25),
   },
+  altImage:{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0, 
+    backgroundColor:'red',
+    width: wp(100),
+    height: wp(100)*209/375
+  }
 });

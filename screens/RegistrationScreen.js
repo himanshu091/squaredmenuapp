@@ -28,7 +28,9 @@ const RegistrationScreen = ({navigation, register}) => {
     const [email, onChangeEmail] = React.useState("");
     const [password, onChangePassword] = React.useState("");
     const [error, setError] = React.useState("");
-    
+    const [clicked, setclicked] = React.useState(false);
+    const [promocode, onChangePromocode] = React.useState("");
+
     const beginRegitration = async () => {
       if(name.trim().length < 1){
         setError("Enter Name")
@@ -43,13 +45,17 @@ const RegistrationScreen = ({navigation, register}) => {
         setError("Enter Contact Number")
         return
       }
+      setclicked(true)
       var bodyFormData = new FormData();
       bodyFormData.append('name', name);
       bodyFormData.append('phone', number);
       bodyFormData.append('email', email);
       bodyFormData.append('password', password);
-
+      if(promocode.trim().length > 0){
+        bodyFormData.append('promo_code', promocode);
+      }
       const res = await register(bodyFormData)
+      setclicked(false)
       // navigation.navigate('ThankYouRegistration')
       if(res.data.status){
         ToastAndroid.showWithGravity(
@@ -139,19 +145,38 @@ const RegistrationScreen = ({navigation, register}) => {
         placeholderTextColor="#635CC9"
         secureTextEntry
       />
+      <TextInput
+        style={styles.input}
+        onChangeText={onChangePromocode}
+        value={promocode}
+        placeholder="promocode"
+        textAlign="center"
+        placeholderTextColor="#635CC9"
+        
+      />
      <Button
   
-          title="Register"
-          titleStyle={{ fontSize: 15 }}
-          buttonStyle={styles.btn1}
-          containerStyle={{marginTop:10}} 
-          onPress={()=>beginRegitration()}
-         
-        />
+        title="Register"
+        titleStyle={{ fontSize: 15 }}
+        buttonStyle={styles.btn1}
+        containerStyle={{marginTop:10}} 
+        onPress={()=>beginRegitration()}
+        loading={clicked}
+      />
         
         <Text style={styles.forgotText}>or register using</Text>
-      <SocialMediaIcon/>
-      <Text onPress={()=>navigation.navigate('RegisterPromoCode')} style={styles.bottomText}>Register using promo code</Text>
+        <View style={styles.socialMedia}>
+              <Image
+              style={styles.icon}
+            source={require('../assets/images/icons/facebook.png')}
+            />
+            <Image
+             style={styles.icon}
+
+            source={require('../assets/images/icons/google.png')}
+            />
+        </View>
+      {/* <Text onPress={()=>navigation.navigate('RegisterPromoCode')} style={styles.bottomText}>Register using promo code</Text> */}
       <Text style={styles.registerText}>Policy and T&C</Text>
         
     </View>
@@ -238,7 +263,7 @@ marginTop:hp('6%')
   bottomText:{
     color:"#635CC9",
     textAlign:'center',
-    marginVertical:40,
+    marginTop:5,
     fontSize:15,
     fontFamily:"Poppins Medium"
   },
@@ -247,6 +272,16 @@ marginTop:hp('6%')
     color:"#757575",
     fontFamily:"Poppins Regular",
     textAlign:'center',
-    marginVertical:10 
-  }
+    marginTop:15 
+  },
+  socialMedia:{
+    display:'flex',
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'center'
+
+},
+icon:{
+    marginHorizontal:10
+}
 });

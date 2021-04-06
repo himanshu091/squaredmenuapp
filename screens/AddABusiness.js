@@ -38,12 +38,12 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
 
   const imagepick = () => {
     ImagePicker.openPicker({
-      width: 1920,
-      height: 1080,
+      width: 375,
+      height: 209,
       cropping: true,
       includeBase64: true
     }).then(image => {
-      console.log(image)
+      // console.log(image)
       onChangephoto(image)
     }).catch(err=>{
       console.log(err);
@@ -78,6 +78,9 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
       type: photo.mime,
       uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
     });
+    if(table.trim().length > 0){
+      bodyFormData.append('total_tables', table);
+    }
     bodyFormData.append('token', token);
     const res = await addNewRestaurant(bodyFormData)
     if(res.data.status){
@@ -178,7 +181,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
           placeholder="Number of tables (optional)"
           textAlign="center"
           placeholderTextColor="#635CC9"
-
+          keyboardType="number-pad"
         />
 
       </View>
@@ -196,7 +199,6 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
         containerStyle={{ marginVertical: 15 }}
         loading={clicked}
       />
-
 
     </ScrollView>
   );

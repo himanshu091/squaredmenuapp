@@ -12,6 +12,7 @@ target 'squaredmenu' do
     :hermes_enabled => false
   )
 
+
   target 'squaredmenuTests' do
     inherit! :complete
     # Pods for testing

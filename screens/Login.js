@@ -31,7 +31,8 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
   const [email, onChangeEmail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
   const [error, setError] = React.useState("");
-
+  const [clicked, setclicked] = React.useState(false);
+  
   const [userGoogleInfo, setUserGoogleInfo] = React.useState({});
   const [loaded, setLoaded] = React.useState(false);
   
@@ -69,6 +70,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
       setError("Enter Password")
       return
     }
+    setclicked(true)
     let device_os = Platform.OS;
     let device_model = await getModel();
     let device_name = await getDeviceName();
@@ -80,6 +82,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
     bodyFormData.append('device_modal', device_model);
     bodyFormData.append('device_os', device_os);
     const res = await login(bodyFormData)
+    setclicked(false)
     if(res.data.status){
       ToastAndroid.showWithGravity(
         res.data.message,
@@ -154,7 +157,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
           containerStyle={{ marginTop: 10 }}
-
+          loading={clicked}
         />
         <Text style={styles.forgotText} onPress={() => navigation.navigate('ForgotPassword')}>Forgot password?</Text>
         <Text style={styles.forgotText}>or login using</Text>

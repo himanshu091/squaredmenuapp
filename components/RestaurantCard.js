@@ -13,7 +13,7 @@ const RestaurantCard = ({navigation, name, data}) => {
                         uri: data.logo,
                         priority: FastImage.priority.normal,
                     }}
-                    resizeMode={FastImage.resizeMode.contain}
+                    resizeMode={FastImage.resizeMode.cover}
                 />
             </View>
             <View style={styles.info}>
@@ -52,7 +52,8 @@ const styles = StyleSheet.create({
     },
     thumbnail:{
         width: '100%',
-        height: '100%'
+        height: '100%',
+        borderRadius: 12
     },
     info:{
         flexDirection: 'column',

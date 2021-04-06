@@ -25,18 +25,19 @@ import ImagePicker from 'react-native-image-crop-picker';
 
 const NewMenu = ({navigation, route, user_id, token, addMenu}) => {
   const [menu, onChangeMenu] = React.useState("");
-  const [note, onChangeNote] = React.useState(null);
+  const [note, onChangeNote] = React.useState("");
   const [isOn, setisOn] = useState(true);
   const [photo, onChangephoto] = React.useState(null);
   const [err, setErr] = React.useState("");
   const [clicked, setclicked] = React.useState(false);
   const imagepick = () => {
     ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true
+      width: 375,
+      height: 209,
+      cropping: true,
+      includeBase64: true
     }).then(image => {
-        console.log(image)
+        // console.log(image)
         onChangephoto(image)
     }).catch(err=>{
         console.log(err);
@@ -49,6 +50,9 @@ const handleSubmit = async () => {
     }else if(!photo){
         setErr("Please select an Image")
         return
+    }else if(note.trim().length < 1){
+      setErr("Please enter Note/Description")
+      return
     }
     setclicked(true)
     var bodyFormData = new FormData();
@@ -62,6 +66,7 @@ const handleSubmit = async () => {
         uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
       });
     bodyFormData.append('active', isOn?1:0);
+    bodyFormData.append('description', menu);
     const res = await addMenu(bodyFormData)
     if(res.data.status){
         Alert.alert(  
@@ -80,7 +85,7 @@ const handleSubmit = async () => {
   return (
     <ScrollView>
       <TouchableOpacity onPress={()=>imagepick()} >
-        <Bg1
+        {!photo?<Bg1
           height={hp(30)}
           width={wp('100%')}
           style={{
@@ -91,7 +96,7 @@ const handleSubmit = async () => {
           }}
           marginTop={-4}
           resizeMode="cover"
-        />
+        />:<Image source={{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.altImage} resizeMode="cover" />}
       
 
       <View style={styles.topElements}>
@@ -137,6 +142,7 @@ const handleSubmit = async () => {
           value={note}
           placeholder="Notes"
           opacity={0.3}
+          multiline={true}
           placeholderTextColor="#000000"
         />
         <View style={styles.bottomSection}>
@@ -191,7 +197,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 5.84,
-
+    marginBottom: 20,
     elevation: 5,
   },
   headingText: {
@@ -334,6 +340,16 @@ const styles = StyleSheet.create({
     color: '#000000',
   },
   bottomSection: {
-    marginTop: hp(25),
+    marginTop: 120,
   },
+  altImage:{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0, 
+    backgroundColor:'red',
+    width: wp(100),
+    height: wp(100)*209/375
+  }
+  
 });

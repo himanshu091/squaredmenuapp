@@ -6,17 +6,7 @@ import HeaderSVG from '../components/HeaderSVG'
 import MenuButtons from '../components/MenuButtons'
 import NewMenuButton from '../components/NewMenuButton'
 import { getMenu } from '../store/action'
-const data = [
-    {
-        title: "Breakfast Menu",
-        uri: "https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-    },
-    {
-        title: "Lunch Menu",
-        uri: "https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"
-    },
-    
-]
+
 const Menu = ({navigation, user_id, token, getMenu, route}) => {
     const [data, setdata] = useState(null)
     useEffect(async () => {
@@ -58,7 +48,7 @@ const Menu = ({navigation, user_id, token, getMenu, route}) => {
                     </View>
                 </View>
                {data && data.menu.map((item, idx) => {
-                   return <MenuButtons key={idx} navigation={navigation} title={item.name} uri={item.image} data={item} restaurant_id={data.restaurant.name} onPress={()=>{navigation.navigate('MenuList')}}/>
+                   return <MenuButtons key={idx} navigation={navigation} title={item.name} uri={item.image} data={item} restaurant_id={route.params.restaurant_id} onPress={()=>{navigation.navigate('MenuList')}}/>
                })}
                 
                <NewMenuButton action={()=>navigation.navigate('NewMenu',{restaurant_id:route.params.restaurant_id})}/>
@@ -115,7 +105,8 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontSize: 37,
         color: '#FFFFFF',
-        lineHeight:40
+        lineHeight:40,
+        textTransform: 'capitalize'
     },
     card:{
         backgroundColor: '#fff',

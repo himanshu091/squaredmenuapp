@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0, 
-    backgroundColor:'red',
+    // backgroundColor:'red',
     width: wp(100),
     height: wp(100)*209/375
   }

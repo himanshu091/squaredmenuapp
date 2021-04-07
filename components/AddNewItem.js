@@ -1,16 +1,88 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TextInput, Switch, TouchableOpacity, Image } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Switch, TouchableOpacity, Image, Alert } from 'react-native'
 import ToggleSwitch from 'toggle-switch-react-native'
-const AddNewItem = ({closeFunc}) => {
+import ImagePicker from 'react-native-image-crop-picker';
+import { Button } from 'react-native-elements';
+import { connect } from 'react-redux';
+import { addNewItem } from '../store/action';
+
+const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClose}) => {
     const [isOn, setisOn] = useState(false)
+    const [photo, setPhoto] = useState(null)
+    const [name, setName] = useState("")
+    const [price, setPrice] = useState("")
+    const [clicked, setClicked] = useState(false)
+    const [err, setErr] = useState("")
+    const imagepick = () => {
+        ImagePicker.openPicker({
+          width: 375,
+          height: 209,
+          cropping: true,
+          includeBase64: true
+        }).then(image => {
+            // console.log(image)
+            setPhoto(image)
+        }).catch(err=>{
+            console.log(err);
+        });
+      }
+    const handleSubmit = async () => {
+        if(name.trim().length < 1){
+            setErr("Please enter Name")
+            return
+        }else if(price.trim().length < 1 && !isOn){
+            setErr("Please enter Price")
+            return
+        }else if(!photo){
+            setErr("Please Select an Image")
+            return
+        }
+        setClicked(true)
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('menu_id', menu_id);
+        bodyFormData.append('name', name);
+        bodyFormData.append('image', {
+            name: name,
+            type: photo.mime,
+            uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+        });
+        bodyFormData.append('has_variants', !isOn?0:1);
+        bodyFormData.append('price', price);
+        const res = await addNewItem(bodyFormData)
+        setClicked(false)
+        if(res.data.status){
+            Alert.alert(  
+                'Success',  
+                res.data.message,  
+                [  
+                    {text: 'OK', onPress: () => successClose()},  
+                ]  
+            );
+        }else{
+            ToastAndroid.showWithGravity(
+                res.data.message,
+                ToastAndroid.LONG,
+                ToastAndroid.BOTTOM
+            )
+        }
+    }
     return (
         <View style={styles.box}>
             <View>
                 <Text style={styles.title}>Add Item</Text>
+                <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
+
+                <View style={{flexDirection: 'row', justifyContent:'center'}}>
+                    <TouchableOpacity onPress={imagepick}>
+                        <Image source={!photo?require('../assets/images/icons/imageicon.png'):{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.imageupload}/>                  
+                    </TouchableOpacity>
+                </View>
                 <TextInput
                     style={styles.input}
-                    // onChangeText={onChangeEmail}
-                    // value={email}
+                    onChangeText={setName}
+                    value={name}
                     placeholder="Name"
                     textAlign="center"
                     placeholderTextColor="#635CC9"
@@ -19,8 +91,8 @@ const AddNewItem = ({closeFunc}) => {
                 
                 {!isOn && <TextInput
                     style={styles.input}
-                    // onChangeText={onChangeEmail}
-                    // value={email}
+                    onChangeText={setPrice}
+                    value={price}
                     placeholder="Price"
                     textAlign="center"
                     placeholderTextColor="#635CC9"
@@ -42,16 +114,28 @@ const AddNewItem = ({closeFunc}) => {
                 <TouchableOpacity style={styles.btn1} onPress={closeFunc}>
                     <Text style={styles.btnText1}>Cancel</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn2}>
+                {!clicked && <TouchableOpacity style={styles.btn2} onPress={handleSubmit}>
                     <Image source={require('../assets/images/icons/tick.png')} />
                     <Text style={styles.btnText2}>Add</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
+                {clicked && <Button
+                    title="Add"
+                    titleStyle={{ fontSize: 15 }}
+                    buttonStyle={styles.btn2}
+                    containerStyle={{ marginTop: 10 }}
+                    loading={true}
+                />}
             </View>
         </View>
     )
 }
-
-export default AddNewItem
+const mapStateToProps = state => {
+    return{
+        user_id: state.auth.user_id,
+        token: state.auth.token
+    }
+}
+export default connect(mapStateToProps,{addNewItem})(AddNewItem)
 
 const styles = StyleSheet.create({
     box:{
@@ -112,5 +196,11 @@ const styles = StyleSheet.create({
           flexDirection: 'row',
           justifyContent: 'center',
           marginTop: 10
+      },
+      imageupload:{
+          width: 70,
+          height: 70,
+          borderRadius: 70,
+          resizeMode: 'cover'
       }
 })

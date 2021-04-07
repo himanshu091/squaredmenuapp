@@ -48,7 +48,7 @@ const Menu = ({navigation, user_id, token, getMenu, route}) => {
                     </View>
                 </View>
                {data && data.menu.map((item, idx) => {
-                   return <MenuButtons key={idx} navigation={navigation} title={item.name} uri={item.image} data={item} restaurant_id={route.params.restaurant_id} onPress={()=>{navigation.navigate('MenuList')}}/>
+                   return <MenuButtons key={idx} navigation={navigation} title={item.name} uri={item.image} data={item} restaurant_id={route.params.restaurant_id} />
                })}
                 
                <NewMenuButton action={()=>navigation.navigate('NewMenu',{restaurant_id:route.params.restaurant_id})}/>

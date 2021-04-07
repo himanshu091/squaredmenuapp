@@ -1,40 +1,41 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-const MenuSection = ({sectionName, itemList, addNew, navigation}) => {
+const MenuSection = ({menuName, data, addNew, navigation}) => {
+    console.log("Menu", data)
     return (
         <View style={styles.mainContainer}>
             <View style={styles.sectionHeader}>
-                <Text style={styles.sectionText}>{sectionName}</Text>
+                <Text style={styles.sectionText}></Text>
                 <TouchableOpacity style={styles.delete}>
                     <Image source={require('../assets/images/icons/delete.png')}/>
                 </TouchableOpacity>
             </View>
-            {itemList.map((menu, idx0) => {
-                return <View key={idx0} style={styles.menuItem}>
+                <View style={styles.menuItem}>
                     <View style={styles.menuSubItem}>
-                        <TouchableOpacity onPress={()=>navigation.navigate('DishDetail')}><Text style={styles.itemName}>{menu.itemName}</Text></TouchableOpacity>
-                        {!menu.varient && <Text style={styles.cost}>${parseFloat(menu.cost).toFixed(2)}</Text>}
+                        <TouchableOpacity onPress={()=>navigation.navigate('EditDish')}><Text style={styles.itemName}>{menuName}</Text></TouchableOpacity>
+                        {data.has_variants === 0 && <Text style={styles.cost}>${parseFloat(data.price).toFixed(2)}</Text>}
                     </View>
                     
                     {
-                        menu.varient && menu.varientList.map((varItem,idx1) => {
+                       data.has_variants === 1 && data.variants.map((varItem,idx1) => {
                             return <View key={idx1} style={styles.varientBox}>
                                 <View style={styles.part1}>
                                     <Image source={require('../assets/images/icons/bullet.png')}/>
-                                    <Text style={styles.varientItemName}>{varItem.name}</Text>
+                                    <Text style={styles.varientItemName}>{varItem.option}</Text>
                                 </View>
-                                <Text style={styles.cost}>${parseFloat(varItem.cost).toFixed(2)}</Text>
+                                <Text style={styles.cost}>${parseFloat(varItem.price).toFixed(2)}</Text>
                             </View>
                         })
                     }
                 </View>
-            })}
-            <View style={styles.bar}></View>
-            <TouchableOpacity style={styles.newSection} onPress={addNew}>
-                <Text style={styles.sectionName}>Add New Item</Text>
+            {data.has_variants === 1 && <View style={styles.bar}></View>}
+            {data.has_variants === 1 && <TouchableOpacity style={styles.newSection} onPress={addNew}>
+                <Text style={styles.sectionName}>Add New Varient</Text>
                 <Image style={styles.plus} source={require('../assets/images/icons/plus.png')}/>
-            </TouchableOpacity>
+            </TouchableOpacity>}
+            {data.has_variants === 0 && <View style={{paddingBottom: 10}}>
+            </View>}
         </View>
     )
 }
@@ -54,7 +55,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingHorizontal: 15,
-        paddingVertical: 30
+        paddingTop: 7,
+        paddingBottom: 3
     },
     sectionText:{
         fontFamily: 'Poppins Bold',

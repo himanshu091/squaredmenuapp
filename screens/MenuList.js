@@ -1,10 +1,13 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import HeaderSVG from '../components/HeaderSVG'
 import MenuSection from '../components/MenuSection'
 import RBSheet from "react-native-raw-bottom-sheet";
 import AddNewItem from '../components/AddNewItem'
+import { connect } from 'react-redux'
+import { getMenuItems } from '../store/action'
+import AddNewVarient from '../components/AddNewVarient'
 const data = [
     {   
         sectionName: "Sweet",
@@ -64,12 +67,37 @@ const data = [
     },
 
 ]
-const MenuList = ({navigation}) => {
+const MenuList = ({navigation, user_id, token, getMenuItems, route}) => {
     const refRBSheet = useRef();
+    const refRBSheet2 = useRef();
+    const [data1, setdata] = useState(null)
+    useEffect(async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('menu_id', route.params.menu_id);
+        const res = await getMenuItems(bodyFormData)
+        setdata(res.data.data)
+    }, [])
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', async () => {
+            var bodyFormData = new FormData();
+            bodyFormData.append('user_id', user_id);
+            bodyFormData.append('token', token);
+            bodyFormData.append('menu_id', route.params.menu_id);
+            const res = await getMenuItems(bodyFormData)
+            setdata(res.data.data)
+        });
+    
+        return unsubscribe;
+    }, [navigation]);
+    const close1andRefresh = () => {
+        
+    }
     return (
         <SafeAreaView>
             <ScrollView>
-                <HeaderSVG uri="https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"/>
+                <HeaderSVG uri={data1 && data1.menu.cat_image}/>
                 <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
                     <TouchableOpacity 
                         style={styles.bell}
@@ -80,8 +108,8 @@ const MenuList = ({navigation}) => {
                     
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
-                            <Text style={styles.name}>Silema Restaurant</Text>
-                            <Text style={styles.menuName}>Breakfast</Text>
+                            <Text style={styles.name}>{data1 && data1.menu.restorant_name}</Text>
+                            <Text style={styles.menuName}>{data1 && data1.menu.cat_name}</Text>
                         </View>
                         <TouchableOpacity style={styles.previewBTN} onPress={()=>navigation.navigate('MenuPreview')}>
                             <Text style={styles.preview}>Preview</Text>
@@ -89,18 +117,39 @@ const MenuList = ({navigation}) => {
                     </View>
                 </View>
                 {
-                    data && data.map((menu, idx) => {
-                        return <MenuSection key={idx} sectionName={menu.sectionName} itemList={menu.itemList} addNew={() => refRBSheet.current.open()} navigation={navigation}/>
+                    data1 && data1.items.map((menu, idx) => {
+                        return <MenuSection key={idx} menuName={menu.name} variants={menu.variants} data={menu} successClose={()=>{close1andRefresh()}} addNew={() => refRBSheet2.current.open()} navigation={navigation}/>
                     })
                 }
                
-                <TouchableOpacity style={styles.newSection}>
-                    <Text style={styles.sectionName}>Add Section</Text>
+                <TouchableOpacity style={styles.newSection} onPress={() => refRBSheet.current.open()}>
+                    <Text style={styles.sectionName}>Add New Item</Text>
                     <Image style={styles.plus} source={require('../assets/images/icons/plus.png')}/>
                 </TouchableOpacity>
             </ScrollView>
             <RBSheet
                 ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                // height={80}
+                animationType='slide'
+                customStyles={{
+                    container: {
+                        ...styles.container,
+                        height: 450
+                      },
+                wrapper: {
+                    backgroundColor: "#00000025"
+                },
+                draggableIcon: {
+                    backgroundColor: "#fff"
+                }
+                }}
+            >
+                <AddNewItem closeFunc={() => refRBSheet.current.close()} menu_id={route.params.menu_id}/>
+            </RBSheet>
+            <RBSheet
+                ref={refRBSheet2}
                 closeOnDragDown={true}
                 closeOnPressMask={false}
                 // height={80}
@@ -118,13 +167,18 @@ const MenuList = ({navigation}) => {
                 }
                 }}
             >
-                <AddNewItem closeFunc={() => refRBSheet.current.close()}/>
+                <AddNewVarient closeFunc={() => refRBSheet2.current.close()}/>
             </RBSheet>
         </SafeAreaView>
     )
 }
-
-export default MenuList
+const mapStateToProps = state => {
+    return {
+        user_id: state.auth.user_id,
+        token: state.auth.token
+    }
+}
+export default connect(mapStateToProps, {getMenuItems})(MenuList)
 
 const styles = StyleSheet.create({
     banner:{
@@ -163,7 +217,8 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontSize: 21,
         color: '#FFFFFF',
-        lineHeight:40
+        lineHeight:40,
+        textTransform: 'capitalize'
     },
     menuName:{
         flexWrap:'wrap',
@@ -171,7 +226,8 @@ const styles = StyleSheet.create({
         fontStyle: 'normal',
         fontSize: 37,
         color: '#FFFFFF',
-        lineHeight:40
+        lineHeight:40,
+        textTransform: 'capitalize'
     },
     card:{
         backgroundColor: '#fff',

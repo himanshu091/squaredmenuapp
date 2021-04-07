@@ -168,3 +168,54 @@ export const signInAPIGoogle = (data) => async (dispatch, getState) => {
     console.log("Login Google =>",res.data)
     return res
 };
+
+export const addNewItem = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/add-item`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Add New Item =>",res.data)
+    return res
+};
+export const addItemVarient = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/add-variant`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Add Item Varient =>",res.data)
+    return res
+};
+export const getMenuItems = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/get-items`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Get Menu Items =>",res.data.data.items)
+    return res
+};
+export const deleteItems = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/delete-item`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Delete Menu Items =>",res.data)
+    return res
+};
+export const getItemDetail = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/get-item-detail`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Items Detail=>",res.data)
+    return res
+};

@@ -70,7 +70,7 @@ const ForgotPassword = ({ navigation,forgotPassword }) => {
         <Text style={styles.headingText}>Forgot Password ?</Text>
       </View>
       <View style={styles.inputFields}>
-        <Text style={styles.emailText}>Enter your registered email/phone number and we will reset your password</Text>
+        <Text style={styles.emailText}>Enter your registered email address and we will reset your password</Text>
         <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
         <TextInput
           style={styles.input}

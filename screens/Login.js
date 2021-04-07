@@ -23,6 +23,8 @@ import { connect } from 'react-redux';
 import { getBaseOs,getModel,getDeviceName } from 'react-native-device-info';
 import { Platform } from 'react-native';
 import { GoogleSignin } from '@react-native-community/google-signin';
+import Google from '../assets/images/icons/googleicon.svg'
+import Facebook from '../assets/images/icons/facebookicon.svg'
 GoogleSignin.configure({
   webClientId:"376994443715-40773pi7plbeft2e7ovbe815661gZoqp.apps.googleusercontent.com",
   offlineAccess: true
@@ -135,7 +137,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
           style={styles.input}
           onChangeText={onChangeEmail}
           value={email}
-          placeholder="email / contact number"
+          placeholder="Email Address"
           textAlign="center"
           placeholderTextColor="#635CC9"
           autoCapitalize="none"
@@ -145,7 +147,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
           style={styles.input}
           onChangeText={onChangePassword}
           value={password}
-          placeholder="password"
+          placeholder="Password"
           textAlign="center"
           placeholderTextColor="#635CC9"
           secureTextEntry
@@ -276,6 +278,8 @@ const styles = StyleSheet.create({
 
 },
 icon:{
-    marginHorizontal:10
+    marginHorizontal:10,
+    height:46,
+    width:46
 }
 });

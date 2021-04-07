@@ -51,7 +51,7 @@ const OnboardingScreen = ({navigation, beginAuth}) => {
         }
     }
     return (
-        <SafeAreaView>
+        <SafeAreaView >
             <GestureRecognizer
                 config={config}
                 onSwipeRight={showPreviousSlide}
@@ -89,10 +89,10 @@ const styles = StyleSheet.create({
     container:{
         position: 'relative',
         height:hp('100%'),
-        backgroundColor:'#635cc9'
+        
     },
     container_image:{
-        height:hp('90%'),
+        height:hp('100%'),
         width:wp('100%')
     },
     skip_button:{

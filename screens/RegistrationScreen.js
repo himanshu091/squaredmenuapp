@@ -113,7 +113,7 @@ const RegistrationScreen = ({navigation, register}) => {
         style={styles.input}
         onChangeText={onChangeName}
         value={name}
-        placeholder="name"
+        placeholder="Name"
         textAlign="center"
         placeholderTextColor="#635CC9"
         
@@ -122,7 +122,7 @@ const RegistrationScreen = ({navigation, register}) => {
         style={styles.input}
         onChangeText={onChangeEmail}
         value={email}
-        placeholder="email"
+        placeholder="Email Address"
         textAlign="center"
         placeholderTextColor="#635CC9"
         autoCapitalize="none"
@@ -131,7 +131,7 @@ const RegistrationScreen = ({navigation, register}) => {
         style={styles.input}
         onChangeText={onChangeNumber}
         value={number}
-        placeholder="contact number"
+        placeholder="Contact Number"
         textAlign="center"
         placeholderTextColor="#635CC9"
         keyboardType="phone-pad"
@@ -140,7 +140,7 @@ const RegistrationScreen = ({navigation, register}) => {
         style={styles.input}
         onChangeText={onChangePassword}
         value={password}
-        placeholder="password"
+        placeholder="Password"
         textAlign="center"
         placeholderTextColor="#635CC9"
         secureTextEntry
@@ -149,7 +149,7 @@ const RegistrationScreen = ({navigation, register}) => {
         style={styles.input}
         onChangeText={onChangePromocode}
         value={promocode}
-        placeholder="promocode"
+        placeholder="Promocode"
         textAlign="center"
         placeholderTextColor="#635CC9"
         
@@ -283,6 +283,8 @@ marginTop:30
 
 },
 icon:{
-    marginHorizontal:10
+    marginHorizontal:10,
+    height:46,
+    width:46
 }
 });

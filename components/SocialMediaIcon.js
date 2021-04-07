@@ -1,17 +1,20 @@
 import React from 'react'
 import { StyleSheet, Text, View,Image } from 'react-native'
+import Google from '../assets/images/icons/googleicon.svg'
+import Facebook from '../assets/images/icons/facebookicon.svg'
 
 const SocialMediaIcon = () => {
     return (
         <View style={styles.socialMedia}>
-              <Image
+              <Google
               style={styles.icon}
-            source={require('../assets/images/icons/facebook.png')}
+
+            
             />
-            <Image
+            <Facebook
              style={styles.icon}
 
-            source={require('../assets/images/icons/google.png')}
+           
             />
         </View>
     )

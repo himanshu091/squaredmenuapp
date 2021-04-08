@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Switch, TouchableOpacity, Image } from 'react-native'
-import ToggleSwitch from 'toggle-switch-react-native'
-const AddNewVarient = ({closeFunc, addVariant}) => {
-    const [name, setname] = useState("")
-    const [price, setprice] = useState("")
+
+const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) => {
+    const [name, setname] = useState(defaultname)
+    const [price, setprice] = useState(defaultprice)
     const [err, seterr] = useState("")
     const handleSubmit = () => {
         if(name.trim().length < 1){
@@ -13,13 +13,13 @@ const AddNewVarient = ({closeFunc, addVariant}) => {
             seterr("Enter Valid price")
             return
         }
-        addVariant(name,price)
+        editVariant(name,price,pos)
         closeFunc()
     }
     return (
         <View style={styles.box}>
             <View>
-                <Text style={styles.title}>Add Varient</Text>
+                <Text style={styles.title}>Edit Varient</Text>
                 <Text style={{textAlign: 'center', fontFamily: 'Poppins Medium', color: 'red'}}>{err}</Text>
                 <TextInput
                     style={styles.input}
@@ -54,7 +54,7 @@ const AddNewVarient = ({closeFunc, addVariant}) => {
     )
 }
 
-export default AddNewVarient
+export default EditVarient
 
 const styles = StyleSheet.create({
     box:{

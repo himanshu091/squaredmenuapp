@@ -170,14 +170,16 @@ export const signInAPIGoogle = (data) => async (dispatch, getState) => {
 };
 
 export const addNewItem = (data) => async (dispatch, getState) => {
-    const res = await axios({
+    try{const res = await axios({
         method: 'post',
-        url: `${API_URL}/add-item`,
+        url: `${API_URL}/add-edit-item`,
         data: data,
         headers: {'Content-Type': 'multipart/form-data' }
     })
-    console.log("Add New Item =>",res.data)
-    return res
+    console.log("Add New Item =>",res)
+    return res}catch(err){
+        console.log("Add New Item Response=>", err)
+    }
 };
 export const addItemVarient = (data) => async (dispatch, getState) => {
     const res = await axios({
@@ -217,5 +219,25 @@ export const getItemDetail = (data) => async (dispatch, getState) => {
         headers: {'Content-Type': 'multipart/form-data' }
     })
     console.log("Items Detail=>",res.data)
+    return res
+};
+export const getItemTypes = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/get-item-data`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    // console.log("Items data=>",res.data)
+    return res
+};
+export const deleteItem = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/delete-item`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Delete Item =>",res.data)
     return res
 };

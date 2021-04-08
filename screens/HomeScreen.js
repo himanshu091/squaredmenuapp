@@ -47,12 +47,12 @@ const HomeScreen = ({navigation, logout, user_id, token, getRestaurants}) => {
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
-                
+                {data?<>
                 {data && data.map((item,idx)=>{
                     return <RestaurantCard key={idx} name='Menu' navigation={navigation} data={item}/>
                 })}
-                <AddNewButton name='AddABusiness' navigation={navigation}/>
-                
+                {data.length < 1 && <AddNewButton name='AddABusiness' navigation={navigation}/>}
+                </>:<View style={styles.loading}><Text style={styles.loadingText}>Fetching Data...</Text></View>}
             </View>
             <View style={{marginBottom:50}}></View>
             </ScrollView>
@@ -104,6 +104,14 @@ const styles = StyleSheet.create({
         fontSize: 37,
         color: '#FFFFFF'
     },
-    
+    loading:{
+        marginTop: 50
+        
+    },
+    loadingText:{
+        textAlign: 'center',
+        fontFamily: 'Poppins Medium',
+        fontSize: 20
+    }
 
 })

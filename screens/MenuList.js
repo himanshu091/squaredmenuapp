@@ -91,6 +91,14 @@ const MenuList = ({navigation, user_id, token, getMenuItems, route}) => {
     
         return unsubscribe;
     }, [navigation]);
+    const refresh = async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('menu_id', route.params.menu_id);
+        const res = await getMenuItems(bodyFormData)
+        setdata(res.data.data)
+    }
     const close1andRefresh = () => {
         
     }
@@ -118,7 +126,8 @@ const MenuList = ({navigation, user_id, token, getMenuItems, route}) => {
                 </View>
                 {
                     data1 && data1.items.map((menu, idx) => {
-                        return <MenuSection key={idx} menuName={menu.name} variants={menu.variants} data={menu} successClose={()=>{close1andRefresh()}} addNew={() => refRBSheet2.current.open()} navigation={navigation}/>
+                        console.log(JSON.stringify(menu))
+                        return <MenuSection key={idx} refresh={()=>refresh()} menuName={menu.name} variants={menu.variants} data={menu} successClose={()=>{close1andRefresh()}} addNew={() => refRBSheet2.current.open()} navigation={navigation}/>
                     })
                 }
                
@@ -146,7 +155,7 @@ const MenuList = ({navigation, user_id, token, getMenuItems, route}) => {
                 }
                 }}
             >
-                <AddNewItem closeFunc={() => refRBSheet.current.close()} menu_id={route.params.menu_id}/>
+                <AddNewItem closeFunc={() => refRBSheet.current.close()} menu_id={route.params.menu_id} navigation={navigation}/>
             </RBSheet>
             <RBSheet
                 ref={refRBSheet2}

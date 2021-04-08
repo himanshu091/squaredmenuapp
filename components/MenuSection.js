@@ -1,13 +1,25 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { connect } from 'react-redux'
+import { deleteItem } from '../store/action'
 
-const MenuSection = ({menuName, data, addNew, navigation}) => {
+const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh}) => {
     console.log("Menu", data)
+    const deleteThisItem = async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('item_id', data.item_id);
+        const res = await deleteItem(bodyFormData)
+        if(res.data.status){
+            refresh()
+        }
+    }
     return (
         <View style={styles.mainContainer}>
             <View style={styles.sectionHeader}>
                 <Text style={styles.sectionText}></Text>
-                <TouchableOpacity style={styles.delete}>
+                <TouchableOpacity style={styles.delete} onPress={deleteThisItem}>
                     <Image source={require('../assets/images/icons/delete.png')}/>
                 </TouchableOpacity>
             </View>
@@ -39,8 +51,13 @@ const MenuSection = ({menuName, data, addNew, navigation}) => {
         </View>
     )
 }
-
-export default MenuSection
+const mapStateToProps = state => {
+    return{
+        user_id: state.auth.user_id,
+        token: state.auth.token
+    }
+}
+export default connect(mapStateToProps,{deleteItem})(MenuSection)
 
 const styles = StyleSheet.create({
     mainContainer:{

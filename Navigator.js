@@ -48,20 +48,23 @@ function AuthStack(){
                 <Auth.Screen name="Login" component={Login} />
                 <Auth.Screen name="RegistrationScreen" component={RegistrationScreen} />
                 <Auth.Screen name="RegisterPromoCode" component={RegisterPromoCode} />
-                <Auth.Screen name="TrialScreen" component={TrialScreen} />
+                
                 <Auth.Screen name="ThankYouRegistration" component={ThankYouRegistration} />
-                <Auth.Screen name="ThankYouPurchase" component={ThankYouPurchase} />
+                
                 <Auth.Screen name="ForgotPassword" component={ForgotPassword} />
                
             </Auth.Navigator>
         </NavigationContainer>
     )
 }
-function MainStack(){
+function MainStack({plan_expired, plan_id}){
     const Main = createStackNavigator()
     return(
+        
         <NavigationContainer>
             <Main.Navigator headerMode="none">
+                {plan_id === "" && <Main.Screen name="TrialScreen" component={TrialScreen} />}
+                {plan_id === "" && <Main.Screen name="ThankYouPurchase" component={ThankYouPurchase} />}
                 <Main.Screen name="HomeScreen" component={HomeScreen} />
                 <Main.Screen name="AddABusiness" component={AddABusiness} />
                 <Main.Screen name="Menu" component={Menu} />
@@ -81,21 +84,25 @@ function MainStack(){
     )
 }
 
-function Navigator({token, new_device}) {
+function Navigator({token, new_device, plan_expired, plan_id}) {
     console.log("New Device:", new_device, "Token:",token)
-    return (
-            <>
-                {new_device ? (<OnboardingStack/>):(
-                    !token ?(<AuthStack/>):(<MainStack/>)
-                )}
-            </>
-    )
+    if(new_device){
+        return <OnboardingScreen/>
+    }else{
+        if(!token){
+            return <AuthStack/>
+        }else{
+            return <MainStack plan_expired={plan_expired} plan_id={plan_id}/>
+        }
+    }
 }
 const mapStateToProps = state => {
     console.log("In Navigator",state.auth)
     return {
         token: state.auth.token,
-        new_device: state.auth.new_device
+        new_device: state.auth.new_device,
+        plan_expired: state.auth.plan_expired,
+        plan_id: state.auth.plan_id
     }
 }
 export default connect(mapStateToProps, null)(Navigator)

@@ -16,7 +16,7 @@ export const login = (data) => async (dispatch, getState) => {
         if(res.data.status){
             dispatch({
                 type: SIGNIN,
-                payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false}
+                payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id}
             })
         }
         return res
@@ -29,7 +29,7 @@ export const register = (data) => async (dispatch, getState) => {
     try{
         const res = await axios({
             method: 'post',
-            url: `${API_URL}/register`,
+            url: `${API_URL}/signup`,
             data: data,
             headers: {'Content-Type': 'multipart/form-data' }
         })
@@ -201,16 +201,6 @@ export const getMenuItems = (data) => async (dispatch, getState) => {
     console.log("Get Menu Items =>",res.data.data.items)
     return res
 };
-export const deleteItems = (data) => async (dispatch, getState) => {
-    const res = await axios({
-        method: 'post',
-        url: `${API_URL}/delete-item`,
-        data: data,
-        headers: {'Content-Type': 'multipart/form-data' }
-    })
-    console.log("Delete Menu Items =>",res.data)
-    return res
-};
 export const getItemDetail = (data) => async (dispatch, getState) => {
     const res = await axios({
         method: 'post',
@@ -239,5 +229,25 @@ export const deleteItem = (data) => async (dispatch, getState) => {
         headers: {'Content-Type': 'multipart/form-data' }
     })
     console.log("Delete Item =>",res.data)
+    return res
+};
+export const profileInfo = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/get-profile`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Profile Detail =>",res.data)
+    return res
+};
+export const updateSubscription = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/update-subscription`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Update Subscription =>",res.data)
     return res
 };

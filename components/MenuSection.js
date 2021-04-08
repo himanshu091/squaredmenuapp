@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { deleteItem } from '../store/action'
 
 const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh}) => {
-    console.log("Menu", data)
+
     const deleteThisItem = async () => {
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
@@ -25,7 +25,7 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
             </View>
                 <View style={styles.menuItem}>
                     <View style={styles.menuSubItem}>
-                        <TouchableOpacity onPress={()=>navigation.navigate('EditDish')}><Text style={styles.itemName}>{menuName}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>navigation.navigate('DishDetail', {item_id:data.item_id})}><Text style={styles.itemName}>{menuName}</Text></TouchableOpacity>
                         {data.has_variants === 0 && <Text style={styles.cost}>${parseFloat(data.price).toFixed(2)}</Text>}
                     </View>
                     
@@ -42,10 +42,10 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
                     }
                 </View>
             {data.has_variants === 1 && <View style={styles.bar}></View>}
-            {data.has_variants === 1 && <TouchableOpacity style={styles.newSection} onPress={addNew}>
+            {/* {data.has_variants === 1 && <TouchableOpacity style={styles.newSection} onPress={addNew}>
                 <Text style={styles.sectionName}>Add New Varient</Text>
                 <Image style={styles.plus} source={require('../assets/images/icons/plus.png')}/>
-            </TouchableOpacity>}
+            </TouchableOpacity>} */}
             {data.has_variants === 0 && <View style={{paddingBottom: 10}}>
             </View>}
         </View>

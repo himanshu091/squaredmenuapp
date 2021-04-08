@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {Button} from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -18,89 +18,108 @@ import {
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg';
 import { connect } from 'react-redux';
-import { logout } from '../store/action';
+import { logout, profileInfo } from '../store/action';
+import { SafeAreaView } from 'react-native';
 
-const UserProfile = ({navigation, name, email, logout}) => {
+const UserProfile = ({ navigation, name, email, logout, user_id, token, profileInfo }) => {
+  const [data, setdata] = useState(null)
+  useEffect(async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    bodyFormData.append('token', token);
+    const res = await profileInfo(bodyFormData)
+    setdata(res.data.data)
+  }, [])
   return (
-    <ScrollView>
-      <Bg1
-        height={hp('40%')}
-        width={wp('100%')}
-        style={{
-          position: 'absolute',
-        }}
-        resizeMode="stretch"
-      />
+    <SafeAreaView>
+      <ScrollView>
+        <Bg1
+          height={hp('40%')}
+          width={wp('100%')}
+          style={{
+            position: 'absolute',
+          }}
+          resizeMode="stretch"
+        />
 
-      <View style={styles.topElements}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={()=>navigation.goBack()}>
-          <Image
-            source={require('../assets/images/topbar/back.png')}
-            style={styles.button_image}
-          />
-        </TouchableOpacity>
+        <View style={styles.topElements}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.goBack()}>
+            <Image
+              source={require('../assets/images/topbar/back.png')}
+              style={styles.button_image}
+            />
+          </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate('EditProfile')}>
-          <Image
-            source={require('../assets/images/icons/edit2.png')}
-            style={styles.button_image}
-          />
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.navigate('EditProfile')}>
+            <Image
+              source={require('../assets/images/icons/edit2.png')}
+              style={styles.button_image}
+            />
+          </TouchableOpacity>
+        </View>
 
-      <View style={styles.imageView}>
-        <Image source={require('../assets/images/profile/profile.png')} />
-      </View>
+        {!data && <View style={styles.imageView}>
+            <Image source={require('../assets/images/profile/profile.png')} />
+        </View>}
+        {data && <View style={styles.imageView}>
+            <Image source={(data.user.image.trim().length > 0)?{uri: data.user.image}:require('../assets/images/profile/profile.png')} />
+        </View>}
 
-      <View style={styles.inputFields}>
-      
+        <View style={styles.inputFields}>
+
           <Text style={styles.nameText}>{name}</Text>
           <Text style={styles.smallText}>{email}</Text>
-          <Text  style={styles.smallText}>**********</Text>
+          <Text style={styles.smallText}>**********</Text>
           <View style={styles.featuresView}>
-          <Text  style={styles.smallHeadingText}>Go Pro!</Text>
-          <Text  style={styles.smallSubHeadingText}>Starting from $9.99/Month</Text>
-        </View>
-        <View style={styles.featuresView}>
-            <View style ={styles.membershipView}>
-            <View>
-          <Text  style={styles.smallHeadingText}>Membership</Text>
-          <Text  style={styles.smallSubHeadingText}>Premium $39.99/Month</Text>
+            {data && data.plans.map(plan => {
+              return <View key={plan.id} style={styles.featuresView}>
+                <View style={styles.membershipView}>
+                  <View>
+                    <Text style={styles.smallHeadingText}>{plan.name}</Text>
+                    <Text style={styles.smallSubHeadingText}>{plan.description}</Text>
+                  </View>
+                  <View style={styles.renewView} >
+                    <Text style={styles.renewText}>Renew Date</Text>
+                    <Text style={styles.renewDateText}>10th March,2021</Text>
+                  </View>
+                </View>
+              </View>
+            })}
+
           </View>
-          <View style={styles.renewView} >
-          <Text  style={styles.renewText}>Renew Date</Text>
-          <Text  style={styles.renewDateText}>10th March,2021</Text>
-          </View>
-          </View>
-        </View>
-        <View style={styles.featuresView}>
+
+          <View style={styles.featuresView}>
             <View style={styles.share}>
-            <View>
-          <Text  style={styles.smallHeadingText}>Share the love 💜</Text>
-          <Text  style={styles.smallShareText}>Share this code and get 1 month free premium features</Text>
-          <Text  style={styles.smallBottomText}>https://nameOfApp.ly/fede007</Text>
+              <View>
+                <Text style={styles.smallHeadingText}>Share the love 💜</Text>
+                <Text style={styles.smallShareText}>Share this code and get 1 month free premium features</Text>
+                
+              </View>
+              <TouchableOpacity>
+                <Image source={require('../assets/images/icons/share.png')} />
+              </TouchableOpacity>
+            </View>
+            <Text style={styles.smallBottomText}>{data && data.web_url}</Text>
           </View>
-          <TouchableOpacity>
-          <Image source={require('../assets/images/icons/share.png')} />
-          </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={logout}><Text style={{ textAlign: 'center' }}>Logout</Text></TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={logout}><Text style={{textAlign:'center'}}>Logout</Text></TouchableOpacity>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 const mapStateToProps = state => {
   return {
     name: state.auth.name,
-    email: state.auth.email
+    email: state.auth.email,
+    user_id: state.auth.user_id,
+    token: state.auth.token
   }
 }
-export default connect(mapStateToProps,{logout})(UserProfile);
+export default connect(mapStateToProps, { logout, profileInfo })(UserProfile);
 
 const styles = StyleSheet.create({
   heading: {
@@ -134,7 +153,7 @@ const styles = StyleSheet.create({
     width: 42,
   },
   inputFields: {
-    marginHorizontal:15,
+    marginHorizontal: 15,
     marginTop: hp('2%'),
   },
   input: {
@@ -174,68 +193,68 @@ const styles = StyleSheet.create({
     paddingTop: 40 - 35 * 0.75,
     textTransform: 'capitalize'
   },
-  smallText:{
+  smallText: {
     fontSize: 15,
     color: '#000000',
-    fontFamily: 'Poppins Regular', 
-    marginVertical:10
+    fontFamily: 'Poppins Regular',
+    marginVertical: 10
   },
-  smallHeadingText:{
+  smallHeadingText: {
     fontSize: 15,
     color: '#000000',
     fontFamily: 'Poppins Bold',
   },
-  smallSubHeadingText:{
+  smallSubHeadingText: {
     fontSize: 15,
     color: '#B3B3B3',
-    fontFamily: 'Poppins Regular', 
+    fontFamily: 'Poppins Regular',
   },
-  featuresView:{
-      marginVertical:10
+  featuresView: {
+    marginVertical: 10
   },
-  membershipView:{
-    flexDirection:'row',
-    alignItems:'center',
-      justifyContent:'space-between'
+  membershipView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
-  renewView:{
-      backgroundColor:"#e4e4e4",
-      padding:10,
-      
-      
+  renewView: {
+    backgroundColor: "#e4e4e4",
+    padding: 10,
+
+
   },
-  renewText:{
-      textAlign:'right',
-      fontFamily: 'Poppins Medium', 
-      fontSize: 11,
+  renewText: {
+    textAlign: 'right',
+    fontFamily: 'Poppins Medium',
+    fontSize: 11,
     color: '#000000',
-    opacity:.5
+    opacity: .5
   },
-  renewDateText:{
-    textAlign:'right',
-    fontFamily: 'Poppins Bold', 
+  renewDateText: {
+    textAlign: 'right',
+    fontFamily: 'Poppins Bold',
 
     fontSize: 11,
-  color: '#000000',
-  opacity:.5
+    color: '#000000',
+    opacity: .5
   },
-  share:{
-      flexDirection:'row',
-      justifyContent:'space-between'
+  share: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
 
   },
-  smallShareText:{
+  smallShareText: {
     fontSize: 15,
     color: '#B3B3B3',
     fontFamily: 'Poppins Regular',
-    flexWrap:'wrap',
-    width:wp(70)
+    flexWrap: 'wrap',
+    width: wp(70)
   },
-  smallBottomText:{
+  smallBottomText: {
     fontSize: 15,
     color: '#B3B3B3',
     fontFamily: 'Poppins Regular',
-    marginVertical:20
+    marginVertical: 20
   }
-  
+
 });

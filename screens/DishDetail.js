@@ -1,17 +1,34 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView, TouchableOpacity } from 'react-native'
 import { Image } from 'react-native';
+import { ScrollView } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen';
+import { connect } from 'react-redux';
+import { getItemDetail } from '../store/action';
+
 const ImageLink = 'https://s3-alpha-sig.figma.com/img/9f1d/c315/08ab99a54f7760efb7348364a34f84a3?Expires=1617580800&Signature=LAU4jcVnfN7bAVg2PIDwLygNnGHW-e6LLGXcmMgxFccROEPkHPCbVYdlOKRQ7IaSqMklmr75mwPhvbeK6RnS4kn5ji75Ljoajd1Kodh~wQ5ZNpigPNQVHnncXcyfysw~uOqiq0wd989nH3FCmhDyelQPIsuFPy9jhvfrdyhEgH9iuNLDpdJ1O5FAI5HXBr6d5tLorQmORCIoevqd2O-BhPX2x8s7MDT9zW2gZdVnzpbkZIkQeZetXALoM5GWzwgK3xj4EX6V2Svfo~MZnEgCb0~t-ULly5-O4bZPUCpQ4kk6coCnP6oC1tFipp9XG2aTAftMsOR6xGJlrWBykBXB0w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA';
-const DishDetail = ({navigation}) => {
+const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
+
+    const [data, setdata] = useState(null)
+
+    useEffect(async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('item_id', route.params.item_id);
+        const res = await getItemDetail(bodyFormData)
+        setdata(res.data.data)
+    }, [])
     return (
-        <SafeAreaView style={styles.body}>
+        <>
+        {data && <SafeAreaView style={styles.body}>
+            <ScrollView>
             <FastImage
                 style={styles.dishImage}
                 source={{
-                    uri: ImageLink,
+                    uri: data.item.image,
                     priority: FastImage.priority.normal,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
@@ -24,36 +41,67 @@ const DishDetail = ({navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.edit}
-                onPress={()=>{navigation.navigate('EditDish')}}>
+                // onPress={()=>{navigation.navigate('EditDish')}}
+                >
                 <Image source={require('../assets/images/icons/edit.png')}/>
             </TouchableOpacity>
             <View style={styles.part1}>
-                <View style={styles.dishNameContainer}><Text style={styles.dishName}>Croissant</Text></View>
-                <View style={styles.trademarks}>
+                <View style={styles.dishNameContainer}><Text style={styles.dishName}>{data.item.name}</Text></View>
+                {/* <View style={styles.trademarks}>
                     <Image  style={styles.tm1} source={require('../assets/images/icons/gluten.png')} />
                     <Image  style={styles.tm2} source={require('../assets/images/icons/vegan.png')} />
-                </View>
+                </View> */}
             </View>
             <View style={styles.descBox}>
-                <Text style={styles.desc}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</Text>
+                <Text style={styles.desc}>{data.item.description}</Text>
             </View>
-            <View style={styles.varientBody}>
-                <Text style={styles.varientName}>Small</Text>
-                <Text style={styles.varientCost}>$2.00</Text>
+            {data.item.has_variants === 1 && data.item.variants.map(vari => {
+                return <View key={vari.variant_id} style={styles.varientBody}>
+                            <Text style={styles.varientName}>{vari.option}</Text>
+                            <Text style={styles.varientCost}>${vari.price}</Text>
+                        </View>
+            })}
+            <View style={{borderTopWidth: 1, borderColor: '#00000010', paddingTop:20}}></View>
+            <View style={{paddingLeft: 20}}>
+                {data.item_types.map(type =>{
+                    if(type.is_checked !== 0){
+                        return  <View key={type.item_type_id} style={styles.compPart1}>
+                                    <FastImage
+                                            style={styles.compImg}
+                                            source={{
+                                                uri: type.image,
+                                                priority: FastImage.priority.normal,
+                                            }}
+                                            resizeMode={FastImage.resizeMode.cover}
+                                        />
+                                    <Text style={styles.compText}>{type.name}</Text>
+                                </View>
+                    }
+                })}
             </View>
-            <View style={styles.varientBody}>
-                <Text style={styles.varientName}>Medium</Text>
-                <Text style={styles.varientCost}>$5.00</Text>
+            <View style={{display:'flex', flexDirection:'row',justifyContent:'center', flexWrap:'wrap'}}>
+                {data.extra_options.map(opt => {
+                    if(opt.is_checked !== 0){
+                        return <View style={styles.active} key={opt.option_id}>
+                                    <Image style={styles.jar} source={require('../assets/images/icons/jar_white.png')} />
+                                    <Text style={styles.activeText}>{opt.name}</Text>
+                                    <Image style={styles.tick} source={require('../assets/images/icons/option_tick.png')} />
+                                </View>
+                    }
+                })}
             </View>
-            <View style={styles.varientBody}>
-                <Text style={styles.varientName}>Large</Text>
-                <Text style={styles.varientCost}>$8.00</Text>
-            </View>
-        </SafeAreaView>
+            </ScrollView>
+        </SafeAreaView>}
+        </>
     )
 }
-
-export default DishDetail
+const mapStateToProps = state => {
+    return {
+        user_id: state.auth.user_id,
+        token: state.auth.token
+    }
+}
+export default connect(mapStateToProps, {getItemDetail})(DishDetail)
 
 const styles = StyleSheet.create({
     body:{
@@ -94,7 +142,7 @@ const styles = StyleSheet.create({
     dishName:{
         flexBasis: '70%',
         fontFamily: 'Poppins SemiBold',
-        fontSize: widthPercentageToDP(100)/8,
+        fontSize: widthPercentageToDP(100)/9,
         lineHeight: 60 * 0.75,
         paddingTop: 60 - 35 * 0.75,
     },
@@ -126,10 +174,56 @@ const styles = StyleSheet.create({
     },
     varientName:{
         fontSize: 18,
-        fontFamily: 'Poppins Medium'
+        fontFamily: 'Poppins Medium',
+        textTransform: 'capitalize'
     },
     varientCost:{
         fontSize: 18,
         fontFamily: 'Poppins Medium'
+    },
+    comp:{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 23
+    },
+    compPart1:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10
+    },
+    compText:{
+        fontFamily: 'Poppins Regular',
+        fontSize: 18
+    },
+    compImg:{
+        height: 25,
+        width: 25,
+        marginRight: 5
+    },
+    active:{
+        flexDirection: 'row',
+        backgroundColor:'#635CC9',
+        justifyContent: 'space-between',
+        alignItems:'center',
+        paddingHorizontal: 12,
+        paddingVertical: 16,
+        width: widthPercentageToDP(45),
+        marginHorizontal: widthPercentageToDP(2.5),
+        borderRadius: 7,
+        marginBottom: 8
+    },
+    activeText: {
+        fontSize: 18,
+        fontFamily: 'Poppins Medium',
+        color: '#fff'
+    },
+    jar:{
+        height: 18.95,
+        width: 15.83
+    },
+    tick:{
+        height: 13.7,
+        width: 18
     }
 })

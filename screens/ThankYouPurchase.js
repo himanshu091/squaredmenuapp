@@ -62,13 +62,13 @@ const ThankYouPurchase = ({navigation}) => {
           title="Go Home"
           titleStyle={{fontSize: 15}}
           buttonStyle={styles.btn1}
-          onPress={()=>navigation.navigate('Login')}
+          onPress={()=>navigation.navigate('HomeScreen')}
         
         />
 
         <View style={styles.bottomView}>
           <Text
-            onPress={() => navigation.navigate('RegisterPromoCode')}
+            // onPress={() => navigation.navigate('RegisterPromoCode')}
             style={styles.bottomText}>
             Download Receipt
           </Text>

@@ -91,6 +91,11 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
             </View>
             </ScrollView>
         </SafeAreaView>}
+        {!data && <SafeAreaView style={{flex: 1, height:heightPercentageToDP(100)}}>
+                <View style={{backgroundColor:'#fff',flexDirection:'column',justifyContent:'center', alignItems: 'center', height:heightPercentageToDP(100)}}>
+                    <Text style={{fontFamily:'Poppins Medium', fontSize: 20}}>Loading...</Text>
+                </View>
+            </SafeAreaView>}
         </>
     )
 }

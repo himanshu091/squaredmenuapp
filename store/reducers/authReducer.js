@@ -52,6 +52,11 @@ export default (state = initialState, action) => {
                 ...state,
                 plan_id: 1
             }
+        case 'UPDATE_PROFILE_PIC':
+            return{
+                ...state,
+                image: action.payload
+            }
         default:
             return state
     }

@@ -19,11 +19,13 @@ import {
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg';
 import { connect } from 'react-redux';
-import { logout, profileInfo } from '../store/action';
+import { logout, profileInfo, updateProfilePic, updatePic } from '../store/action';
 import { SafeAreaView } from 'react-native';
 import FastImage from 'react-native-fast-image';
+import ImagePicker from 'react-native-image-crop-picker';
+import { Alert } from 'react-native';
 
-const UserProfile = ({ navigation, name, email, logout, user_id, token, profileInfo }) => {
+const UserProfile = ({ navigation, name, email, logout, user_id,updatePic, token, profileInfo, updateProfilePic }) => {
   const [data, setdata] = useState(null)
   useEffect(async () => {
     var bodyFormData = new FormData();
@@ -43,6 +45,14 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
 
     return unsubscribe;
 }, [navigation]);
+const refresh = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    bodyFormData.append('token', token);
+    const res = await profileInfo(bodyFormData)
+    setdata(res.data.data)
+    updatePic(res.data.data.user.image)
+}
   const onShare = async (msg) => {
     try {
       const result = await Share.share({
@@ -70,7 +80,6 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
       includeBase64: true
     }).then(async image => {
         // console.log(image)
-        setPhoto(image)
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
         bodyFormData.append('token', token);
@@ -86,7 +95,7 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
             'Success',  
             res.data.message,  
             [  
-                {text: 'OK', onPress: () => navigation.navigate('UserProfile')},  
+                {text: 'OK', onPress: () => refresh()},  
             ]  
         );
     }).catch(err=>{
@@ -196,7 +205,7 @@ const mapStateToProps = state => {
     token: state.auth.token
   }
 }
-export default connect(mapStateToProps, { logout, profileInfo })(UserProfile);
+export default connect(mapStateToProps, { logout, profileInfo, updateProfilePic, updatePic })(UserProfile);
 
 const styles = StyleSheet.create({
   heading: {

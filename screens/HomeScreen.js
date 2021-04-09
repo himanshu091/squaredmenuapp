@@ -44,7 +44,7 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
                                 <Text style={styles.name}>Your Business</Text>
                             </View>
                             <TouchableOpacity onPress={() => navigation.navigate('UserProfile')}>
-                                {image.trim().length < 1 && <Image style={styles.profilePic} source={require('../assets/images/profile/user.png')} />}
+                                {image.trim().length < 1 && <Image style={styles.profilePic} source={require('../assets/images/profile/profile.png')} />}
                                 {image.trim().length > 0 && <FastImage
                                     style={styles.profilePic}
                                     source={{
@@ -128,8 +128,9 @@ const styles = StyleSheet.create({
         height: 70,
         width: 70,
         borderRadius: 70,
-        borderWidth: 1,
-        borderColor: '#fff'
+        borderWidth: 2,
+        borderColor: '#fff',
+        backgroundColor:'#fff'
     }
 
 })

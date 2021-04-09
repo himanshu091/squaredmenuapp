@@ -67,6 +67,15 @@ export const beginUpdate = () => async (dispatch, getState) => {
     });
 };
 
+export const UPDATE_PROFILE_PIC= 'UPDATE_PROFILE_PIC';
+export const updatePic = (img) => async (dispatch, getState) => {
+
+    dispatch({
+        type: UPDATE_PROFILE_PIC,
+        payload: img
+    });
+};
+
 export const verifyEmail = (data) => async (dispatch, getState) => {
     const res = await axios({
         method: 'post',

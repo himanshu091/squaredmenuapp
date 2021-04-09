@@ -185,7 +185,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
         />
 
       </View>
-      <TouchableOpacity style={styles.locationContainer} >
+      <TouchableOpacity style={styles.locationContainer} onPress={()=>{navigation.navigate('LocationTest')}} >
         <Image
           source={require("../assets/images/icons/location.png")}
         />

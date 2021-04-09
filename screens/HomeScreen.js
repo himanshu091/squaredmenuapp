@@ -51,7 +51,7 @@ const HomeScreen = ({navigation, logout, user_id, token, getRestaurants}) => {
                 {data && data.map((item,idx)=>{
                     return <RestaurantCard key={idx} name='Menu' navigation={navigation} data={item}/>
                 })}
-                {data.length < 1 && <AddNewButton name='AddABusiness' navigation={navigation}/>}
+                {data.length < 3 && <AddNewButton name='AddABusiness' navigation={navigation}/>}
                 </>:<View style={styles.loading}><Text style={styles.loadingText}>Fetching Data...</Text></View>}
             </View>
             <View style={{marginBottom:50}}></View>

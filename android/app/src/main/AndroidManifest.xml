@@ -11,6 +11,9 @@
       android:allowBackup="false"
       android:usesCleartextTraffic="true"
       android:theme="@style/AppTheme">
+      <meta-data
+  android:name="com.google.android.geo.API_KEY"
+  android:value="AIzaSyBsqmLSVPGVmlSVcVmrLY_ynqvMLRUyeZU"/>
       <activity
         android:name=".SplashActivity"
         android:theme="@style/SplashTheme"

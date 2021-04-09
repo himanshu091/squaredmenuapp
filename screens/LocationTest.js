@@ -1,201 +1,170 @@
-import React, {useState, useEffect} from 'react';
-
-// import all the components we are going to use
-import {
-  SafeAreaView,
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  PermissionsAndroid,
-  Platform,
-  Button,
-} from 'react-native';
-
-//import all the components we are going to use.
+import React, { Component } from 'react';
+import { Text, View, ActivityIndicator, Button,StyleSheet,Dimensions } from 'react-native';
+import MapView from "react-native-maps";
 import Geolocation from '@react-native-community/geolocation';
 
-const LocationTest = () => {
-  const [
-    currentLongitude,
-    setCurrentLongitude
-  ] = useState('...');
-  const [
-    currentLatitude,
-    setCurrentLatitude
-  ] = useState('...');
-  const [
-    locationStatus,
-    setLocationStatus
-  ] = useState('');
 
-  useEffect(() => {
-    const requestLocationPermission = async () => {
-      if (Platform.OS === 'ios') {
-        getOneTimeLocation();
-        subscribeLocationLocation();
-      } else {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Location Access Required',
-              message: 'This App needs to Access your location',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            //To Check, If Permission is granted
-            getOneTimeLocation();
-            subscribeLocationLocation();
-          } else {
-            setLocationStatus('Permission Denied');
-          }
-        } catch (err) {
-          console.warn(err);
-        }
-      }
-    };
-    requestLocationPermission();
-    return () => {
-      Geolocation.clearWatch(watchID);
-    };
-  }, []);
+// Disable yellow box warning messages
+console.disableYellowBox = true;
 
-  const getOneTimeLocation = () => {
-    setLocationStatus('Getting Location ...');
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      region: {
+        latitude: 10,
+        longitude: 10,
+        latitudeDelta: 0.001,
+        longitudeDelta: 0.001
+      },
+      isMapReady: false,
+      marginTop: 1,
+      userLocation: "",
+      regionChangeProgress: false
+    };
+  }
+
+  componentWillMount() {
     Geolocation.getCurrentPosition(
-      //Will give you the current location
       (position) => {
-        setLocationStatus('You are Here');
-
-        //getting the Longitude from the location json
-        const currentLongitude = 
-          JSON.stringify(position.coords.longitude);
-
-        //getting the Latitude from the location json
-        const currentLatitude = 
-          JSON.stringify(position.coords.latitude);
-
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
-        
-        //Setting Longitude state
-        setCurrentLatitude(currentLatitude);
+        const region = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          latitudeDelta: 0.001,
+          longitudeDelta: 0.001
+        };
+        this.setState({
+          region: region,
+          loading: false,
+          error: null,
+        });
       },
       (error) => {
-        setLocationStatus(error.message);
+        alert(error);
+        this.setState({
+          error: error.message,
+          loading: false
+        })
       },
-      {
-        enableHighAccuracy: false,
-        timeout: 30000,
-        maximumAge: 1000
-      },
+      { enableHighAccuracy: false, timeout: 200000, maximumAge: 5000 },
     );
-  };
+  }
 
-  const subscribeLocationLocation = () => {
-    watchID = Geolocation.watchPosition(
-      (position) => {
-        //Will give you the location on location change
-        
-        setLocationStatus('You are Here');
-        console.log(position);
+  onMapReady = () => {
+    this.setState({ isMapReady: true, marginTop: 0 });
+  }
 
-        //getting the Longitude from the location json        
-        const currentLongitude =
-          JSON.stringify(position.coords.longitude);
+  // Fetch location details as a JOSN from google map API
+  fetchAddress = () => {
+    fetch("https://maps.googleapis.com/maps/api/geocode/json?address=" + this.state.region.latitude + "," + this.state.region.longitude + "&key=" + "AIzaSyBsqmLSVPGVmlSVcVmrLY_ynqvMLRUyeZU")
+      .then((response) => response.json())
+      .then((responseJson) => {
+        const userLocation = responseJson.results[0].formatted_address;
+        this.setState({
+          userLocation: userLocation,
+          regionChangeProgress: false
+        });
+      });
+  }
 
-        //getting the Latitude from the location json
-        const currentLatitude = 
-          JSON.stringify(position.coords.latitude);
+  // Update state on region change
+  onRegionChange = region => {
+    this.setState({
+      region,
+      regionChangeProgress: true
+    }, () => this.fetchAddress());
+  }
 
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
+  // Action to be taken after select location button click
+  onLocationSelect = () => {
+    console.log(this.state);
+    alert(this.state.userLocation);}
 
-        //Setting Latitude state
-        setCurrentLatitude(currentLatitude);
-      },
-      (error) => {
-        setLocationStatus(error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        maximumAge: 1000
-      },
-    );
-  };
-
-  return (
-    <SafeAreaView style={{flex: 1}}>
-      <View style={styles.container}>
+  render() {
+    if (this.state.loading) {
+      return (
+        <View style={styles.spinnerView}>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      );
+    } else {
+      return (
         <View style={styles.container}>
-          <Image
-            source={{
-              uri:
-                'https://raw.githubusercontent.com/AboutReact/sampleresource/master/location.png',
-            }}
-            style={{width: 100, height: 100}}
-          />
-          <Text style={styles.boldText}>
-            {locationStatus}
-          </Text>
-          <Text
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 16,
-            }}>
-            Longitude: {currentLongitude}
-          </Text>
-          <Text
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 16,
-            }}>
-            Latitude: {currentLatitude}
-          </Text>
-          <View style={{marginTop: 20}}>
-            <Button
-              title="Button"
-              onPress={getOneTimeLocation}
-            />
+          <View style={{ flex: 2 }}>
+            {!!this.state.region.latitude && !!this.state.region.longitude &&
+              <MapView
+                style={{ ...styles.map, marginTop: this.state.marginTop }}
+                initialRegion={this.state.region}
+                showsUserLocation={true}
+                onMapReady={this.onMapReady}
+                onRegionChangeComplete={this.onRegionChange}
+              >
+                <MapView.Marker
+                  coordinate={{ "latitude": this.state.region.latitude, "longitude": this.state.region.longitude }}
+                  title={"Your Location"}
+                  draggable
+                />
+              </MapView>
+            }
+
+          </View>
+          <View style={styles.deatilSection}>
+            <Text style={{ fontSize: 16, fontWeight: "bold", fontFamily: "roboto", marginBottom: 20 }}>Move map for location</Text>
+            <Text style={{ fontSize: 10, color: "#999" }}>LOCATION</Text>
+            <Text numberOfLines={2} style={{ fontSize: 14, paddingVertical: 10, borderBottomColor: "silver", borderBottomWidth: 0.5 }}>
+              {!this.state.regionChangeProgress ? this.state.userLocation : "Identifying Location..."}</Text>
+            <View style={styles.btnContainer}>
+              <Button
+                title="PICK THIS LOCATION"
+                disabled={this.state.regionChangeProgress}
+                onPress={this.onLocationSelect}
+              >
+              </Button>
+            </View>
           </View>
         </View>
-        <Text
-          style={{
-            fontSize: 18,
-            textAlign: 'center',
-            color: 'grey'
-          }}>
-          React Native Geolocation
-        </Text>
-        <Text
-          style={{
-            fontSize: 16,
-            textAlign: 'center',
-            color: 'grey'
-          }}>
-          www.aboutreact.com
-        </Text>
-      </View>
-    </SafeAreaView>
-  );
-};
-
+      );
+    }
+  }
+}
 const styles = StyleSheet.create({
+  map: {
+    ...StyleSheet.absoluteFillObject,
+  },
   container: {
+    display: "flex",
+    height: Dimensions.get("screen").height,
+    width: Dimensions.get("screen").width
+  },
+  map: {
+    flex: 1
+  },
+  mapMarkerContainer: {
+    left: '47%',
+    position: 'absolute',
+    top: '42%'
+  },
+  mapMarker: {
+    fontSize: 40,
+    color: "red"
+  },
+  deatilSection: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "#fff",
     padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    justifyContent: "flex-start"
   },
-  boldText: {
-    fontSize: 25,
-    color: 'red',
-    marginVertical: 16,
+  spinnerView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center"
   },
+  btnContainer: {
+    width: Dimensions.get("window").width - 20,
+    position: "absolute",
+    bottom: 100,
+    left: 10
+  }
 });
-
-export default LocationTest;

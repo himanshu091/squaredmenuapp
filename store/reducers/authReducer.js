@@ -5,6 +5,7 @@ const initialState = {
     user_id:"", 
     plan_expired: null,
     plan_id: null,
+    image: "",
     new_device: true
 }
 export default (state = initialState, action) => {
@@ -18,6 +19,7 @@ export default (state = initialState, action) => {
                 user_id:action.payload.user_id,
                 plan_expired: action.payload.plan_expired,
                 plan_id: action.payload.plan_id,
+                image: action.payload.image,
                 new_device: false
             }
         case 'SIGNUP':
@@ -36,6 +38,7 @@ export default (state = initialState, action) => {
                 user_id:"",
                 plan_expired: null,
                 plan_id: null,
+                image: "",
                 new_device: false
             }
         case 'BEGIN_AUTH':

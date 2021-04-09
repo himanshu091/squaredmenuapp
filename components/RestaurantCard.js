@@ -4,7 +4,6 @@ import FastImage from 'react-native-fast-image'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
 const RestaurantCard = ({navigation, name, data}) => {
-    console.log(data)
     return (
         <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate(name,{restaurant_id:data.restaurant_id, brandImage:data.logo})}>
             <View style={styles.subBox}>

@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { connect } from 'react-redux'
 import { deleteItem } from '../store/action'
 
-const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh}) => {
+const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh, menu_id}) => {
 
     const deleteThisItem = async () => {
         var bodyFormData = new FormData();
@@ -25,7 +25,7 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
             </View>
                 <View style={styles.menuItem}>
                     <View style={styles.menuSubItem}>
-                        <TouchableOpacity onPress={()=>navigation.navigate('DishDetail', {item_id:data.item_id})}><Text style={styles.itemName}>{menuName}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>navigation.navigate('DishDetail', {item_id:data.item_id, menu_id:menu_id})}><Text style={styles.itemName}>{menuName}</Text></TouchableOpacity>
                         {data.has_variants === 0 && <Text style={styles.cost}>${parseFloat(data.price).toFixed(2)}</Text>}
                     </View>
                     

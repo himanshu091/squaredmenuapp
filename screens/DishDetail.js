@@ -8,7 +8,6 @@ import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsi
 import { connect } from 'react-redux';
 import { getItemDetail } from '../store/action';
 
-const ImageLink = 'https://s3-alpha-sig.figma.com/img/9f1d/c315/08ab99a54f7760efb7348364a34f84a3?Expires=1617580800&Signature=LAU4jcVnfN7bAVg2PIDwLygNnGHW-e6LLGXcmMgxFccROEPkHPCbVYdlOKRQ7IaSqMklmr75mwPhvbeK6RnS4kn5ji75Ljoajd1Kodh~wQ5ZNpigPNQVHnncXcyfysw~uOqiq0wd989nH3FCmhDyelQPIsuFPy9jhvfrdyhEgH9iuNLDpdJ1O5FAI5HXBr6d5tLorQmORCIoevqd2O-BhPX2x8s7MDT9zW2gZdVnzpbkZIkQeZetXALoM5GWzwgK3xj4EX6V2Svfo~MZnEgCb0~t-ULly5-O4bZPUCpQ4kk6coCnP6oC1tFipp9XG2aTAftMsOR6xGJlrWBykBXB0w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA';
 const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
 
     const [data, setdata] = useState(null)
@@ -41,7 +40,7 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
             </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.edit}
-                // onPress={()=>{navigation.navigate('EditDish')}}
+                onPress={()=>{navigation.navigate('EditDish',{item_id: route.params.item_id, menu_id: route.params.menu_id})}}
                 >
                 <Image source={require('../assets/images/icons/edit.png')}/>
             </TouchableOpacity>
@@ -79,7 +78,7 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
                     }
                 })}
             </View>
-            <View style={{display:'flex', flexDirection:'row',justifyContent:'center', flexWrap:'wrap'}}>
+            <View style={{display:'flex', flexDirection:'row', flexWrap:'wrap'}}>
                 {data.extra_options.map(opt => {
                     if(opt.is_checked !== 0){
                         return <View style={styles.active} key={opt.option_id}>
@@ -145,6 +144,7 @@ const styles = StyleSheet.create({
         fontSize: widthPercentageToDP(100)/9,
         lineHeight: 60 * 0.75,
         paddingTop: 60 - 35 * 0.75,
+        textTransform: 'capitalize'
     },
     tm1:{
         width: widthPercentageToDP(9),

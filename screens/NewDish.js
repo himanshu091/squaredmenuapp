@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react'
-import { SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
+import { Alert, SafeAreaView, TextInput, TouchableOpacity } from 'react-native'
 import { ScrollView } from 'react-native';
 import { Image } from 'react-native';
 import { StyleSheet, Text, View } from 'react-native'
@@ -94,14 +94,14 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
         const temp = [...variants]
         temp.push({
             name: name,
-            price: price
+            price: parseFloat(price)
         })
         setVariants(temp)
         console.log("Add Varient",temp)
     }
     const editVariant = (name,price, pos) => {
         const temp = [...variants]
-        temp[pos] = {name:name, price:price}
+        temp[pos] = {name:name, price:parseFloat(price)}
         setVariants(temp)
     }
     const deleteVariant = (pos) => {
@@ -139,34 +139,36 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
         });
         bodyFormData.append('has_variants', has_variants); 
-        bodyFormData.append('price', has_variants===0?price:""); 
-        bodyFormData.append('variants', has_variants!==0?{"variants":variants}:"");
+        bodyFormData.append('price', has_variants===0?parseFloat(price):""); 
+        bodyFormData.append('variants', has_variants!==0?JSON.stringify({variants:variants}):"");
         bodyFormData.append('item_type_ids', selectedTypes.toString()); 
         bodyFormData.append('option_ids', selectedOptions.toString());
         bodyFormData.append('available', isOn?1:0); 
-        console.log(bodyFormData)
-        
+         
+        for (let [key, value] of bodyFormData._parts) {
+            console.log(`${key}: ${JSON.stringify(value)}`)
+          }
         const res = await addNewItem(bodyFormData)
         setClicked(false)
-        // if(res.data.status){
-        //     Alert.alert(  
-        //         'Success',  
-        //         res.data.message,  
-        //         [  
-        //             {text: 'OK', onPress: () => navigation.goBack()},  
-        //         ]  
-        //     );
-        // }else{
-        //     if(Platform.OS === 'android'){
-        //         ToastAndroid.showWithGravity(
-        //         res.data.message,
-        //         ToastAndroid.SHORT,
-        //         ToastAndroid.BOTTOM
-        //     )
-        //     }else{
-        //         AlertIOS.alert(res.data.message)
-        //     }
-        // }
+        if(res.data.status){
+            Alert.alert(  
+                'Success',  
+                res.data.message,  
+                [  
+                    {text: 'OK', onPress: () => navigation.goBack()},  
+                ]  
+            );
+        }else{
+            if(Platform.OS === 'android'){
+                ToastAndroid.showWithGravity(
+                res.data.message,
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM
+            )
+            }else{
+                AlertIOS.alert(res.data.message)
+            }
+        }
     }
     return (
         <SafeAreaView style={styles.body}>

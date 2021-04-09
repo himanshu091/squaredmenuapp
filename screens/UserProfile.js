@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  Share,
 } from 'react-native';
 import { Button } from 'react-native-elements';
 import {
@@ -30,6 +31,25 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
     const res = await profileInfo(bodyFormData)
     setdata(res.data.data)
   }, [])
+  const onShare = async (msg) => {
+    try {
+      const result = await Share.share({
+        message:
+          msg,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+        } else {
+          // shared
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  };
   return (
     <SafeAreaView>
       <ScrollView>
@@ -74,23 +94,27 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
           <Text style={styles.nameText}>{name}</Text>
           <Text style={styles.smallText}>{email}</Text>
           <Text style={styles.smallText}>**********</Text>
+          <View style={styles.memberView}>
           <View style={styles.featuresView}>
             {data && data.plans.map(plan => {
+             
               return <View key={plan.id} style={styles.featuresView}>
                 <View style={styles.membershipView}>
                   <View>
                     <Text style={styles.smallHeadingText}>{plan.name}</Text>
                     <Text style={styles.smallSubHeadingText}>{plan.description}</Text>
                   </View>
-                  <View style={styles.renewView} >
-                    <Text style={styles.renewText}>Renew Date</Text>
-                    <Text style={styles.renewDateText}>10th March,2021</Text>
-                  </View>
+                 
                 </View>
               </View>
             })}
 
           </View>
+          <View style={styles.renewView} >
+                    <Text style={styles.renewText}>Renew Date</Text>
+                    <Text style={styles.renewDateText}>{data && data.subscription.ends_at}</Text>
+                  </View>
+                  </View>
 
           <View style={styles.featuresView}>
             <View style={styles.share}>
@@ -99,7 +123,7 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
                 <Text style={styles.smallShareText}>Share this code and get 1 month free premium features</Text>
                 
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>{onShare(data.web_url)}}>
                 <Image source={require('../assets/images/icons/share.png')} />
               </TouchableOpacity>
             </View>
@@ -255,6 +279,13 @@ const styles = StyleSheet.create({
     color: '#B3B3B3',
     fontFamily: 'Poppins Regular',
     marginVertical: 20
+  },
+  memberView: {
+    flexDirection:'row',
+    alignItems:'flex-end',
+    justifyContent:'space-between'
+    
+
   }
 
 });

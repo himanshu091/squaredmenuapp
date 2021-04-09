@@ -27,6 +27,7 @@ import ForgotPassword from './screens/ForgotPassword';
 import LocationTest from './screens/LocationTest';
 import NewMenu from './screens/NewMenu';
 import NewDish from './screens/NewDish';
+import EditABusiness from './screens/EditABusiness';
 
 
 function OnboardingStack(){
@@ -67,6 +68,7 @@ function MainStack({plan_expired, plan_id}){
                 {plan_id === "" && <Main.Screen name="ThankYouPurchase" component={ThankYouPurchase} />}
                 <Main.Screen name="HomeScreen" component={HomeScreen} />
                 <Main.Screen name="AddABusiness" component={AddABusiness} />
+                <Main.Screen name="EditABusiness" component={EditABusiness} />
                 <Main.Screen name="Menu" component={Menu} />
                 <Main.Screen name="MenuList" component={MenuList} />
                 <Main.Screen name="MenuPreview" component={MenuPreview} />

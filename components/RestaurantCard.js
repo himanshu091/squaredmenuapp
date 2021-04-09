@@ -4,6 +4,7 @@ import FastImage from 'react-native-fast-image'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
 const RestaurantCard = ({navigation, name, data}) => {
+    console.log(data)
     return (
         <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate(name,{restaurant_id:data.restaurant_id, brandImage:data.logo})}>
             <View style={styles.subBox}>
@@ -20,7 +21,7 @@ const RestaurantCard = ({navigation, name, data}) => {
                 <View style={styles.parentText}><Text style={styles.name}>{data.name}</Text></View>
                 <View style={styles.parentText}><Text style={styles.address}>{data.address}</Text></View>
             </View>
-            
+            <View style={styles.edit}><TouchableOpacity onPress={()=>navigation.navigate('EditABusiness', {data:data})}><Image source={require('../assets/images/icons/edit.png')}/></TouchableOpacity></View>
         </TouchableOpacity>
     )
 }
@@ -40,6 +41,11 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    edit:{
+        position:'absolute',
+        right: 0,
+        top: 0
     },
     subBox: {
         display: 'flex',

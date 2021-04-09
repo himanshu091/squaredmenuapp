@@ -21,6 +21,7 @@ import Bg1 from '../assets/images/banners/bg1.svg';
 import { connect } from 'react-redux';
 import { logout, profileInfo } from '../store/action';
 import { SafeAreaView } from 'react-native';
+import FastImage from 'react-native-fast-image';
 
 const UserProfile = ({ navigation, name, email, logout, user_id, token, profileInfo }) => {
   const [data, setdata] = useState(null)
@@ -31,6 +32,17 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
     const res = await profileInfo(bodyFormData)
     setdata(res.data.data)
   }, [])
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      var bodyFormData = new FormData();
+      bodyFormData.append('user_id', user_id);
+      bodyFormData.append('token', token);
+      const res = await profileInfo(bodyFormData)
+      setdata(res.data.data)
+    });
+
+    return unsubscribe;
+}, [navigation]);
   const onShare = async (msg) => {
     try {
       const result = await Share.share({
@@ -83,10 +95,20 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
         </View>
 
         {!data && <View style={styles.imageView}>
-            <Image source={require('../assets/images/profile/profile.png')} />
+            <Image source={require('../assets/images/profile/profile.png')} style={styles.profilePic} />
         </View>}
         {data && <View style={styles.imageView}>
-            <Image source={(data.user.image.trim().length > 0)?{uri: data.user.image}:require('../assets/images/profile/profile.png')} />
+          {(data.user.image.trim().length > 0)?<FastImage
+                    style={styles.profilePic}
+                    source={{
+                        uri: data.user.image,
+                        priority: FastImage.priority.normal,
+                    }}
+                    resizeMode={FastImage.resizeMode.cover}
+                />:
+          <Image source={require('../assets/images/profile/profile.png')} style={styles.profilePic} resizeMode="cover" />}
+            
+            
         </View>}
 
         <View style={styles.inputFields}>
@@ -208,6 +230,7 @@ const styles = StyleSheet.create({
   imageView: {
     alignItems: 'center',
     marginTop: heightPercentageToDP(10),
+    
   },
   nameText: {
     fontSize: 48,
@@ -286,6 +309,12 @@ const styles = StyleSheet.create({
     justifyContent:'space-between'
     
 
+  },
+  profilePic:{
+    height:120,
+    width: 120,
+    borderRadius: 100,
+    resizeMode: 'cover',
   }
 
 });

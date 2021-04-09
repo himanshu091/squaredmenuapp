@@ -126,7 +126,7 @@ const MenuList = ({navigation, user_id, token, getMenuItems, route}) => {
                 </View>
                 {
                     data1 && data1.items.map((menu, idx) => {
-                        return <MenuSection key={idx} refresh={()=>refresh()} menuName={menu.name} variants={menu.variants} data={menu} successClose={()=>{close1andRefresh()}} addNew={() => refRBSheet2.current.open()} navigation={navigation}/>
+                        return <MenuSection key={idx} refresh={()=>refresh()} menuName={menu.name} variants={menu.variants} menu_id={route.params.menu_id} data={menu} successClose={()=>{close1andRefresh()}} addNew={() => refRBSheet2.current.open()} navigation={navigation}/>
                     })
                 }
                

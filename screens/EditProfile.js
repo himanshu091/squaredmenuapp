@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import {
   StyleSheet,
   Text,
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
-import {Button} from 'react-native-elements';
+import { Button } from 'react-native-elements';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -18,84 +18,112 @@ import {
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/backgroundimage.svg';
 import { connect } from 'react-redux';
-import { changePassword } from '../store/action';
+import { changePassword, updateProfilePic } from '../store/action';
 import { ToastAndroid } from 'react-native';
 
-const EditProfile = ({navigation, changePassword, name, user_id}) => {
+import ImagePicker from 'react-native-image-crop-picker';
+import { Alert } from 'react-native';
+
+
+const EditProfile = ({ navigation, changePassword, name, user_id, token, updateProfilePic }) => {
   const [old, onChangeOld] = React.useState("");
   const [confirm, onChangeConfirm] = React.useState("")
   const [newpassword, onChangeNewPassword] = React.useState("");
+  const [photo, setPhoto] = React.useState(null);
+
   const handleSubmit = async () => {
     var bodyFormData = new FormData();
     bodyFormData.append('current_pass', old);
     bodyFormData.append('new_pass', newpassword);
     bodyFormData.append('user_id', user_id);
     const res = await changePassword(bodyFormData)
-  
+
     ToastAndroid.showWithGravity(
       res.data.message,
       ToastAndroid.SHORT,
       ToastAndroid.BOTTOM
     )
   }
+  const imagepick = () => {
+    ImagePicker.openPicker({
+      width: 200,
+      height: 200,
+      cropping: true,
+      includeBase64: true
+    }).then(async image => {
+        // console.log(image)
+        setPhoto(image)
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('name', name);
+        bodyFormData.append('image', {
+          name: name,
+          type: image.mime,
+          uri: Platform.OS === 'android' ? image.path : image.path.replace('file://', ''),
+        });
+        const res = await updateProfilePic(bodyFormData)
+        
+          Alert.alert(  
+            'Success',  
+            res.data.message,  
+            [  
+                {text: 'OK', onPress: () => navigation.navigate('UserProfile')},  
+            ]  
+        );
+    }).catch(err=>{
+        console.log(err);
+    });
+  }
   return (
     <ScrollView>
-        <TouchableOpacity>
-        <Bg1
-          height={hp(30)}
-          width={wp('100%')}
-          style={{
-            position: 'absolute',
-            top:0,
-            left:0,
-            right:0
-          }}
-          marginTop={-4}
-          resizeMode="cover"
+      <TouchableOpacity onPress={imagepick}>
+        <ImageBackground source={require('../assets/images/banners/imageUpload.png')} style={{ width: wp(100), height:wp(100)*418/750 }}>
+          <View style={styles.topElements}>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.goBack()}>
+              <Image
+                source={require('../assets/images/topbar/back.png')}
+                style={styles.button_image}
+              />
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate('RegistrationScreen')}>
+              <Image
+                source={require('../assets/images/icons/edit2.png')}
+                style={styles.button_image}
+              />
+            </TouchableOpacity>
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
+
+
+
+
+      <View style={styles.inputFields}>
+
+        <Text style={styles.nameText}>{name}</Text>
+        <TextInput
+          fontSize={15}
+          fontFamily={"Poppins Regular"}
+          onChangeText={onChangeOld}
+          value={old}
+          placeholder="Old Password"
+          opacity={0.3}
+          placeholderTextColor="#000000"
+          secureTextEntry
         />
-        </TouchableOpacity>
-
-        <View style={styles.topElements}>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={()=>navigation.goBack()}>
-            <Image
-              source={require('../assets/images/topbar/back.png')}
-              style={styles.button_image}
-            />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => navigation.navigate('RegistrationScreen')}>
-            <Image
-              source={require('../assets/images/icons/edit2.png')}
-              style={styles.button_image}
-            />
-          </TouchableOpacity>
-        </View>
-
-
-        <View style={styles.inputFields}>
-        
-          <Text style={styles.nameText}>{name}</Text>
-          <TextInput
-            fontSize={15}
-            fontFamily={"Poppins Regular"}
-            onChangeText={onChangeOld}
-            value={old}
-            placeholder="Old Password"
-            opacity={ 0.3}
-            placeholderTextColor="#000000"
-            secureTextEntry
-          />
         <TextInput
           fontSize={15}
           fontFamily={"Poppins Regular"}
           onChangeText={onChangeNewPassword}
           value={newpassword}
           placeholder="New Password"
-          opacity={ 0.3}
+          opacity={0.3}
           placeholderTextColor="#000000"
           secureTextEntry
         />
@@ -105,18 +133,18 @@ const EditProfile = ({navigation, changePassword, name, user_id}) => {
           onChangeText={onChangeConfirm}
           value={confirm}
           placeholder="Confirm New Password"
-          opacity={ 0.3}
+          opacity={0.3}
           placeholderTextColor="#000000"
           secureTextEntry
         />
-      
+
         <Button
           onPress={handleSubmit}
           title="Salva"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
-          containerStyle={{marginTop:80}} 
-         
+          containerStyle={{ marginTop: 80 }}
+
         />
       </View>
     </ScrollView>
@@ -125,10 +153,11 @@ const EditProfile = ({navigation, changePassword, name, user_id}) => {
 const mapSatateToProps = state => {
   return {
     name: state.auth.name,
-    user_id: state.auth.user_id
+    user_id: state.auth.user_id,
+    token: state.auth.token
   }
 }
-export default connect(mapSatateToProps,{changePassword})(EditProfile);
+export default connect(mapSatateToProps, { changePassword, updateProfilePic })(EditProfile);
 
 const styles = StyleSheet.create({
   heading: {
@@ -137,12 +166,12 @@ const styles = StyleSheet.create({
     marginBottom: 40,
     marginLeft: 15,
   },
-  btn1:{
-            
+  btn1: {
+
     backgroundColor: "#635CC9",
     borderRadius: 50,
-    marginHorizontal:15,
-    height:50,
+    marginHorizontal: 15,
+    height: 50,
     shadowColor: "rgba(239, 54, 81, 0.35)",
     shadowOffset: {
       width: 0,
@@ -152,7 +181,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5.84,
 
     elevation: 5,
-    
+
   },
   headingText: {
     color: 'white',
@@ -179,8 +208,8 @@ const styles = StyleSheet.create({
     width: 42,
   },
   inputFields: {
-    marginHorizontal:15,
-    marginTop: hp('18%'),
+    marginHorizontal: 15,
+    marginTop: 50,
   },
   input: {
     height: 50,
@@ -219,68 +248,68 @@ const styles = StyleSheet.create({
     paddingTop: 40 - 35 * 0.75,
     textTransform: 'capitalize'
   },
-  smallText:{
+  smallText: {
     fontSize: 15,
     color: '#000000',
-    fontFamily: 'Poppins Regular', 
-    marginVertical:10
+    fontFamily: 'Poppins Regular',
+    marginVertical: 10
   },
-  smallHeadingText:{
+  smallHeadingText: {
     fontSize: 15,
     color: '#000000',
     fontFamily: 'Poppins Bold',
   },
-  smallSubHeadingText:{
+  smallSubHeadingText: {
     fontSize: 15,
     color: '#B3B3B3',
-    fontFamily: 'Poppins Regular', 
+    fontFamily: 'Poppins Regular',
   },
-  featuresView:{
-      marginVertical:10
+  featuresView: {
+    marginVertical: 10
   },
-  membershipView:{
-    flexDirection:'row',
-    alignItems:'center',
-      justifyContent:'space-between'
+  membershipView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between'
   },
-  renewView:{
-      backgroundColor:"#e4e4e4",
-      padding:10,
-      
-      
+  renewView: {
+    backgroundColor: "#e4e4e4",
+    padding: 10,
+
+
   },
-  renewText:{
-      textAlign:'right',
-      fontFamily: 'Poppins Medium', 
-      fontSize: 11,
+  renewText: {
+    textAlign: 'right',
+    fontFamily: 'Poppins Medium',
+    fontSize: 11,
     color: '#000000',
-    opacity:.5
+    opacity: .5
   },
-  renewDateText:{
-    textAlign:'right',
-    fontFamily: 'Poppins Bold', 
+  renewDateText: {
+    textAlign: 'right',
+    fontFamily: 'Poppins Bold',
 
     fontSize: 11,
-  color: '#000000',
-  opacity:.5
+    color: '#000000',
+    opacity: .5
   },
-  share:{
-      flexDirection:'row',
-      justifyContent:'space-between'
+  share: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
 
   },
-  smallShareText:{
+  smallShareText: {
     fontSize: 15,
     color: '#B3B3B3',
     fontFamily: 'Poppins Regular',
-    flexWrap:'wrap',
-    width:wp(70)
+    flexWrap: 'wrap',
+    width: wp(70)
   },
-  smallBottomText:{
+  smallBottomText: {
     fontSize: 15,
     color: '#B3B3B3',
     fontFamily: 'Poppins Regular',
-    marginVertical:20
+    marginVertical: 20
   }
-  
+
 });

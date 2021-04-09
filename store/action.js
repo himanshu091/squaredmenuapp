@@ -16,7 +16,7 @@ export const login = (data) => async (dispatch, getState) => {
         if(res.data.status){
             dispatch({
                 type: SIGNIN,
-                payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id}
+                payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id, image: res.data.data.image}
             })
         }
         return res
@@ -249,5 +249,15 @@ export const updateSubscription = (data) => async (dispatch, getState) => {
         headers: {'Content-Type': 'multipart/form-data' }
     })
     console.log("Update Subscription =>",res.data)
+    return res
+};
+export const updateProfilePic = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/update-profile`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Update Profile =>",res.data)
     return res
 };

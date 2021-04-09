@@ -59,6 +59,13 @@ export const logout = () => async (dispatch, getState) => {
         type: LOGOUT,
     });
 };
+export const UPDATE_SUBSCRIPTION= 'UPDATE_SUBSCRIPTION';
+export const beginUpdate = () => async (dispatch, getState) => {
+
+    dispatch({
+        type: UPDATE_SUBSCRIPTION,
+    });
+};
 
 export const verifyEmail = (data) => async (dispatch, getState) => {
     const res = await axios({

@@ -23,10 +23,13 @@ import Geolocation from '@react-native-community/geolocation';
 import { Platform } from 'react-native';
 import { connect } from 'react-redux';
 import {addNewRestaurant} from '../store/action'
+import { SafeAreaView } from 'react-native';
+import LocationTest from '../components/LocationTest';
 
 
 
 const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) => {
+  const [step, setStep] = React.useState(1);
   const [name, onChangeName] = React.useState(route.params.data.name);
   const [address, onChangeAddress] = React.useState(route.params.data.address);
   const [restaurantId, setRestaurantId] = React.useState(route.params.data.restaurant_id);
@@ -36,6 +39,8 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
   const [photo, onChangephoto] = React.useState(null);
   const [defaultimage, setdefaultImage] = React.useState(route.params.data.logo);
   const [err, setErr] = React.useState("");
+  const [lat, setlat] = React.useState(route.params.data.lat);
+  const [long, setlong] = React.useState(route.params.data.lng);
   const [clicked, setclicked] = React.useState(false);
 
   const imagepick = () => {
@@ -51,6 +56,14 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
       console.log(err);
     });
   }
+  const showMap = () => {setStep(2)}
+  const hideMap = () => {setStep(1)}
+  const setLatLong = (lat, long) => {
+    setlat(lat);
+    setlong(long);
+    console.log(lat, long)
+    hideMap()
+  }
   const handleSubmit = async () => {
     if(name.trim().length < 1){
       setErr("Enter Valid Name")
@@ -65,8 +78,8 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
     bodyFormData.append('user_id', user_id);
     bodyFormData.append('name', name);
     bodyFormData.append('address', `${address}`);
-    bodyFormData.append('lat', 81);
-    bodyFormData.append('lng', 85);
+    bodyFormData.append('lat', lat);
+    bodyFormData.append('lng', long);
     if(photo){
       bodyFormData.append('image', {
         name: name,
@@ -95,7 +108,8 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
   }
 
   return (
-    <ScrollView>
+    <SafeAreaView>
+    {step === 1 && <ScrollView>
       <Bg1
         height={hp('40%')}
         width={wp('100%')}
@@ -184,7 +198,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
         />
 
       </View>
-      <TouchableOpacity style={styles.locationContainer} >
+      <TouchableOpacity style={styles.locationContainer} onPress={showMap}>
         <Image
           source={require("../assets/images/icons/location.png")}
         />
@@ -199,7 +213,9 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
         loading={clicked}
       />
 
-    </ScrollView>
+    </ScrollView>}
+    {step === 2 && <LocationTest setLatLong={(lat, long)=>setLatLong(lat, long)} />}
+    </SafeAreaView>
   );
 };
 const mapStateToProps = state => {
@@ -304,5 +320,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 15
+  },
+  latlong:{
+    textAlign:'center',
+    fontFamily: 'Poppins Light',
+    fontSize: 12
   }
 });

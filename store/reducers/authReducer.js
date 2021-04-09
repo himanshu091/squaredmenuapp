@@ -47,6 +47,11 @@ export default (state = initialState, action) => {
                 ...state,
                 new_device: false
             }
+        case 'UPDATE_SUBSCRIPTION':
+            return{
+                ...state,
+                plan_id: 1
+            }
         default:
             return state
     }

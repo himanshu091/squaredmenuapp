@@ -62,6 +62,37 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
       alert(error.message);
     }
   };
+  const imagepick = () => {
+    ImagePicker.openPicker({
+      width: 200,
+      height: 200,
+      cropping: true,
+      includeBase64: true
+    }).then(async image => {
+        // console.log(image)
+        setPhoto(image)
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('name', name);
+        bodyFormData.append('image', {
+          name: name,
+          type: image.mime,
+          uri: Platform.OS === 'android' ? image.path : image.path.replace('file://', ''),
+        });
+        const res = await updateProfilePic(bodyFormData)
+        
+          Alert.alert(  
+            'Success',  
+            res.data.message,  
+            [  
+                {text: 'OK', onPress: () => navigation.navigate('UserProfile')},  
+            ]  
+        );
+    }).catch(err=>{
+        console.log(err);
+    });
+  }
   return (
     <SafeAreaView>
       <ScrollView>
@@ -94,10 +125,10 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
           </TouchableOpacity>
         </View>
 
-        {!data && <View style={styles.imageView}>
+        {!data && <TouchableOpacity style={styles.imageView} onPress={imagepick}>
             <Image source={require('../assets/images/profile/profile.png')} style={styles.profilePic} />
-        </View>}
-        {data && <View style={styles.imageView}>
+        </TouchableOpacity>}
+        {data && <TouchableOpacity style={styles.imageView} onPress={imagepick}>
           {(data.user.image.trim().length > 0)?<FastImage
                     style={styles.profilePic}
                     source={{
@@ -109,7 +140,7 @@ const UserProfile = ({ navigation, name, email, logout, user_id, token, profileI
           <Image source={require('../assets/images/profile/profile.png')} style={styles.profilePic} resizeMode="cover" />}
             
             
-        </View>}
+        </TouchableOpacity>}
 
         <View style={styles.inputFields}>
 

@@ -24,7 +24,7 @@ import DishDetail from './screens/DishDetail';
 import EditDish from './screens/EditDish';
 import { connect } from 'react-redux';
 import ForgotPassword from './screens/ForgotPassword';
-import LocationTest from './screens/LocationTest';
+import LocationTest from './components/LocationTest';
 import NewMenu from './screens/NewMenu';
 import NewDish from './screens/NewDish';
 import EditABusiness from './screens/EditABusiness';
@@ -58,14 +58,23 @@ function AuthStack(){
         </NavigationContainer>
     )
 }
-function MainStack({plan_expired, plan_id}){
+function SubscriptionStack(){
+    const Subsc = createStackNavigator()
+    return(
+        <NavigationContainer>
+            <Subsc.Navigator headerMode="none">
+                <Subsc.Screen name="TrialScreen" component={TrialScreen} />
+                <Subsc.Screen name="ThankYouPurchase" component={ThankYouPurchase} />
+            </Subsc.Navigator>
+        </NavigationContainer>
+    )
+}
+function MainStack(){
     const Main = createStackNavigator()
     return(
         
         <NavigationContainer>
             <Main.Navigator headerMode="none">
-                {plan_id === "" && <Main.Screen name="TrialScreen" component={TrialScreen} />}
-                {plan_id === "" && <Main.Screen name="ThankYouPurchase" component={ThankYouPurchase} />}
                 <Main.Screen name="HomeScreen" component={HomeScreen} />
                 <Main.Screen name="AddABusiness" component={AddABusiness} />
                 <Main.Screen name="EditABusiness" component={EditABusiness} />
@@ -79,7 +88,7 @@ function MainStack({plan_expired, plan_id}){
                 <Main.Screen name="QR" component={QR} />
                 <Main.Screen name="DishDetail" component={DishDetail} />
                 <Main.Screen name="EditDish" component={EditDish} />
-                <Main.Screen name="LocationTest" component={LocationTest} />
+                {/* <Main.Screen name="LocationTest" component={LocationTest} /> */}
                 <Main.Screen name="NewDish" component={NewDish} />
             </Main.Navigator>
         </NavigationContainer>
@@ -94,7 +103,12 @@ function Navigator({token, new_device, plan_expired, plan_id}) {
         if(!token){
             return <AuthStack/>
         }else{
-            return <MainStack plan_expired={plan_expired} plan_id={plan_id}/>
+            if(plan_id === ""){
+                return <SubscriptionStack plan_expired={plan_expired} plan_id={plan_id}/>
+            }else{
+                return <MainStack/>
+            }
+            
         }
     }
 }

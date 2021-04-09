@@ -17,8 +17,10 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
+import { connect } from 'react-redux';
+import { beginUpdate } from '../store/action';
 
-const ThankYouPurchase = ({navigation}) => {
+const ThankYouPurchase = ({navigation, beginUpdate}) => {
   const [name, onChangeName] = React.useState(null);
   const [number, onChangeNumber] = React.useState(null);
   const [email, onChangeEmail] = React.useState(null);
@@ -41,11 +43,11 @@ const ThankYouPurchase = ({navigation}) => {
       <View style={styles.heading}>
         <Text style={styles.headingText}>Thank You </Text>
         <Text style={styles.contentHeadingText}>
-        Payment has been successfully done, your transaction number is
+        You have successfully activated the trial version.
         </Text>
-        <Text style={styles.transictionID}>
+        {/* <Text style={styles.transictionID}>
         Txn321435465
-        </Text>
+        </Text> */}
 
       </View>
       <View style={styles.content}>
@@ -62,24 +64,24 @@ const ThankYouPurchase = ({navigation}) => {
           title="Go Home"
           titleStyle={{fontSize: 15}}
           buttonStyle={styles.btn1}
-          onPress={()=>navigation.navigate('HomeScreen')}
+          onPress={beginUpdate}
         
         />
 
-        <View style={styles.bottomView}>
+        {/* <View style={styles.bottomView}>
           <Text
             // onPress={() => navigation.navigate('RegisterPromoCode')}
             style={styles.bottomText}>
             Download Receipt
           </Text>
         
-        </View>
+        </View> */}
       </View>
     </ScrollView>
   );
 };
 
-export default ThankYouPurchase;
+export default connect(null,{beginUpdate})(ThankYouPurchase);
 
 const styles = StyleSheet.create({
   heading: {

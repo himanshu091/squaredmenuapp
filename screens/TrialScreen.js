@@ -93,7 +93,7 @@ const TrialScreen = ({navigation, updateSubscription, user_id, token}) => {
 
       <View style={styles.inputFields}>
         <Button
-          title="Try it for Free for 7 Days"
+          title="Try it for Free for 90 Days"
           titleStyle={{fontSize: 15}}
           buttonStyle={styles.btn1}
           containerStyle={{marginTop: 10}}

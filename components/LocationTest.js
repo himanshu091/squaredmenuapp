@@ -7,7 +7,7 @@ import Geolocation from '@react-native-community/geolocation';
 // Disable yellow box warning messages
 console.disableYellowBox = true;
 
-export default class App extends Component {
+export default class LocationTest extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -78,9 +78,10 @@ export default class App extends Component {
 
   // Action to be taken after select location button click
   onLocationSelect = () => {
-    console.log(this.state);
-    alert(this.state.userLocation);}
-
+    console.log(this.state.region);
+    // alert(this.state.userLocation);
+    this.props.setLatLong(this.state.region.latitude,this.state.region.longitude)
+  }
   render() {
     if (this.state.loading) {
       return (

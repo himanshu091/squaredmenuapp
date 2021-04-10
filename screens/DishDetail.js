@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 12,
         paddingVertical: 16,
         width: widthPercentageToDP(45),
-        marginHorizontal: widthPercentageToDP(2.5),
+        marginHorizontal: widthPercentageToDP(2.4),
         borderRadius: 7,
         marginBottom: 8
     },

@@ -17,12 +17,24 @@ import {
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
+import { connect } from 'react-redux';
+import { updateSubscription } from '../store/action';
 
-const TrialScreen = ({navigation}) => {
-  const [name, onChangeName] = React.useState(null);
-  const [number, onChangeNumber] = React.useState(null);
-  const [email, onChangeEmail] = React.useState(null);
-  const [password, onChangePassword] = React.useState(null);
+const TrialScreen = ({navigation, updateSubscription, user_id, token}) => {
+  const [clicked, setClicked] = React.useState(false);
+  const handleSubmit = async () => {
+    setClicked(true)
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    bodyFormData.append('token', token);
+    bodyFormData.append('plan_id', 1);
+    const res = await updateSubscription(bodyFormData)
+    setClicked(false)
+    if(res.data.status){
+      navigation.navigate('ThankYouPurchase')
+    }
+    
+  }
   return (
     <ScrollView>
       <Bg2
@@ -81,11 +93,12 @@ const TrialScreen = ({navigation}) => {
 
       <View style={styles.inputFields}>
         <Button
-          title="Try it for Free for 7 Days"
+          title="Try it for Free for 90 Days"
           titleStyle={{fontSize: 15}}
           buttonStyle={styles.btn1}
           containerStyle={{marginTop: 10}}
-          onPress={()=>navigation.navigate('ThankYouPurchase')}
+          onPress={handleSubmit}
+          loading={clicked}
         />
 
         <View style={styles.bottomView}>
@@ -104,8 +117,13 @@ const TrialScreen = ({navigation}) => {
     </ScrollView>
   );
 };
-
-export default TrialScreen;
+const mapStateToProps = state => {
+  return{
+    user_id: state.auth.user_id,
+    token: state.auth.token
+  }
+}
+export default connect(mapStateToProps,{updateSubscription})(TrialScreen);
 
 const styles = StyleSheet.create({
   heading: {

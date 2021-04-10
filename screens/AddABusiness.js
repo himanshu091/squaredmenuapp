@@ -23,10 +23,12 @@ import Geolocation from '@react-native-community/geolocation';
 import { Platform } from 'react-native';
 import { connect } from 'react-redux';
 import {addNewRestaurant} from '../store/action'
-
+import LocationTest from '../components/LocationTest';
+import { SafeAreaView } from 'react-native';
 
 
 const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
+  const [step, setStep] = React.useState(1);
   const [name, onChangeName] = React.useState("");
   const [address, onChangeAddress] = React.useState("");
   const [states, onChangeState] = React.useState("");
@@ -34,6 +36,8 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
   const [table, onChangeTable] = React.useState("");
   const [photo, onChangephoto] = React.useState(null);
   const [err, setErr] = React.useState("");
+  const [lat, setlat] = React.useState(null);
+  const [long, setlong] = React.useState(null);
   const [clicked, setclicked] = React.useState(false);
 
   const imagepick = () => {
@@ -65,14 +69,17 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
     }else if(!photo){
       setErr("Please select an Image")
       return
+    }else if(!lat){
+      setErr("Please select your location from 'Locate me'")
+      return
     }
     setclicked(true)
     var bodyFormData = new FormData();
     bodyFormData.append('user_id', user_id);
     bodyFormData.append('name', name);
-    bodyFormData.append('address', `${address},${city},${states}`);
-    bodyFormData.append('lat', 81);
-    bodyFormData.append('lng', 85);
+    bodyFormData.append('address', `${address}, ${city}, ${states}`);
+    bodyFormData.append('lat', lat);
+    bodyFormData.append('lng', long);
     bodyFormData.append('image', {
       name: name,
       type: photo.mime,
@@ -96,111 +103,123 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
       setclicked(false)
     }
   }
-
+  const showMap = () => {setStep(2)}
+  const hideMap = () => {setStep(1)}
+  const setLatLong = (lat, long) => {
+    setlat(lat);
+    setlong(long);
+    console.log(lat, long)
+    hideMap()
+  }
   return (
-    <ScrollView>
-      <Bg1
-        height={hp('40%')}
-        width={wp('100%')}
-        style={{
-          position: 'absolute',
+    <SafeAreaView>
+      {step === 1 && <ScrollView>
+        <Bg1
+          height={hp('40%')}
+          width={wp('100%')}
+          style={{
+            position: 'absolute',
 
-        }}
-        resizeMode="stretch"
-      />
+          }}
+          resizeMode="stretch"
+        />
 
-      <View style={styles.topElements}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../assets/images/topbar/back.png')}
-            style={styles.button_image}
-          />
-        </TouchableOpacity>
-        <View style={styles.logoflat}>
+        <View style={styles.topElements}>
+          <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
+            <Image
+              source={require('../assets/images/topbar/back.png')}
+              style={styles.button_image}
+            />
+          </TouchableOpacity>
+          <View style={styles.logoflat}>
 
-          <Image
-            source={require('../assets/images/logoinapp/logoflat.png')}
-          />
+            <Image
+              source={require('../assets/images/logoinapp/logoflat.png')}
+            />
+          </View>
         </View>
-      </View>
 
-      <View style={styles.heading}>
-        <Text style={styles.headingText}>Add Business</Text>
-      </View>
+        <View style={styles.heading}>
+          <Text style={styles.headingText}>Add Business</Text>
+        </View>
 
-      <View style={styles.inputFields}>
+        <View style={styles.inputFields}>
 
-        <TouchableOpacity onPress={imagepick} style={styles.imageContainer}>
-          <Image
-            source={!photo?require("../assets/images/icons/imageicon.png"):{uri:`data:${photo.mime};base64,${photo.data}`}}
-            style={styles.imageIcon}
+          <TouchableOpacity onPress={imagepick} style={styles.imageContainer}>
+            <Image
+              source={!photo?require("../assets/images/icons/imageicon.png"):{uri:`data:${photo.mime};base64,${photo.data}`}}
+              style={styles.imageIcon}
+            />
+          </TouchableOpacity>
+
+          <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeName}
+            value={name}
+            placeholder="Name"
+            textAlign="center"
+            placeholderTextColor="#635CC9"
+
           />
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeAddress}
+            value={address}
+            placeholder="Address"
+            textAlign="center"
+            placeholderTextColor="#635CC9"
+
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeState}
+            value={states}
+            placeholder="State"
+            textAlign="center"
+            placeholderTextColor="#635CC9"
+
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeCity}
+            value={city}
+            placeholder="City"
+            textAlign="center"
+            placeholderTextColor="#635CC9"
+
+          />
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeTable}
+            value={table}
+            placeholder="Number of tables (optional)"
+            textAlign="center"
+            placeholderTextColor="#635CC9"
+            keyboardType="number-pad"
+          />
+
+        </View>
+        {lat && <Text style={styles.latlong}>Latitude: {lat}</Text>}
+        {long && <Text style={styles.latlong}>Longitude: {long}</Text>}
+        <TouchableOpacity style={styles.locationContainer} onPress={showMap} >
+          <Image
+            source={require("../assets/images/icons/location.png")}
+          />
+          <Text style={styles.locationText}>Locate me</Text>
         </TouchableOpacity>
-
-        <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeName}
-          value={name}
-          placeholder="Name"
-          textAlign="center"
-          placeholderTextColor="#635CC9"
-
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeAddress}
-          value={address}
-          placeholder="Address"
-          textAlign="center"
-          placeholderTextColor="#635CC9"
-
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeState}
-          value={states}
-          placeholder="State"
-          textAlign="center"
-          placeholderTextColor="#635CC9"
-
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeCity}
-          value={city}
-          placeholder="City"
-          textAlign="center"
-          placeholderTextColor="#635CC9"
-
-        />
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeTable}
-          value={table}
-          placeholder="Number of tables (optional)"
-          textAlign="center"
-          placeholderTextColor="#635CC9"
-          keyboardType="number-pad"
+        <Button
+          onPress={() => { handleSubmit()}}
+          title="Add"
+          titleStyle={{ fontSize: 15 }}
+          buttonStyle={styles.btn1}
+          containerStyle={{ marginVertical: 15 }}
+          loading={clicked}
         />
 
-      </View>
-      <TouchableOpacity style={styles.locationContainer} >
-        <Image
-          source={require("../assets/images/icons/location.png")}
-        />
-        <Text style={styles.locationText}>Locate me</Text>
-      </TouchableOpacity>
-      <Button
-        onPress={() => { handleSubmit()}}
-        title="Add"
-        titleStyle={{ fontSize: 15 }}
-        buttonStyle={styles.btn1}
-        containerStyle={{ marginVertical: 15 }}
-        loading={clicked}
-      />
-
-    </ScrollView>
+      </ScrollView>}
+      {step === 2 && <LocationTest setLatLong={(lat, long)=>setLatLong(lat, long)} />}
+    </SafeAreaView>
   );
 };
 const mapStateToProps = state => {
@@ -305,5 +324,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginVertical: 15
+  },
+  latlong:{
+    textAlign:'center',
+    fontFamily: 'Poppins Light',
+    fontSize: 12
   }
 });

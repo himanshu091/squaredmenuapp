@@ -1,19 +1,31 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { connect } from 'react-redux'
+import { deleteItem } from '../store/action'
 
-const MenuSection = ({menuName, data, addNew, navigation}) => {
-    console.log("Menu", data)
+const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh, menu_id}) => {
+
+    const deleteThisItem = async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('item_id', data.item_id);
+        const res = await deleteItem(bodyFormData)
+        if(res.data.status){
+            refresh()
+        }
+    }
     return (
         <View style={styles.mainContainer}>
             <View style={styles.sectionHeader}>
                 <Text style={styles.sectionText}></Text>
-                <TouchableOpacity style={styles.delete}>
+                <TouchableOpacity style={styles.delete} onPress={deleteThisItem}>
                     <Image source={require('../assets/images/icons/delete.png')}/>
                 </TouchableOpacity>
             </View>
                 <View style={styles.menuItem}>
                     <View style={styles.menuSubItem}>
-                        <TouchableOpacity onPress={()=>navigation.navigate('EditDish')}><Text style={styles.itemName}>{menuName}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={()=>navigation.navigate('DishDetail', {item_id:data.item_id, menu_id:menu_id})}><Text style={styles.itemName}>{menuName}</Text></TouchableOpacity>
                         {data.has_variants === 0 && <Text style={styles.cost}>${parseFloat(data.price).toFixed(2)}</Text>}
                     </View>
                     
@@ -30,17 +42,22 @@ const MenuSection = ({menuName, data, addNew, navigation}) => {
                     }
                 </View>
             {data.has_variants === 1 && <View style={styles.bar}></View>}
-            {data.has_variants === 1 && <TouchableOpacity style={styles.newSection} onPress={addNew}>
+            {/* {data.has_variants === 1 && <TouchableOpacity style={styles.newSection} onPress={addNew}>
                 <Text style={styles.sectionName}>Add New Varient</Text>
                 <Image style={styles.plus} source={require('../assets/images/icons/plus.png')}/>
-            </TouchableOpacity>}
+            </TouchableOpacity>} */}
             {data.has_variants === 0 && <View style={{paddingBottom: 10}}>
             </View>}
         </View>
     )
 }
-
-export default MenuSection
+const mapStateToProps = state => {
+    return{
+        user_id: state.auth.user_id,
+        token: state.auth.token
+    }
+}
+export default connect(mapStateToProps,{deleteItem})(MenuSection)
 
 const styles = StyleSheet.create({
     mainContainer:{

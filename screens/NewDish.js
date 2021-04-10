@@ -8,7 +8,7 @@ import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsi
 import { connect } from 'react-redux';
 import ToggleSwitch from 'toggle-switch-react-native';
 import TypeComponent from '../components/TypeComponent';
-import {getItemDetail, addNewItem} from '../store/action';
+import {getItemTypes, addNewItem} from '../store/action';
 import { Button } from 'react-native-elements'
 import { Platform } from 'react-native';
 import OptionComponent from '../components/OptionComponent';
@@ -16,13 +16,10 @@ import ImagePicker from 'react-native-image-crop-picker';
 import RBSheet from "react-native-raw-bottom-sheet";
 import AddNewVarient from '../components/AddNewVarient';
 import EditVarient from '../components/EditVarient';
-import TypeComponentEdit from '../components/TypeComponentEdit';
-import OptionComponentEdit from '../components/OptionComponentEdit';
 
-const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) => {
+const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) => {
     const refRBSheet1 = useRef();
     const refRBSheet2 = useRef();
-    const [fetched, setFetched] = useState(null)
     const [isOn, setisOn] = useState(false)
     const [options, setOptions] = useState([])
     const [selectedOptions, setSelectedOptions] = useState([])
@@ -30,55 +27,22 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
     const [selectedTypes, setselectedTypes] = useState([])
     const [clicked, setClicked] = useState(false)
     const [photo, setPhoto] = useState(null)
-    const [defaultImage, setdefaultImage] = useState(null)
-    const [name, setName] = useState("")
-    const [price, setPrice] = useState(0)
+    const [name, setName] = useState(route.params.name)
+    const [price, setPrice] = useState(route.params.price)
     const [desc, setDesc] = useState('')
     const [variants, setVariants] = useState([])
     const [currentEditVarient, setcurrentEditVarient] = useState({})
     const [err, seterr] = useState("")
-    const [has_variants, setHas_variants] = useState(0)
-    var {menu_id} = route.params
+    var {has_variants,menu_id} = route.params
 
     useEffect(async () => {
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
         bodyFormData.append('token', token);
-        bodyFormData.append('item_id', route.params.item_id);
-        const res = await getItemDetail(bodyFormData)
+        const res = await getItemTypes(bodyFormData)
         if(res.data.status){
-            setFetched(true)
             setTypes(res.data.data.item_types)
             setOptions(res.data.data.extra_options)
-            setisOn(res.data.data.item.available===1?true:false)
-            setdefaultImage(res.data.data.item.image)
-            setName(res.data.data.item.name)
-            setDesc(res.data.data.item.description)
-            setHas_variants(res.data.data.item.has_variants)
-            setPrice(res.data.data.item.price)
-            const variants = res.data.data.item.variants.map(item => {
-                return {
-                    name: item.option,
-                    price: item.price
-                }
-            })
-            setVariants(variants)
-            console.log("Types =>", res.data.data.item_types)
-            const selectedTypesTemp = Array()
-            for await (var typ of res.data.data.item_types){
-                if(typ.is_checked === 1){
-                    selectedTypesTemp.push(typ.item_type_id)
-                }
-            }
-            setselectedTypes(selectedTypesTemp)
-
-            const selectedOptionsTemp = []
-            for await (var opt of res.data.data.extra_options){
-                if(opt.is_checked === 1){
-                    selectedOptionsTemp.push(opt.option_id)
-                }
-            }
-            setSelectedOptions(selectedOptionsTemp)
         }
     }, [])
     const selectThisType = (id) => {
@@ -152,6 +116,9 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
         }else if(desc.trim().length < 1){
             seterr("Enter Valid Description")
             return
+        }else if(!photo){
+            seterr("Enter Image of the Item")
+            return
         }else if(has_variants === 1 && variants.length < 1){
             seterr("Enter atleast one varient.")
             return
@@ -163,10 +130,9 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id); 
         bodyFormData.append('token', token); 
-        bodyFormData.append('menu_id', route.params.menu_id); 
+        bodyFormData.append('menu_id', menu_id); 
         bodyFormData.append('name', name); 
         bodyFormData.append('description', desc);
-        if(photo)
         bodyFormData.append('image', {
             name: name,
             type: photo.mime,
@@ -178,7 +144,6 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
         bodyFormData.append('item_type_ids', selectedTypes.toString()); 
         bodyFormData.append('option_ids', selectedOptions.toString());
         bodyFormData.append('available', isOn?1:0); 
-        bodyFormData.append('item_id', route.params.item_id); 
          
         for (let [key, value] of bodyFormData._parts) {
             console.log(`${key}: ${JSON.stringify(value)}`)
@@ -190,7 +155,7 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                 'Success',  
                 res.data.message,  
                 [  
-                    {text: 'OK', onPress: () => navigation.navigate('MenuList', {menu_id:route.params.menu_id})},  
+                    {text: 'OK', onPress: () => navigation.goBack()},  
                 ]  
             );
         }else{
@@ -206,11 +171,10 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
         }
     }
     return (
-        <>
-        {fetched && <SafeAreaView style={styles.body}>
+        <SafeAreaView style={styles.body}>
             <ScrollView>
             <TouchableOpacity onPress={imagepick}>
-                <Image source={!photo?(!defaultImage?require('../assets/images/banners/imageUpload.png'):{uri: defaultImage}):{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.imageupload}/>                  
+                <Image source={!photo?require('../assets/images/banners/imageUpload.png'):{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.imageupload}/>                  
             </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.bell}
@@ -265,13 +229,12 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
             </TouchableOpacity>}
             {has_variants===1 && <View style={styles.line}></View>}
             {types.map((item)=>{
-                
-                return <TypeComponentEdit key={item.item_type_id} data={item} selectThisType={(id)=>selectThisType(id)} deselectThisType={(id)=>deselectThisType(id)} is_checked={item.is_checked}/>
+                return <TypeComponent key={item.item_type_id} data={item} selectThisType={(id)=>selectThisType(id)} deselectThisType={(id)=>deselectThisType(id)}/>
             })}
 
             <View style={styles.optionContainer}>
                 {options.map((item)=>{
-                    return <OptionComponentEdit key={item.option_id} option_id={item.option_id} name={item.name} selectThisOption={(id)=>selectThisOption(id)} deselectThisOption={(id)=>deselectThisOption(id)} is_checked={item.is_checked}/>
+                    return <OptionComponent key={item.option_id} option_id={item.option_id} name={item.name} selectThisOption={(id)=>selectThisOption(id)} deselectThisOption={(id)=>deselectThisOption(id)}/>
                 })}
             </View>
             <View style={styles.line}></View>
@@ -345,17 +308,11 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                     closeFunc={() => refRBSheet2.current.close()} 
                     editVariant={(name,price, pos)=>editVariant(name, price, pos)} 
                     defaultname={currentEditVarient.name} 
-                    defaultprice={`${currentEditVarient.price}`}
+                    defaultprice={currentEditVarient.price}
                     pos={currentEditVarient.pos}
                 />
             </RBSheet>
-        </SafeAreaView>}
-        {!fetched && <SafeAreaView style={{flex: 1, height:heightPercentageToDP(100)}}>
-                <View style={{backgroundColor:'#fff',flexDirection:'column',justifyContent:'center', alignItems: 'center', height:heightPercentageToDP(100)}}>
-                    <Text style={{fontFamily:'Poppins Medium', fontSize: 20}}>Loading...</Text>
-                </View>
-            </SafeAreaView>}
-        </>
+        </SafeAreaView>
     )
 }
 const mapStateToProps = state => {
@@ -364,7 +321,7 @@ const mapStateToProps = state => {
         token: state.auth.token
     }
 }
-export default connect(mapStateToProps,{getItemDetail, addNewItem})(EditDish)
+export default connect(mapStateToProps,{getItemTypes, addNewItem})(NewDish)
 
 const styles = StyleSheet.create({
     body:{

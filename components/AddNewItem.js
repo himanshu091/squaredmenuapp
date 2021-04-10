@@ -6,13 +6,24 @@ import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { addNewItem } from '../store/action';
 
-const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClose}) => {
+const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClose, navigation}) => {
     const [isOn, setisOn] = useState(false)
     const [photo, setPhoto] = useState(null)
     const [name, setName] = useState("")
     const [price, setPrice] = useState("")
     const [clicked, setClicked] = useState(false)
     const [err, setErr] = useState("")
+    const beginCreation = () => {
+        if(name.trim().length < 1){
+            setErr("Please enter Name")
+            return
+        }else if(price.trim().length < 1 && !isOn){
+            setErr("Please enter Price")
+            return
+        }
+        navigation.navigate('NewDish',{menu_id:menu_id, name:name, has_variants:!isOn?0:1, price:price})
+        closeFunc()
+    }
     const imagepick = () => {
         ImagePicker.openPicker({
           width: 375,
@@ -74,11 +85,11 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                 <Text style={styles.title}>Add Item</Text>
                 <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
 
-                <View style={{flexDirection: 'row', justifyContent:'center'}}>
+                {/* <View style={{flexDirection: 'row', justifyContent:'center'}}>
                     <TouchableOpacity onPress={imagepick}>
                         <Image source={!photo?require('../assets/images/icons/imageicon.png'):{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.imageupload}/>                  
                     </TouchableOpacity>
-                </View>
+                </View> */}
                 <TextInput
                     style={styles.input}
                     onChangeText={setName}
@@ -114,7 +125,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                 <TouchableOpacity style={styles.btn1} onPress={closeFunc}>
                     <Text style={styles.btnText1}>Cancel</Text>
                 </TouchableOpacity>
-                {!clicked && <TouchableOpacity style={styles.btn2} onPress={handleSubmit}>
+                {!clicked && <TouchableOpacity style={styles.btn2} onPress={beginCreation}>
                     <Image source={require('../assets/images/icons/tick.png')} />
                     <Text style={styles.btnText2}>Add</Text>
                 </TouchableOpacity>}

@@ -24,8 +24,10 @@ import DishDetail from './screens/DishDetail';
 import EditDish from './screens/EditDish';
 import { connect } from 'react-redux';
 import ForgotPassword from './screens/ForgotPassword';
-import LocationTest from './screens/LocationTest';
+import LocationTest from './components/LocationTest';
 import NewMenu from './screens/NewMenu';
+import NewDish from './screens/NewDish';
+import EditABusiness from './screens/EditABusiness';
 
 
 function OnboardingStack(){
@@ -47,22 +49,35 @@ function AuthStack(){
                 <Auth.Screen name="Login" component={Login} />
                 <Auth.Screen name="RegistrationScreen" component={RegistrationScreen} />
                 <Auth.Screen name="RegisterPromoCode" component={RegisterPromoCode} />
-                <Auth.Screen name="TrialScreen" component={TrialScreen} />
+                
                 <Auth.Screen name="ThankYouRegistration" component={ThankYouRegistration} />
-                <Auth.Screen name="ThankYouPurchase" component={ThankYouPurchase} />
+                
                 <Auth.Screen name="ForgotPassword" component={ForgotPassword} />
                
             </Auth.Navigator>
         </NavigationContainer>
     )
 }
+function SubscriptionStack(){
+    const Subsc = createStackNavigator()
+    return(
+        <NavigationContainer>
+            <Subsc.Navigator headerMode="none">
+                <Subsc.Screen name="TrialScreen" component={TrialScreen} />
+                <Subsc.Screen name="ThankYouPurchase" component={ThankYouPurchase} />
+            </Subsc.Navigator>
+        </NavigationContainer>
+    )
+}
 function MainStack(){
     const Main = createStackNavigator()
     return(
+        
         <NavigationContainer>
             <Main.Navigator headerMode="none">
                 <Main.Screen name="HomeScreen" component={HomeScreen} />
                 <Main.Screen name="AddABusiness" component={AddABusiness} />
+                <Main.Screen name="EditABusiness" component={EditABusiness} />
                 <Main.Screen name="Menu" component={Menu} />
                 <Main.Screen name="MenuList" component={MenuList} />
                 <Main.Screen name="MenuPreview" component={MenuPreview} />
@@ -73,27 +88,37 @@ function MainStack(){
                 <Main.Screen name="QR" component={QR} />
                 <Main.Screen name="DishDetail" component={DishDetail} />
                 <Main.Screen name="EditDish" component={EditDish} />
-                <Main.Screen name="LocationTest" component={LocationTest} />
+                {/* <Main.Screen name="LocationTest" component={LocationTest} /> */}
+                <Main.Screen name="NewDish" component={NewDish} />
             </Main.Navigator>
         </NavigationContainer>
     )
 }
 
-function Navigator({token, new_device}) {
+function Navigator({token, new_device, plan_expired, plan_id}) {
     console.log("New Device:", new_device, "Token:",token)
-    return (
-            <>
-                {new_device ? (<OnboardingStack/>):(
-                    !token ?(<AuthStack/>):(<MainStack/>)
-                )}
-            </>
-    )
+    if(new_device){
+        return <OnboardingScreen/>
+    }else{
+        if(!token){
+            return <AuthStack/>
+        }else{
+            if(plan_id === ""){
+                return <SubscriptionStack plan_expired={plan_expired} plan_id={plan_id}/>
+            }else{
+                return <MainStack/>
+            }
+            
+        }
+    }
 }
 const mapStateToProps = state => {
     console.log("In Navigator",state.auth)
     return {
         token: state.auth.token,
-        new_device: state.auth.new_device
+        new_device: state.auth.new_device,
+        plan_expired: state.auth.plan_expired,
+        plan_id: state.auth.plan_id
     }
 }
 export default connect(mapStateToProps, null)(Navigator)

@@ -20,7 +20,7 @@ const RestaurantCard = ({navigation, name, data}) => {
                 <View style={styles.parentText}><Text style={styles.name}>{data.name}</Text></View>
                 <View style={styles.parentText}><Text style={styles.address}>{data.address}</Text></View>
             </View>
-            
+            <View style={styles.edit}><TouchableOpacity onPress={()=>navigation.navigate('EditABusiness', {data:data})}><Image source={require('../assets/images/icons/edit.png')}/></TouchableOpacity></View>
         </TouchableOpacity>
     )
 }
@@ -40,6 +40,11 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center'
+    },
+    edit:{
+        position:'absolute',
+        right: 0,
+        top: 0
     },
     subBox: {
         display: 'flex',

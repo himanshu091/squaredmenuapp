@@ -26,6 +26,15 @@ import { Platform } from 'react-native';
 // import { GoogleSignin } from '@react-native-community/google-signin';
 import Google from '../assets/images/icons/googleicon.svg'
 import Facebook from '../assets/images/icons/facebookicon.svg'
+import {
+  LoginButton,
+  AccessToken,
+  GraphRequest,
+  GraphRequestManager,
+  LoginManager,
+} from 'react-native-fbsdk';
+
+
 // GoogleSignin.configure({
 //   webClientId:"376994443715-40773pi7plbeft2e7ovbe815661gZoqp.apps.googleusercontent.com",
 //   offlineAccess: true
@@ -38,7 +47,8 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
   
   const [userGoogleInfo, setUserGoogleInfo] = React.useState({});
   const [loaded, setLoaded] = React.useState(false);
-  
+  const [userFacebookInfo, setUserFacebookInfo] = React.useState({});
+
   const signinWithGoogle = async () => {
     // try{
     //   await GoogleSignin.hasPlayServices()
@@ -64,7 +74,45 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
     //   console.log("Error Google Signin =>", err)
     // }
   }
+  const getInfoFromToken = token => {
+    const PROFILE_REQUEST_PARAMS = {
+      fields: {
+        string: 'id,name,first_name,last_name, email',
+      },
+    };
+    const profileRequest = new GraphRequest(
+      '/me',
+      {token, parameters: PROFILE_REQUEST_PARAMS},
+      (error, user) => {
+        if (error) {
+          console.log('login info has error: ' + error);
+        } else {
+          setUserFacebookInfo(user);
+          console.log('result:', user);
+        }
+      },
+    );
+    new GraphRequestManager().addRequest(profileRequest).start();
+  };
 
+  const loginWithFacebook = () => {
+    // Attempt a login using the Facebook login dialog asking for default permissions.
+    LoginManager.logInWithPermissions(['public_profile','email']).then(
+      login => {
+        if (login.isCancelled) {
+          console.log('Login cancelled');
+        } else {
+          AccessToken.getCurrentAccessToken().then(data => {
+            const accessToken = data.accessToken.toString();
+            getInfoFromToken(accessToken);
+          });
+        }
+      },
+      error => {
+        console.log('Login fail with error: ' + error);
+      },
+    );
+  };
   const startLogin = async () => {
     if(email.trim().length < 1){
       setError("Enter Email")
@@ -172,8 +220,9 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
         />
         <Text style={styles.forgotText} onPress={() => navigation.navigate('ForgotPassword')}>Forgot password?</Text>
         <Text style={styles.forgotText}>or login using</Text>
+        
         <View style={styles.socialMedia}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={loginWithFacebook}>
             <Image
                 style={styles.icon}
               source={require('../assets/images/icons/facebook.png')}

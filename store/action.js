@@ -182,6 +182,12 @@ export const signInAPIGoogle = (data) => async (dispatch, getState) => {
         headers: {'Content-Type': 'multipart/form-data' }
     })
     console.log("Login Google =>",res.data)
+    if(res.data.status){
+        dispatch({
+            type: SIGNIN,
+            payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id, image: res.data.data.image}
+        })
+    }
     return res
 };
 

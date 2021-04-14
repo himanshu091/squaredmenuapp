@@ -23,7 +23,7 @@ import { login, signInAPIGoogle } from '../store/action';
 import { connect } from 'react-redux';
 import { getBaseOs,getModel,getDeviceName } from 'react-native-device-info';
 import { Platform } from 'react-native';
-// import { GoogleSignin } from '@react-native-community/google-signin';
+import { GoogleSignin } from '@react-native-community/google-signin';
 import Google from '../assets/images/icons/googleicon.svg'
 import Facebook from '../assets/images/icons/facebookicon.svg'
 import {
@@ -35,10 +35,11 @@ import {
 } from 'react-native-fbsdk';
 
 
-// GoogleSignin.configure({
-//   webClientId:"376994443715-40773pi7plbeft2e7ovbe815661gZoqp.apps.googleusercontent.com",
-//   offlineAccess: true
-// })
+GoogleSignin.configure({
+  webClientId:"955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
+  
+  // offlineAccess: true
+})
 const Login = ({ navigation,login, signInAPIGoogle }) => {
   const [email, onChangeEmail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
@@ -50,31 +51,53 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
   const [userFacebookInfo, setUserFacebookInfo] = React.useState({});
 
   const signinWithGoogle = async () => {
-    // try{
-    //   await GoogleSignin.hasPlayServices()
-    //   const userInfo = await GoogleSignin.signIn()
-    //   setUserGoogleInfo(userInfo)
-    //   console.log("Google Success =>",userInfo)
+    try{
+      await GoogleSignin.hasPlayServices()
+      const userInfo = await GoogleSignin.signIn()
+      setUserGoogleInfo(userInfo)
+      console.log("Google Success =>",userInfo)
 
-    //   //Begin Signin to API
-    //   let device_os = Platform.OS;
-    //   let device_model = await getModel();
-    //   let device_name = await getDeviceName();
-    //   var bodyFormData = new FormData();
-    //   bodyFormData.append('sm_id', 'TEST8676');
-    //   bodyFormData.append('platform', 'google');
-    //   bodyFormData.append('name', userInfo.user.name);
-    //   bodyFormData.append('email', userInfo.user.email);
-    //   bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
-    //   bodyFormData.append('device_name', device_name);
-    //   bodyFormData.append('device_modal', device_model);
-    //   bodyFormData.append('device_os', device_os);
-    //   const res = await signInAPIGoogle(bodyFormData)
-    // }catch(err){
-    //   console.log("Error Google Signin =>", err)
-    // }
+      //Begin Signin to API
+      let device_os = Platform.OS;
+      let device_model = await getModel();
+      let device_name = await getDeviceName();
+      var bodyFormData = new FormData();
+      bodyFormData.append('sm_id', userInfo.user.id);
+      bodyFormData.append('platform', 'google');
+      bodyFormData.append('name', userInfo.user.name);
+      bodyFormData.append('email', userInfo.user.email);
+      bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
+      bodyFormData.append('device_name', device_name);
+      bodyFormData.append('device_modal', device_model);
+      bodyFormData.append('device_os', device_os);
+      const res = await signInAPIGoogle(bodyFormData)
+      if(res.data.status){
+        if(Platform.OS === 'android'){
+          ToastAndroid.showWithGravity(
+          res.data.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        )
+        }else{
+          AlertIOS.alert(res.data.message)
+        }
+      }else{
+        if(Platform.OS === 'android'){
+          ToastAndroid.showWithGravity(
+          res.data.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        )
+        }else{
+          AlertIOS.alert(res.data.message)
+        }
+      }
+  
+    }catch(err){
+      console.log("Error Google Signin =>", err)
+    }
   }
-  const getInfoFromToken = token => {
+  const getInfoFromToken = async token => {
     const PROFILE_REQUEST_PARAMS = {
       fields: {
         string: 'id,name,first_name,last_name, email',
@@ -83,12 +106,47 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
     const profileRequest = new GraphRequest(
       '/me',
       {token, parameters: PROFILE_REQUEST_PARAMS},
-      (error, user) => {
+      async (error, user) => {
         if (error) {
           console.log('login info has error: ' + error);
         } else {
           setUserFacebookInfo(user);
           console.log('result:', user);
+          let device_os = Platform.OS;
+          let device_model = await getModel();
+          let device_name = await getDeviceName();
+          var bodyFormData = new FormData();
+          bodyFormData.append('sm_id', user.id);
+          bodyFormData.append('platform', 'facebook');
+          bodyFormData.append('name', user.name);
+          bodyFormData.append('email', user.email);
+          bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
+          bodyFormData.append('device_name', device_name);
+          bodyFormData.append('device_modal', device_model);
+          bodyFormData.append('device_os', device_os);
+          const res = await signInAPIGoogle(bodyFormData)
+          if(res.data.status){
+            if(Platform.OS === 'android'){
+              ToastAndroid.showWithGravity(
+              res.data.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM
+            )
+            }else{
+              AlertIOS.alert(res.data.message)
+            }
+          }else{
+            if(Platform.OS === 'android'){
+              ToastAndroid.showWithGravity(
+              res.data.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM
+            )
+            }else{
+              AlertIOS.alert(res.data.message)
+            }
+          }
+        
         }
       },
     );

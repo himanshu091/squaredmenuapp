@@ -10,6 +10,7 @@
 		00E356F31AD99517003FC87E /* squaredmenuTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* squaredmenuTests.m */; };
 		01A4BCC6F1384076BD7B2FD3 /* Poppins Thin Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1331D000657140E9BCE1E768 /* Poppins Thin Italic.otf */; };
 		03A5AEEEDB2F4E1E9F0F37A8 /* Poppins SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D21DB41B3A5F4D8684C9208F /* Poppins SemiBold.otf */; };
+		0D5562772626B1880042B537 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5562762626B1880042B537 /* File.swift */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -48,6 +49,8 @@
 		00E356EE1AD99517003FC87E /* squaredmenuTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = squaredmenuTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* squaredmenuTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = squaredmenuTests.m; sourceTree = "<group>"; };
+		0D5562752626B17F0042B537 /* squaredmenu-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "squaredmenu-Bridging-Header.h"; sourceTree = "<group>"; };
+		0D5562762626B1880042B537 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
 		0D55FDAE261E0AB300899EC2 /* libYogaKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libYogaKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D55FDC6261E1C4100899EC2 /* libYogaKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libYogaKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D55FDCA261E1F2000899EC2 /* libAppAuth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libAppAuth.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -187,6 +190,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				0D5562762626B1880042B537 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* squaredmenu */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* squaredmenuTests */,
@@ -194,6 +198,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				DEA03D721C84498198626F03 /* Resources */,
 				0B237943BD3EC0E228225A78 /* Pods */,
+				0D5562752626B17F0042B537 /* squaredmenu-Bridging-Header.h */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -309,7 +314,7 @@
 						TestTargetID = 13B07F861A680F5B00A75B9A;
 					};
 					13B07F861A680F5B00A75B9A = {
-						LastSwiftMigration = 1120;
+						LastSwiftMigration = 1220;
 					};
 				};
 			};
@@ -531,6 +536,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				0D5562772626B1880042B537 /* File.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -550,6 +556,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5A9190F8315EF5005F4EFB1C /* Pods-squaredmenu-squaredmenuTests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -577,6 +584,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 516DDB1521F726324ECFA6E9 /* Pods-squaredmenu-squaredmenuTests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = squaredmenuTests/Info.plist;
@@ -617,6 +625,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = squaredmenu;
+				SWIFT_OBJC_BRIDGING_HEADER = "squaredmenu-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -642,6 +651,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = squaredmenu;
+				SWIFT_OBJC_BRIDGING_HEADER = "squaredmenu-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

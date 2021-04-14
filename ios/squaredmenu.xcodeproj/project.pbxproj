@@ -11,6 +11,8 @@
 		01A4BCC6F1384076BD7B2FD3 /* Poppins Thin Italic.otf in Resources */ = {isa = PBXBuildFile; fileRef = 1331D000657140E9BCE1E768 /* Poppins Thin Italic.otf */; };
 		03A5AEEEDB2F4E1E9F0F37A8 /* Poppins SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = D21DB41B3A5F4D8684C9208F /* Poppins SemiBold.otf */; };
 		0D5562772626B1880042B537 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0D5562762626B1880042B537 /* File.swift */; };
+		0D55631926276C4C0042B537 /* libRNGoogleSignin.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D55631826276C4B0042B537 /* libRNGoogleSignin.a */; };
+		0D55632126276F2B0042B537 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0D55632026276F2A0042B537 /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -51,6 +53,8 @@
 		00E356F21AD99517003FC87E /* squaredmenuTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = squaredmenuTests.m; sourceTree = "<group>"; };
 		0D5562752626B17F0042B537 /* squaredmenu-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "squaredmenu-Bridging-Header.h"; sourceTree = "<group>"; };
 		0D5562762626B1880042B537 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		0D55631826276C4B0042B537 /* libRNGoogleSignin.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libRNGoogleSignin.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D55632026276F2A0042B537 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		0D55FDAE261E0AB300899EC2 /* libYogaKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libYogaKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D55FDC6261E1C4100899EC2 /* libYogaKit.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libYogaKit.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		0D55FDCA261E1F2000899EC2 /* libAppAuth.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libAppAuth.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -118,6 +122,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D55631926276C4C0042B537 /* libRNGoogleSignin.a in Frameworks */,
 				D4C08B9106127A9FE296F171 /* libPods-squaredmenu.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -169,6 +174,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0D55631826276C4B0042B537 /* libRNGoogleSignin.a */,
 				0D55FDCC261E1F3400899EC2 /* libYoga.a */,
 				0D55FDCA261E1F2000899EC2 /* libAppAuth.a */,
 				0D55FDC6261E1C4100899EC2 /* libYogaKit.a */,
@@ -190,6 +196,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				0D55632026276F2A0042B537 /* GoogleService-Info.plist */,
 				0D5562762626B1880042B537 /* File.swift */,
 				13B07FAE1A68108700A75B9A /* squaredmenu */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -349,6 +356,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0D55632126276F2B0042B537 /* GoogleService-Info.plist in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				2103F635DC3149549D56DFA3 /* Poppins Black Italic.otf in Resources */,

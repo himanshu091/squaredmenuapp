@@ -22,13 +22,14 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Geolocation from '@react-native-community/geolocation';
 import { Platform } from 'react-native';
 import { connect } from 'react-redux';
-import {addNewRestaurant} from '../store/action'
+import {addNewRestaurant, getCurrency} from '../store/action'
 import LocationTest from '../components/LocationTest';
 import { SafeAreaView } from 'react-native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
+import {Picker} from '@react-native-picker/picker';
 
-const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
+const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrency }) => {
   const refRBSheet = useRef();
   const [step, setStep] = React.useState(1);
   const [name, onChangeName] = React.useState("");
@@ -40,9 +41,19 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
   const [err, setErr] = React.useState("");
   const [lat, setlat] = React.useState(0);
   const [long, setlong] = React.useState(0);
-  const [curr, setcurr] = React.useState("");
+  const [curr, setcurr] = React.useState("USD");
   const [clicked, setclicked] = React.useState(false);
-
+  const [denominations, setDenominations] = React.useState([]);
+  useEffect(() => {
+    getListOfCurrency()
+  }, [])
+  const getListOfCurrency = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    bodyFormData.append('token', token);
+    const res = await getCurrency(bodyFormData)
+    setDenominations(res.data.data)
+  }
   const imagepick = () => {
     ImagePicker.openPicker({
       width: 375,
@@ -104,6 +115,11 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
     bodyFormData.append('lat', lat);
     bodyFormData.append('lng', long);
     bodyFormData.append('image', {
+      name: name,
+      type: photo.mime,
+      uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+    });
+    bodyFormData.append('cover', {
       name: name,
       type: photo.mime,
       uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
@@ -227,14 +243,20 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant }) => {
             placeholderTextColor="#635CC9"
             keyboardType="number-pad"
           />
-          <TextInput
-            style={styles.input}
-            onChangeText={setcurr}
-            value={curr}
-            placeholder="Currency"
-            textAlign="center"
-            placeholderTextColor="#635CC9"
-          />
+          <View style={styles.inputselect}>
+
+          <Picker
+            selectedValue={curr}
+            onValueChange={(itemValue, itemIndex) =>
+              setcurr(itemValue)
+          }>
+            
+            {denominations.map((denom, idx) => {
+              return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#635CC9" />
+            })}
+          </Picker>
+            </View>
+          
         </View>
         {/* {lat && <Text style={styles.latlong}>Latitude: {lat}</Text>}
         {long && <Text style={styles.latlong}>Longitude: {long}</Text>} */}
@@ -285,7 +307,7 @@ const mapStateToProps = state => {
     token: state.auth.token
   }
 }
-export default connect(mapStateToProps,{addNewRestaurant})(AddABusiness);
+export default connect(mapStateToProps,{addNewRestaurant, getCurrency})(AddABusiness);
 
 const styles = StyleSheet.create({
   heading: {
@@ -338,7 +360,7 @@ const styles = StyleSheet.create({
     borderColor: "#E7E6F3",
   },
   inputselect: {
-    height: 50,
+    height: 52,
     marginVertical: 5,
     marginHorizontal: 40,
     borderWidth: 1,

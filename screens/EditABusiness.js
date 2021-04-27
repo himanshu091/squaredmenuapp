@@ -22,14 +22,14 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Geolocation from '@react-native-community/geolocation';
 import { Platform } from 'react-native';
 import { connect } from 'react-redux';
-import {addNewRestaurant} from '../store/action'
+import {addNewRestaurant, getCurrency} from '../store/action'
 import { SafeAreaView } from 'react-native';
 import LocationTest from '../components/LocationTest';
 import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
+import {Picker} from '@react-native-picker/picker';
 
-
-const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) => {
+const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , getCurrency}) => {
   const refRBSheet = useRef();
   const [step, setStep] = React.useState(1);
   const [name, onChangeName] = React.useState(route.params.data.name);
@@ -39,12 +39,23 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
   const [city, onChangeCity] = React.useState("");
   const [table, onChangeTable] = React.useState(`${route.params.data.total_tables}`);
   const [photo, onChangephoto] = React.useState(null);
-  const [defaultimage, setdefaultImage] = React.useState(route.params.data.logo);
+  const [defaultimage, setdefaultImage] = React.useState(route.params.data.cover);
   const [err, setErr] = React.useState("");
   const [lat, setlat] = React.useState(route.params.data.lat);
   const [long, setlong] = React.useState(route.params.data.lng);
   const [clicked, setclicked] = React.useState(false);
   const [curr, setcurr] = React.useState(route.params.data.currency);
+  const [denominations, setDenominations] = React.useState([]);
+  useEffect(() => {
+    getListOfCurrency()
+  }, [])
+  const getListOfCurrency = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    bodyFormData.append('token', token);
+    const res = await getCurrency(bodyFormData)
+    setDenominations(res.data.data)
+  }
   const imagepick = () => {
     ImagePicker.openPicker({
       width: 375,
@@ -104,6 +115,13 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
     bodyFormData.append('currency', curr);
     if(photo){
       bodyFormData.append('image', {
+        name: name,
+        type: photo.mime,
+        uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+      });
+    }
+    if(photo){
+      bodyFormData.append('cover', {
         name: name,
         type: photo.mime,
         uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
@@ -219,14 +237,19 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
           placeholderTextColor="#635CC9"
           keyboardType="number-pad"
         />
-          <TextInput
-            style={styles.input}
-            onChangeText={setcurr}
-            value={curr}
-            placeholder="Currency"
-            textAlign="center"
-            placeholderTextColor="#635CC9"
-          />
+         <View style={styles.inputselect}>
+
+          <Picker
+            selectedValue={curr}
+            onValueChange={(itemValue, itemIndex) =>
+              setcurr(itemValue)
+          }>
+            
+            {denominations.map((denom, idx) => {
+              return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#635CC9" />
+            })}
+          </Picker>
+            </View>
       </View>
       
       <TouchableOpacity style={styles.locationContainer} onPress={showMap}>
@@ -238,7 +261,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
       </TouchableOpacity>
       <Button
         onPress={() => { handleSubmit()}}
-        title="Add"
+        title="Update"
         titleStyle={{ fontSize: 15 }}
         buttonStyle={styles.btn1}
         containerStyle={{ marginVertical: 15 }}
@@ -276,7 +299,7 @@ const mapStateToProps = state => {
     token: state.auth.token
   }
 }
-export default connect(mapStateToProps,{addNewRestaurant})(EditABusiness);
+export default connect(mapStateToProps,{addNewRestaurant, getCurrency})(EditABusiness);
 
 const styles = StyleSheet.create({
   heading: {

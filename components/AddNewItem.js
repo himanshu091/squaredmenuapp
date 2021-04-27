@@ -107,7 +107,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                     placeholder="Price"
                     textAlign="center"
                     placeholderTextColor="#635CC9"
-                    
+                    keyboardType="decimal-pad"
                 />}
                 <View style={styles.switchBox}>
                     <ToggleSwitch
@@ -168,7 +168,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     btn1:{
-
+        // backgroundColor:'red',
+        paddingVertical: 14,
+        paddingLeft: 25,
+        paddingRight: 25,
     },
     btnText1:{
         color: '#635CC9',

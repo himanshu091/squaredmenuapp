@@ -316,3 +316,12 @@ export const getNotifications = (data) => async (dispatch, getState) => {
     console.log("Notifications =>",res.data)
     return res
 }
+export const getCurrency = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/get-currency`,data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    // console.log("Currency =>",res.data)
+    return res
+}

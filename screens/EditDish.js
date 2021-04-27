@@ -19,11 +19,13 @@ import EditVarient from '../components/EditVarient';
 import TypeComponentEdit from '../components/TypeComponentEdit';
 import OptionComponentEdit from '../components/OptionComponentEdit';
 import ImageChoice from '../components/ImageChoice';
+import NonVarientPrice from '../components/NonVarientPrice';
 
 const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) => {
     const refRBSheet = useRef();
     const refRBSheet1 = useRef();
     const refRBSheet2 = useRef();
+    const refRBSheet3 = useRef();
     const [fetched, setFetched] = useState(null)
     const [isOn, setisOn] = useState(false)
     const [options, setOptions] = useState([])
@@ -234,7 +236,7 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                 style={styles.bell}
                 onPress={()=>navigation.goBack()}
             >
-                <Image source={require('../assets/images/onboarding/next.png')}/>
+                <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
             </TouchableOpacity>
             <View style={styles.part1}>
                 <View style={styles.dishNameContainer}>
@@ -250,9 +252,12 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                         placeholderTextColor="#00000090"
                     />
                 </View>
-                <TouchableOpacity style={styles.trademarks} onPress={()=>{setName('')}}>
+                {/* <TouchableOpacity style={styles.trademarks} onPress={()=>{setName('')}}>
                     <Image  style={styles.tm1} source={require('../assets/images/icons/delete.png')} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                {price !== 0 && <View>
+                    <Text style={styles.nonPrice}>{route.params.currency.toUpperCase()} {parseFloat(price).toFixed(2).toString().replace('.',',')}</Text>
+                </View>}
             </View>
             <View style={styles.descBox}>
                 <TextInput
@@ -267,12 +272,20 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                 />
             </View>
             <View style={{marginTop: 20}}></View>
+            {has_variants===0 && <View style={styles.varientBody}>
+                            <Text style={styles.varientName}>Price</Text>
+                            <View style={styles.part2}>
+                                <Text style={styles.varientCost}>{route.params.currency.toUpperCase()} {parseFloat(price).toFixed(2).toString().replace('.',',')}</Text>
+                                <TouchableOpacity onPress={()=>{refRBSheet3.current.open();}}><Image style={styles.editIcon} source={require('../assets/images/icons/edit.png')}/></TouchableOpacity>
+                            </View>
+                        </View>
+            }
             {has_variants===1 && variants.map((item,idx) => {
                 return <View key={idx} style={styles.varientBody}>
                             <Text style={styles.varientName}>{item.name}</Text>
                             <View style={styles.part2}>
-                                <Text style={styles.varientCost}>${item.price}</Text>
-                                <TouchableOpacity onPress={()=>{setcurrentEditVarient({name:item.name, price:item.price, pos:idx});refRBSheet2.current.open();}}><Image source={require('../assets/images/icons/edit.png')}/></TouchableOpacity>
+                                <Text style={styles.varientCost}>{route.params.currency.toUpperCase()} {parseFloat(item.price).toFixed(2).toString().replace('.',',')}</Text>
+                                <TouchableOpacity onPress={()=>{setcurrentEditVarient({name:item.name, price:item.price, pos:idx});refRBSheet2.current.open();}}><Image style={styles.editIcon} source={require('../assets/images/icons/edit.png')}/></TouchableOpacity>
                             </View>
                         </View>
             })}
@@ -368,6 +381,27 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                 />
             </RBSheet>
             <RBSheet
+                ref={refRBSheet3}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                // height={80}
+                animationType='slide'
+                customStyles={{
+                    container: {
+                        ...styles.container,
+                        height: 360
+                      },
+                    wrapper: {
+                        backgroundColor: "#00000025"
+                    },
+                    draggableIcon: {
+                        backgroundColor: "#fff"
+                    }
+                }}
+            >
+                <NonVarientPrice closeFunc={() => refRBSheet3.current.close()} O_price={price} editPrice={(price)=>setPrice(price)} />
+            </RBSheet>
+            <RBSheet
                 ref={refRBSheet}
                 closeOnDragDown={true}
                 closeOnPressMask={true}
@@ -422,7 +456,7 @@ const styles = StyleSheet.create({
     part1:{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        // alignItems: 'center',
         paddingHorizontal: 15,
         marginTop: 15
     },
@@ -449,6 +483,11 @@ const styles = StyleSheet.create({
     tm2:{
         width: widthPercentageToDP(13),
         height: widthPercentageToDP(13),
+    },
+    nonPrice:{
+        fontSize: 18,
+        fontFamily: 'Poppins Medium',
+        marginTop: 20
     },
     descBox:{
         // paddingVertical: 13,
@@ -559,5 +598,9 @@ const styles = StyleSheet.create({
     imageupload:{
         width: widthPercentageToDP(100),
         height: widthPercentageToDP(100)*418/750,
+    },
+    editIcon:{
+        height: 45,
+        width: 45
     }
 })

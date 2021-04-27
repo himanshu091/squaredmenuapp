@@ -17,6 +17,7 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
         bodyFormData.append('token', token);
         const res = await getRestaurants(bodyFormData)
         setdata(res)
+        console.log(res[0].logo)
     }, [])
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -35,7 +36,8 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
             <ScrollView>
                 <View>
                     <ImageBackground source={require('../assets/images/banners/lands.png')} style={styles.banner} resizeMode="stretch">
-                        <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification')}><Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>
+                        {data && data.length > 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:data[0].logo})}><Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>}
+                        {data && data.length === 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification')}><Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>}
                         <View style={styles.logoContainer}>
                             <Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo} />
                         </View>

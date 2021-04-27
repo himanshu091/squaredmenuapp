@@ -2,18 +2,18 @@ import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
-const MenuButtons = ({uri, title,navigation, data, restaurant_id, themeURL}) => {
+const MenuButtons = ({uri, title,navigation, data, restaurant_id, themeURL, brandImage}) => {
     console.log(data)
     return (
         <View style={styles.card}>
-            <TouchableOpacity onPress={()=>{navigation.navigate('MenuList', {menu_id:data.menu_id, themeURL:themeURL})}} style={styles.part1}>
+            <TouchableOpacity onPress={()=>{navigation.navigate('MenuList', {menu_id:data.menu_id, themeURL:themeURL, brandImage: brandImage, restaurant_id:restaurant_id})}} style={styles.part1}>
                 <View style={styles.subBox}>
                     <Image source={{uri:uri}} style={styles.plus} />
                 </View>
-                <Text style={styles.new}>{title}</Text>
+                <Text numberOfLines={1} style={styles.new}>{title}</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={()=>{navigation.navigate('EditMenu',{data:data,restaurant_id:restaurant_id})}}>
-                <Image source={require('../assets/images/icons/edit.png')}/>
+                <Image source={require('../assets/images/icons/edit.png')} style={styles.editIcon}/>
             </TouchableOpacity>
         </View>
     )
@@ -39,7 +39,9 @@ const styles = StyleSheet.create({
     part1:{
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center' 
+        alignItems: 'center' ,
+        width: '80%',
+        paddingRight: 50
     },
     subBox: {
         display: 'flex',
@@ -61,5 +63,9 @@ const styles = StyleSheet.create({
         height: '100%',
         resizeMode: 'cover',
         borderRadius: 10
+    },
+    editIcon:{
+        height: 45,
+        width: 45
     }
 })

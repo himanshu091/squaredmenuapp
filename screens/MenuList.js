@@ -112,17 +112,17 @@ const MenuList = ({navigation, user_id, token, getMenuItems, route}) => {
                         style={styles.bell}
                         onPress={()=>navigation.goBack()}
                     >
-                        <Image source={require('../assets/images/onboarding/next.png')}/>
+                        <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
                     </TouchableOpacity>
-                    
+                    <TouchableOpacity style={styles.previewBTN} onPress={()=>navigation.navigate('MenuPreview', {themeURL:route.params.themeURL})}>
+                        <Text style={styles.preview}>Preview</Text>
+                    </TouchableOpacity>
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
-                            <Text style={styles.name}>{data1 && data1.menu.restorant_name}</Text>
-                            <Text style={styles.menuName}>{data1 && data1.menu.cat_name}</Text>
+                            <Text numberOfLines={1} style={styles.name}>{data1 && data1.menu.restorant_name}</Text>
+                            <Text numberOfLines={1} style={styles.menuName}>{data1 && data1.menu.cat_name}</Text>
                         </View>
-                        <TouchableOpacity style={styles.previewBTN} onPress={()=>navigation.navigate('MenuPreview', {themeURL:route.params.themeURL})}>
-                            <Text style={styles.preview}>Preview</Text>
-                        </TouchableOpacity>
+                        
                     </View>
                 </View>
                 {   
@@ -136,6 +136,9 @@ const MenuList = ({navigation, user_id, token, getMenuItems, route}) => {
                     <Image style={styles.plus} source={require('../assets/images/icons/plus.png')}/>
                 </TouchableOpacity>
             </ScrollView>
+            <TouchableOpacity style={styles.qrbutton} onPress={()=>navigation.navigate('QR',{restaurant_id:route.params.restaurant_id, img:route.params.brandImage})}>
+                <Image source={require('../assets/images/icons/qr.png')} style={{height:33, width:33}}/>
+            </TouchableOpacity>
             <RBSheet
                 ref={refRBSheet}
                 closeOnDragDown={true}
@@ -217,7 +220,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     nameContainer:{
-        flexBasis: widthPercentageToDP(66),
+        flexBasis: widthPercentageToDP(76),
         flexDirection:'column'
     },
     name:{
@@ -255,7 +258,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         paddingHorizontal: 18,
         paddingVertical: 7,
-        borderRadius:23
+        borderRadius:23,
+        position:'absolute',
+        top: heightPercentageToDP(5.4),
+        right:widthPercentageToDP(3.5),
     },
     preview:{
         fontFamily: 'Poppins Medium',
@@ -293,6 +299,15 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins Regular',
         color: '#635CC9',
         fontSize: 15
+    },
+    qrbutton:{
+        position: 'absolute',
+        right: 25,
+        top: heightPercentageToDP(84),
+        backgroundColor: '#fff',
+        padding: 22,
+        borderRadius: 100,
+        elevation: 5
     }
 
 })

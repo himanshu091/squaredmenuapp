@@ -36,13 +36,13 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
                 style={styles.bell}
                 onPress={()=>navigation.goBack()}
             >
-                <Image source={require('../assets/images/onboarding/next.png')}/>
+                <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
             </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.edit}
-                onPress={()=>{navigation.navigate('EditDish',{item_id: route.params.item_id, menu_id: route.params.menu_id})}}
+                onPress={()=>{navigation.navigate('EditDish',{item_id: route.params.item_id, menu_id: route.params.menu_id, currency:route.params.currency})}}
                 >
-                <Image source={require('../assets/images/icons/edit.png')}/>
+                <Image source={require('../assets/images/icons/edit.png')} style={styles.editIcon}/>
             </TouchableOpacity>
             <View style={styles.part1}>
                 <View style={styles.dishNameContainer}><Text style={styles.dishName}>{data.item.name}</Text></View>
@@ -57,7 +57,7 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
             {data.item.has_variants === 1 && data.item.variants.map(vari => {
                 return <View key={vari.variant_id} style={styles.varientBody}>
                             <Text style={styles.varientName}>{vari.option}</Text>
-                            <Text style={styles.varientCost}>{route.params.currency.toUpperCase()} {parseFloat(vari.price).toFixed(2)}</Text>
+                            <Text style={styles.varientCost}>{route.params.currency.toUpperCase()} {parseFloat(vari.price).toFixed(2).toString().replace('.',',')}</Text>
                         </View>
             })}
             <View style={{borderTopWidth: 1, borderColor: '#00000010', paddingTop:20}}></View>
@@ -230,5 +230,9 @@ const styles = StyleSheet.create({
     tick:{
         height: 13.7,
         width: 18
+    },
+    editIcon:{
+        height: 45,
+        width: 45
     }
 })

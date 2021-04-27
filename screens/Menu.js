@@ -38,17 +38,19 @@ const Menu = ({navigation, user_id, token, getMenu, route}) => {
                         style={styles.bell}
                         onPress={()=>navigation.goBack()}
                     >
-                        <Image source={require('../assets/images/onboarding/next.png')}/>
+                        <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
                     </TouchableOpacity>
-                    
+                    <TouchableOpacity style={styles.previewBTN} onPress={()=>navigation.navigate('MenuPreview', {themeURL:route.params.themeURL})}>
+                        <Text style={styles.preview}>Preview</Text>
+                    </TouchableOpacity>
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
-                            <Text style={styles.name}>{data && data.restaurant.name}</Text>
+                            <Text numberOfLines={2} style={styles.name}>{data && data.restaurant.name}</Text>
                         </View>
                     </View>
                 </View>
                {data && data.menu.map((item, idx) => {
-                   return <MenuButtons key={idx} navigation={navigation} title={item.name} uri={item.image} data={item} restaurant_id={route.params.restaurant_id} themeURL={route.params.themeURL}/>
+                   return <MenuButtons key={idx} navigation={navigation} title={item.name} uri={item.image} data={item} restaurant_id={route.params.restaurant_id} themeURL={route.params.themeURL} brandImage={route.params.brandImage}/>
                })}
                 
                <NewMenuButton action={()=>navigation.navigate('NewMenu',{restaurant_id:route.params.restaurant_id})}/>
@@ -107,6 +109,20 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         lineHeight:40,
         textTransform: 'capitalize'
+    },
+    previewBTN:{
+        backgroundColor: '#fff',
+        paddingHorizontal: 18,
+        paddingVertical: 7,
+        borderRadius:23,
+        position:'absolute',
+        top: heightPercentageToDP(5.4),
+        right:widthPercentageToDP(3.5),
+    },
+    preview:{
+        fontFamily: 'Poppins Medium',
+        fontSize: 16,
+        color: '#635CC9'
     },
     card:{
         backgroundColor: '#fff',

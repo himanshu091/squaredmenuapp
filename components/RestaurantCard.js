@@ -5,22 +5,22 @@ import { widthPercentageToDP } from 'react-native-responsive-screen'
 
 const RestaurantCard = ({navigation, name, data}) => {
     return (
-        <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate(name,{restaurant_id:data.restaurant_id, brandImage:data.logo, themeURL: data.theme_url})}>
+        <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate(name,{restaurant_id:data.restaurant_id, brandImage:data.cover, themeURL: data.theme_url})}>
             <View style={styles.subBox}>
                 <FastImage
                     style={styles.thumbnail}
                     source={{
-                        uri: data.logo,
+                        uri: data.cover,
                         priority: FastImage.priority.normal,
                     }}
                     resizeMode={FastImage.resizeMode.cover}
                 />
             </View>
             <View style={styles.info}>
-                <View style={styles.parentText}><Text style={styles.name}>{data.name}</Text></View>
-                <View style={styles.parentText}><Text style={styles.address}>{data.address}</Text></View>
+                <View style={styles.parentText}><Text numberOfLines={2} style={styles.name}>{data.name}</Text></View>
+                <View style={styles.parentText}><Text numberOfLines={2} style={styles.address}>{data.address}</Text></View>
             </View>
-            <View style={styles.edit}><TouchableOpacity onPress={()=>navigation.navigate('EditABusiness', {data:data})}><Image source={require('../assets/images/icons/edit.png')}/></TouchableOpacity></View>
+            <View style={styles.edit}><TouchableOpacity onPress={()=>navigation.navigate('EditABusiness', {data:data})}><Image style={styles.editIcon} source={require('../assets/images/icons/edit.png')}/></TouchableOpacity></View>
         </TouchableOpacity>
     )
 }
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         elevation: 2,
         display: 'flex',
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     edit:{
         position:'absolute',
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     parentText:{
         display:'flex',
         flexDirection:'row',
-        width: widthPercentageToDP(49)
+        width: widthPercentageToDP(55)-43
     },
     name:{
         flexWrap: 'wrap',
@@ -85,5 +85,9 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: '#cfcfcf',
         lineHeight: 17
+    },
+    editIcon:{
+        height: 45,
+        width: 45
     }
 })

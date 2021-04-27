@@ -1,36 +1,22 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Switch, TouchableOpacity, Image } from 'react-native'
-
-const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) => {
-    const [name, setname] = useState(defaultname)
-    const [price, setprice] = useState(defaultprice)
+import ToggleSwitch from 'toggle-switch-react-native'
+const NonVarientPrice = ({closeFunc, O_price, editPrice}) => {
+    const [price, setprice] = useState(O_price)
     const [err, seterr] = useState("")
     const handleSubmit = () => {
-        if(name.trim().length < 1){
-            seterr("Enter Valid Varient Name")
-            return
-        }else if(price.trim().length < 1 ){
+        if(price.trim().length < 1 ){
             seterr("Enter Valid price")
             return
         }
-        editVariant(name,price,pos)
+        editPrice(price)
         closeFunc()
     }
     return (
         <View style={styles.box}>
             <View>
-                <Text style={styles.title}>Edit Varient</Text>
+                <Text style={styles.title}>Edit Price</Text>
                 <Text style={{textAlign: 'center', fontFamily: 'Poppins Medium', color: 'red'}}>{err}</Text>
-                <TextInput
-                    style={styles.input}
-                    onChangeText={setname}
-                    value={name}
-                    placeholder="Name"
-                    textAlign="center"
-                    placeholderTextColor="#635CC9"
-                    
-                />
-                
                 <TextInput
                     style={styles.input}
                     onChangeText={setprice}
@@ -47,14 +33,14 @@ const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) =
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn2} onPress={handleSubmit}>
                     <Image source={require('../assets/images/icons/tick.png')} />
-                    <Text style={styles.btnText2}>Add</Text>
+                    <Text style={styles.btnText2}>Update</Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
 }
 
-export default EditVarient
+export default NonVarientPrice
 
 const styles = StyleSheet.create({
     box:{

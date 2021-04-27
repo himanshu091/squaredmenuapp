@@ -6,11 +6,16 @@ import MenuSection from '../components/MenuSection'
 import FastImage from 'react-native-fast-image'
 import { generateQR, sendQrOverMail } from '../store/action'
 import { connect } from 'react-redux'
-import { Linking } from 'react-native'
+import { Button } from 'react-native-elements'
+import Clipboard from '@react-native-clipboard/clipboard';
+
 const ImageLink = '../';
 
 const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => {
+    console.log("brandimage",route.params)
     const [myQrLink, setMyQrLink] = useState(null)
+    const [loading, setloading] = useState(false)
+    const [copiedText, setCopiedText] = useState('');
     const getQR = async () => {
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
@@ -26,30 +31,38 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
         bodyFormData.append('restaurant_id', route.params.restaurant_id);
         const res = await generateQR(bodyFormData)
         if(res.data.status){
-            Linking.openURL(res.data.data)
+            // Linking.openURL(res.data.data)
+            Clipboard.setString(res.data.data);
+            alert('Copied to Clipboard!');
+        }else{
+            alert(res.data.message)
         }
     }
     const getQRByMail = async () => {
+        setloading(true)
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
         bodyFormData.append('token', token);
         bodyFormData.append('restaurant_id', route.params.restaurant_id);
         const res = await sendQrOverMail(bodyFormData)
+        setloading(false)
         if(res.data.status){
+            alert(res.data.message)
+        }else{
             alert(res.data.message)
         }
     }
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <HeaderSVG uri={route.params.uri}/>
+                <HeaderSVG uri={route.params.img}/>
                 <View  style={styles.banner} >
-                    {/* <TouchableOpacity 
+                    <TouchableOpacity 
                         style={styles.bell}
                         onPress={()=>navigation.goBack()}
                     >
-                        <Image source={require('../assets/images/onboarding/next.png')}/>
-                    </TouchableOpacity> */}
+                        <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
+                    </TouchableOpacity>
                     <View style={styles.logoContainer}><Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo} /></View>
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
@@ -68,9 +81,12 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
                 <TouchableOpacity style={styles.btn1} onPress={browseQR}>
                     <Text style={styles.btnText1}>Copy URL</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn2} onPress={getQRByMail}>
+                {!loading && <TouchableOpacity style={styles.btn2} onPress={getQRByMail}>
                     <Text style={styles.btnText2}>Get the printable PDF</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
+                {loading && <TouchableOpacity style={styles.btn2} onPress={getQRByMail}>
+                    <Text style={styles.btnText2}>Generating...</Text>
+                </TouchableOpacity>}
                 <View style={{marginBottom:97}}></View>
             </ScrollView>
         </SafeAreaView>
@@ -167,8 +183,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     qrBox:{
-        width: widthPercentageToDP(80), 
-        height: widthPercentageToDP(80),
+        width: widthPercentageToDP(65), 
+        height: widthPercentageToDP(65),
         borderWidth: 3,
         borderColor: '#726AE9',
         borderRadius: 37,

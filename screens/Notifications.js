@@ -9,8 +9,10 @@ import { getNotifications, logout } from '../store/action'
 import { useFocusEffect } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import moment from 'moment'
+import HeaderSVG from '../components/HeaderSVG'
 
-const Notifications = ({ navigation, logout, user_id, token, image, getNotifications }) => {
+const Notifications = ({ navigation, logout, user_id, token, image, getNotifications, route }) => {
+    
     const [data, setdata] = useState(null)
     useEffect(async () => {
         var bodyFormData = new FormData();
@@ -35,12 +37,13 @@ const Notifications = ({ navigation, logout, user_id, token, image, getNotificat
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <View>
-                    <ImageBackground source={require('../assets/images/banners/lands.png')} style={styles.banner} resizeMode="stretch">
+                    <HeaderSVG uri={route.params.brandImage}/>
+                    <View  style={styles.banner}>
                         <TouchableOpacity 
                             style={styles.bell}
                             onPress={()=>navigation.goBack()}
                         >
-                            <Image source={require('../assets/images/onboarding/next.png')}/>
+                            <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
                         </TouchableOpacity>
                         <View style={styles.info}>
                             <View style={styles.nameContainer}>
@@ -50,7 +53,7 @@ const Notifications = ({ navigation, logout, user_id, token, image, getNotificat
                                 <Image style={styles.profilePic} source={require('../assets/images/icons/notif.png')} />
                             </View>
                         </View>
-                    </ImageBackground>
+                    </View>
                     
                     {data && data.map((item, idx) => {
                         return <View style={styles.notiCard} key={idx}>

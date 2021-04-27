@@ -42,8 +42,10 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
             </View>
                 <View style={styles.menuItem}>
                     <View style={styles.menuSubItem}>
-                        <TouchableOpacity onPress={()=>navigation.navigate('DishDetail', {item_id:data.item_id, menu_id:menu_id, currency:currency})}><Text style={styles.itemName}>{menuName}</Text></TouchableOpacity>
-                        {data.has_variants === 0 && <Text style={styles.cost}>{currency.toUpperCase()} {parseFloat(data.price).toFixed(2)}</Text>}
+                        <TouchableOpacity style={styles.dishNameCont} onPress={()=>navigation.navigate('DishDetail', {item_id:data.item_id, menu_id:menu_id, currency:currency})}>
+                            <Text numberOfLines={1} style={styles.itemName}>{menuName}</Text>
+                        </TouchableOpacity>
+                        {data.has_variants === 0 && <Text style={styles.cost}>{currency.toUpperCase()} {parseFloat(data.price).toFixed(2).toString().replace('.',',')}</Text>}
                     </View>
                     
                     {
@@ -51,9 +53,9 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
                             return <View key={idx1} style={styles.varientBox}>
                                 <View style={styles.part1}>
                                     <Image source={require('../assets/images/icons/bullet.png')}/>
-                                    <Text style={styles.varientItemName}>{varItem.option}</Text>
+                                    <Text numberOfLines={1} style={styles.varientItemName}>{varItem.option}</Text>
                                 </View>
-                                <Text style={styles.cost}>{currency.toUpperCase()} {parseFloat(varItem.price).toFixed(2)}</Text>
+                                <Text style={styles.cost}>{currency.toUpperCase()} {parseFloat(varItem.price).toFixed(2).toString().replace('.',',')}</Text>
                             </View>
                         })
                     }
@@ -79,10 +81,10 @@ export default connect(mapStateToProps,{deleteItem})(MenuSection)
 const styles = StyleSheet.create({
     mainContainer:{
         backgroundColor: '#fff',
-        borderTopRightRadius: 17,
-        borderTopLeftRadius: 17,
+        borderRadius: 17,
         marginHorizontal: 25,
         marginBottom: 15,
+        paddingBottom: 10,
         elevation: 2
     },
     sectionHeader:{
@@ -109,7 +111,10 @@ const styles = StyleSheet.create({
     itemName:{
         fontSize: 15,
         fontFamily: 'Poppins Medium',
-        textTransform: 'capitalize'
+        textTransform: 'capitalize',
+    },
+    dishNameCont:{
+        flexBasis: '50%'
     },
     varientBox:{
         flexDirection: 'row',

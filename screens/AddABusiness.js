@@ -247,6 +247,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
 
           <Picker
             selectedValue={curr}
+            dropdownIconColor="#000000"
             onValueChange={(itemValue, itemIndex) =>
               setcurr(itemValue)
           }>
@@ -369,7 +370,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E7E6F3",
     fontFamily: "Poppins Regular",
     borderColor: "#E7E6F3",
-    paddingHorizontal: 40
+    paddingHorizontal: 7
   },
 
   btn1: {

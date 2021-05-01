@@ -164,8 +164,8 @@ const refresh = async () => {
             style={styles.button}
             onPress={() => navigation.navigate('EditProfile')}>
             <Image
-              source={require('../assets/images/icons/edit2.png')}
-              style={styles.button_image}
+              source={require('../assets/images/icons/edit.png')}
+              style={styles.button_edit}
             />
           </TouchableOpacity>}
         </View>
@@ -291,9 +291,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginHorizontal: 15,
-    marginVertical: 40,
+    marginTop: 40,
+    marginBottom: 12,
   },
   logoflat: {
     marginHorizontal: 55,
@@ -301,6 +302,10 @@ const styles = StyleSheet.create({
   button_image: {
     height: 42,
     width: 42,
+  },
+  button_edit: {
+    height: 56,
+    width: 56,
   },
   inputFields: {
     marginHorizontal: 15,

@@ -8,69 +8,17 @@ import SubMenu from '../components/SubMenu'
 import RBSheet from "react-native-raw-bottom-sheet";
 import ThemeChooser from '../components/ThemeChooser'
 import { WebView } from 'react-native-webview';
-const data = [
-    {   
-        sectionName: "Sweet",
-        itemList: [
-            {
-                itemName: "Croissant",
-                varient: true,
-                varientList: [{
-                    name: "Small",
-                    cost: 2
-                },
-                {
-                    name: "Medium",
-                    cost: 4
-                }]
-            },
-            {
-                itemName: "White Sauce Pasta",
-                varient: false,
-                cost: 4
-            },
-            {
-                itemName: "Red Sauce Pasta",
-                varient: false,
-                cost: 4
-            },
-        ]
-        
-    },
-    {   
-        sectionName: "Spicy",
-        itemList: [
-            {
-                itemName: "Croissant",
-                varient: true,
-                varientList: [{
-                    name: "Small",
-                    cost: 2.5
-                },
-                {
-                    name: "Medium",
-                    cost: 4
-                }]
-            },
-            {
-                itemName: "White Sauce Pasta",
-                varient: false,
-                cost: 4
-            },
-            {
-                itemName: "Red Sauce Pasta",
-                varient: false,
-                cost: 4.99
-            },
-        ]
-        
-    },
 
-]
 const MenuPreview = ({navigation, route}) => {
     const refRBSheet = useRef();
+    console.log(route.params.themeURL)
     return (
         <SafeAreaView style={{backgroundColor:'#fff', flex:1}}>
+            <View style={styles.exitBtn}>
+                <TouchableOpacity style={styles.exbt} onPress={()=>navigation.goBack()}>
+                    <Text style={styles.btnText}>Exit Preview</Text>
+                </TouchableOpacity>
+            </View>
            <WebView source={{ uri:route.params.themeURL}} />
         </SafeAreaView>
     )
@@ -165,5 +113,25 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
         resizeMode: 'contain'
+    },
+    exitBtn:{
+        position: 'absolute',
+        top: 42,
+        right: widthPercentageToDP(50)-50,
+        zIndex: 1
+    },
+    exbt:{
+        backgroundColor: '#fff',
+        paddingTop: 4.5,
+        paddingBottom: 2.5,
+        paddingHorizontal: 11,
+        borderRadius: 50,
+        borderColor:'#635cc9',
+        borderWidth: 1,
+    },
+    btnText:{
+        color: '#635cc9',
+        fontFamily: 'Poppins SemiBold',
+        fontSize: 14
     }
 })

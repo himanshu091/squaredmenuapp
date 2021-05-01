@@ -37,7 +37,7 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
             <View style={styles.sectionHeader}>
                 <Text style={styles.sectionText}></Text>
                 <TouchableOpacity style={styles.delete} onPress={createTwoButtonAlert}>
-                    <Image source={require('../assets/images/icons/delete.png')}/>
+                    <Image source={require('../assets/images/icons/delete.png')} style={{height: 16, width: 14}}/>
                 </TouchableOpacity>
             </View>
                 <View style={styles.menuItem}>

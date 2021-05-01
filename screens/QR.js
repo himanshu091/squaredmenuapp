@@ -70,7 +70,7 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.QRcontainer}>
+                <TouchableOpacity style={styles.QRcontainer} onPress={getQRByMail}>
                     <FastImage
                         style={styles.qrBox}
                         source={require('../assets/images/icons/qr-code.png')}

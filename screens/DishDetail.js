@@ -61,7 +61,7 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
                         </View>
             })}
             <View style={{borderTopWidth: 1, borderColor: '#00000010', paddingTop:20}}></View>
-            <View style={{paddingLeft: 20}}>
+            <View style={{paddingLeft: 20, marginBottom:20}}>
                 {data.item_types.map(type =>{
                     if(type.is_checked !== 0){
                         return  <View key={type.item_type_id} style={styles.compPart1}>

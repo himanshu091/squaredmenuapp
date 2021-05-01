@@ -132,9 +132,10 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
         if(name.trim().length < 1){
             seterr("Enter Valid Item Name")
             return
-        }else if(desc.trim().length < 1){
-            seterr("Enter Valid Description")
-            return
+        // }
+        // else if(desc.trim().length < 1){
+        //     seterr("Enter Valid Description")
+        //     return
         }else if(!photo){
             seterr("Enter Image of the Item")
             return

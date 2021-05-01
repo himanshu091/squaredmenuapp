@@ -241,12 +241,13 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
 
           <Picker
             selectedValue={curr}
+            dropdownIconColor="#000000"
             onValueChange={(itemValue, itemIndex) =>
               setcurr(itemValue)
           }>
             
             {denominations.map((denom, idx) => {
-              return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#635CC9" />
+              return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#000000" fontFamily="Poppins Light" />
             })}
           </Picker>
             </View>
@@ -360,7 +361,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E7E6F3",
     fontFamily: "Poppins Regular",
     borderColor: "#E7E6F3",
-    paddingHorizontal: 40
+    paddingHorizontal: 7
   },
   btn1: {
 

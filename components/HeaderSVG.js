@@ -16,8 +16,8 @@ const HeaderSVG = ({uri}) => {
             </Defs>
             <Defs>
             <LinearGradient id="grad1" x1="0" y1="0" x2="0" y2="1">
-                    <Stop offset="0" stopColor="#726AE9" stopOpacity="1"/>
-                    <Stop offset="1" stopColor="#635CC9" stopOpacity="0.29" />
+                    <Stop offset="0" stopColor="#726AE9" stopOpacity="0.51"/>
+                    <Stop offset="1" stopColor="#635CC9" stopOpacity="0.15" />
                 </LinearGradient>
             </Defs>
             <Path fill="url(#img1)" fill-opacity="1" d={`M160 225.908C96 251.756 44.5 185.069 0 215.569V0H${widthPercentageToDP(100)}V186.103C284 244.001 294.855 171.444 160 225.908Z`}/>

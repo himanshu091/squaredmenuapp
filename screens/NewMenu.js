@@ -106,18 +106,13 @@ const handleSubmit = async () => {
   return (
     <SafeAreaView>
     <ScrollView>
-      <TouchableOpacity onPress={() => refRBSheet.current.open()} >
-        {!photo?<Bg1
-          height={hp(30)}
-          width={wp('100%')}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-          }}
-          marginTop={-4}
-          resizeMode="cover"
+        <TouchableOpacity onPress={() => refRBSheet.current.open()} >
+        {!photo?<Image
+        source={require('../assets/images/banners/imageUpload.png')}
+         
+          style={{height:wp(100)*418/750, width: wp(100)}}
+          // marginTop={-4}
+          resizeMode="contain"
         />:<Image source={{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.altImage} resizeMode="cover" />}
       
 
@@ -141,6 +136,7 @@ const handleSubmit = async () => {
         </TouchableOpacity> */}
       </View>
       </TouchableOpacity>
+
       <View style={styles.inputFields}>
         <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
         <View style={styles.editMenu}>
@@ -151,7 +147,7 @@ const handleSubmit = async () => {
             value={menu}
             width={wp(100)}
             multiline={true}
-            placeholder="Silema Menu"
+            placeholder="e.g. Breakfast, Lunch, Dinner"
             opacity={0.3}
             placeholderTextColor="#000000"
           />
@@ -253,12 +249,13 @@ const styles = StyleSheet.create({
   },
   button: {},
   topElements: {
+    position: 'absolute',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 15,
-    marginVertical: 40,
+    marginTop: 25,
   },
   logoflat: {
     marginHorizontal: 55,
@@ -269,7 +266,7 @@ const styles = StyleSheet.create({
   },
   inputFields: {
     marginHorizontal: 15,
-    marginTop: hp('15%'),
+    // marginTop: hp('15%'),
   },
   input: {
     height: 50,
@@ -386,11 +383,11 @@ const styles = StyleSheet.create({
     marginTop: 120,
   },
   altImage:{
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0, 
-    backgroundColor:'red',
+    // position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // right: 0, 
+    // backgroundColor:'red',
     width: wp(100),
     height: wp(100)*209/375
   }

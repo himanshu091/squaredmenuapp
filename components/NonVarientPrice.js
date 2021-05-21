@@ -12,6 +12,14 @@ const NonVarientPrice = ({closeFunc, O_price, editPrice}) => {
         editPrice(price)
         closeFunc()
     }
+    const checkPrice = (value) => {
+        if(value === ""){
+            setprice(value)
+        }
+        if(!isNaN(value) && Number(value) > 0){
+            setprice(value)
+        }
+    }
     return (
         <View style={styles.box}>
             <View>
@@ -19,8 +27,8 @@ const NonVarientPrice = ({closeFunc, O_price, editPrice}) => {
                 <Text style={{textAlign: 'center', fontFamily: 'Poppins Medium', color: 'red'}}>{err}</Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={setprice}
-                    value={price}
+                    onChangeText={value=>checkPrice(value)}
+                    value={`${price}`}
                     placeholder="Price"
                     textAlign="center"
                     placeholderTextColor="#635CC9"

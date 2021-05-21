@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-na
 import { connect } from 'react-redux'
 import { deleteItem } from '../store/action'
 
-const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh, menu_id, currency}) => {
+const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh, menu_id, currency, drag}) => {
 
     const deleteThisItem = async () => {
         var bodyFormData = new FormData();
@@ -35,7 +35,7 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
     return (
         <View style={styles.mainContainer}>
             <View style={styles.sectionHeader}>
-                <Text style={styles.sectionText}></Text>
+                <TouchableOpacity onPressIn={drag}><Image source={require('../assets/images/icons/drag_icon.png')} style={{width: 18, height: 18}}/></TouchableOpacity>
                 <TouchableOpacity style={styles.delete} onPress={createTwoButtonAlert}>
                     <Image source={require('../assets/images/icons/delete.png')} style={{height: 16, width: 14}}/>
                 </TouchableOpacity>
@@ -45,7 +45,7 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
                         <TouchableOpacity style={styles.dishNameCont} onPress={()=>navigation.navigate('DishDetail', {item_id:data.item_id, menu_id:menu_id, currency:currency})}>
                             <Text numberOfLines={1} style={styles.itemName}>{menuName}</Text>
                         </TouchableOpacity>
-                        {data.has_variants === 0 && <Text style={styles.cost}>{currency.toUpperCase()} {parseFloat(data.price).toFixed(2).toString().replace('.',',')}</Text>}
+                        {data.has_variants === 0 && <Text style={styles.cost}>{data.price_formatted}</Text>}
                     </View>
                     
                     {
@@ -55,7 +55,7 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
                                     <Image source={require('../assets/images/icons/bullet.png')}/>
                                     <Text numberOfLines={1} style={styles.varientItemName}>{varItem.option}</Text>
                                 </View>
-                                <Text style={styles.cost}>{currency.toUpperCase()} {parseFloat(varItem.price).toFixed(2).toString().replace('.',',')}</Text>
+                                <Text style={styles.cost}>{varItem.price_formatted}</Text>
                             </View>
                         })
                     }

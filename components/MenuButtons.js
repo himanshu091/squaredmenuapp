@@ -2,7 +2,7 @@ import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
-const MenuButtons = ({uri, title,navigation, data, restaurant_id, themeURL, brandImage}) => {
+const MenuButtons = ({uri, title,navigation, data, restaurant_id, themeURL, brandImage, drag}) => {
     console.log(data)
     return (
         <View style={styles.card}>
@@ -12,9 +12,14 @@ const MenuButtons = ({uri, title,navigation, data, restaurant_id, themeURL, bran
                 </View>
                 <Text numberOfLines={1} style={styles.new}>{title}</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={()=>{navigation.navigate('EditMenu',{data:data,restaurant_id:restaurant_id})}}>
-                <Image source={require('../assets/images/icons/edit.png')} style={styles.editIcon}/>
-            </TouchableOpacity>
+            <View style={styles.actBtn}>
+                <TouchableOpacity onPressIn={drag}>
+                    <Image source={require('../assets/images/icons/drag_icon.png')} style={styles.dragImg}/>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={()=>{navigation.navigate('EditMenu',{data:data,restaurant_id:restaurant_id})}}>
+                    <Image source={require('../assets/images/icons/edit.png')} style={styles.editIcon}/>
+                </TouchableOpacity>
+            </View>
         </View>
     )
 }
@@ -67,5 +72,15 @@ const styles = StyleSheet.create({
     editIcon:{
         height: 45,
         width: 45
+    },
+    actBtn:{
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        height: '100%',
+    },
+    dragImg:{
+        width: 20, 
+        height: 20,
     }
 })

@@ -218,7 +218,7 @@ const refresh = async () => {
             <View style={styles.share}>
               <View>
                 <Text style={styles.smallHeadingText}>Share the love 💜</Text>
-                <Text style={styles.smallShareText}>Share this code and get 1 month free premium features</Text>
+                {/* <Text style={styles.smallShareText}>Share this code and get 1 month free premium features</Text> */}
                 
               </View>
               <TouchableOpacity onPress={()=>{onShare(data.sharing_msg)}}>
@@ -396,8 +396,8 @@ const styles = StyleSheet.create({
   },
   share: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
-
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   smallShareText: {
     fontSize: 15,

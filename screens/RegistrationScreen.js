@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-elements'
 import Bg1 from '../assets/images/banners/bg1.svg'
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -42,6 +42,8 @@ GoogleSignin.configure({
 })
 
 const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
+    const [iceye, setIceye] = React.useState("visibility-off");
+    const [showPassword, setShowPassword] = React.useState(true);
     const [name, onChangeName] = React.useState("");
     const [number, onChangeNumber] = React.useState("");
     const [email, onChangeEmail] = React.useState("");
@@ -217,6 +219,15 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
           )
       }
     }
+    changePwdType = () => {
+    if (showPassword) {
+      setIceye('visibility')
+      setShowPassword(false)
+    } else {
+      setIceye('visibility-off')
+      setShowPassword(true)
+    }
+  };
   return (
     <ScrollView>
   <Bg1
@@ -282,15 +293,24 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
         placeholderTextColor="#635CC9"
         keyboardType="phone-pad"
       />
-       <TextInput
-        style={styles.input}
-        onChangeText={onChangePassword}
-        value={password}
-        placeholder="Password"
-        textAlign="center"
-        placeholderTextColor="#635CC9"
-        secureTextEntry
-      />
+      <View style={{position:'relative'}}>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangePassword}
+          value={password}
+          placeholder="Password"
+          textAlign="center"
+          placeholderTextColor="#635CC9"
+          secureTextEntry={showPassword}
+
+        />
+        <Icon style={styles.showicon}
+            name={iceye}
+            size={26}
+            color='#635CC9'
+            onPress={changePwdType}
+        />
+        </View>
       <TextInput
         style={styles.input}
         onChangeText={onChangePromocode}
@@ -435,6 +455,11 @@ marginTop:30
     alignItems:'center',
     justifyContent:'center'
 
+},
+showicon: {
+  position: 'absolute',
+  top: 16,
+  right: 60
 },
 icon:{
     marginHorizontal:10,

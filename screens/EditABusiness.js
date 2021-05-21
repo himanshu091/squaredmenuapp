@@ -199,6 +199,13 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
           placeholderTextColor="#635CC9"
 
         />
+        <TouchableOpacity style={styles.locationContainer} onPress={showMap}>
+        <Image
+          source={require("../assets/images/icons/location.png")}
+          style={{height: 20, width: 20}}
+        />
+        <Text style={styles.locationText}>Locate me</Text>
+      </TouchableOpacity>
         <TextInput
           style={styles.input}
           onChangeText={onChangeAddress}
@@ -230,7 +237,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
         /> */}
         <TextInput
           style={styles.input}
-          onChangeText={onChangeTable}
+          onChangeText={value=>onChangeTable(value.replace(/[^0-9]/g, ''))}
           value={table}
           placeholder="Number of tables (optional)"
           textAlign="center"
@@ -247,19 +254,13 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
           }>
             
             {denominations.map((denom, idx) => {
-              return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#000000" fontFamily="Poppins Light" />
+              return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#00000099" fontFamily="Poppins Light"/>
             })}
           </Picker>
             </View>
       </View>
       
-      <TouchableOpacity style={styles.locationContainer} onPress={showMap}>
-        <Image
-          source={require("../assets/images/icons/location.png")}
-          style={{height: 20, width: 20}}
-        />
-        <Text style={styles.locationText}>Locate me</Text>
-      </TouchableOpacity>
+      
       <Button
         onPress={() => { handleSubmit()}}
         title="Update"
@@ -361,7 +362,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E7E6F3",
     fontFamily: "Poppins Regular",
     borderColor: "#E7E6F3",
-    paddingHorizontal: 7
+    paddingHorizontal: 20
   },
   btn1: {
 

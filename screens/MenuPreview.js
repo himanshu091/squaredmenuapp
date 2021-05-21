@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
+import React, { useRef, useState } from 'react'
+import {StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import HeaderSVG from '../components/HeaderSVG'
 import MenuButtons from '../components/MenuButtons'
@@ -10,16 +10,27 @@ import ThemeChooser from '../components/ThemeChooser'
 import { WebView } from 'react-native-webview';
 
 const MenuPreview = ({navigation, route}) => {
+    const [loading, setloading] = useState(true)
     const refRBSheet = useRef();
     console.log(route.params.themeURL)
     return (
-        <SafeAreaView style={{backgroundColor:'#fff', flex:1}}>
-            <View style={styles.exitBtn}>
-                <TouchableOpacity style={styles.exbt} onPress={()=>navigation.goBack()}>
+        <SafeAreaView style={{backgroundColor:'#fff', flex:1, overflow:'hidden'}}>
+            {!loading && <View style={styles.exitBtn}>
+                <TouchableOpacity style={styles.exbt} onPress={()=>{navigation.goBack()}}>
                     <Text style={styles.btnText}>Exit Preview</Text>
                 </TouchableOpacity>
-            </View>
-           <WebView source={{ uri:route.params.themeURL}} />
+            </View>}
+            {/* {loading && <View style={{flexDirection:'column', justifyContent:'center', height:'100%'}}>
+                <Text style={{fontFamily:'Poppins Medium', fontSize: 20, textAlign:'center'}}>Loading...</Text>
+            </View>} */}
+           <WebView
+                source={{ uri:route.params.themeURL}} 
+                onLoadEnd={()=>setloading(false)}
+                startInLoadingState={true}
+                renderLoading={() => <View style={{flexDirection:'column', justifyContent:'center', height:'100%'}}>
+                                        <ActivityIndicator size="large" color="#635cc9" />
+                                    </View>}
+            />
         </SafeAreaView>
     )
 }

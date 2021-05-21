@@ -20,7 +20,7 @@ import {
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/backgroundimage.svg';
 import { connect } from 'react-redux';
-import { editMenu } from '../store/action';
+import { deleteMenu, editMenu } from '../store/action';
 import ImagePicker from 'react-native-image-crop-picker';
 import FastImage from 'react-native-fast-image';
 import { Platform } from 'react-native';
@@ -29,7 +29,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
 import { SafeAreaView } from 'react-native';
 
-const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
+const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => {
   const refRBSheet = useRef();
   const [menu, onChangeMenu] = React.useState(route.params.data.name);
   const [note, onChangeNote] = React.useState(route.params.data.description);
@@ -107,6 +107,35 @@ const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
         alert(res.data.message)
     }
   }
+  const deleteThisMenu = async () => {
+    
+
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    bodyFormData.append('token', token);
+    bodyFormData.append('menu_id', route.params.data.menu_id);
+
+    const res = await deleteMenu(bodyFormData)
+
+    navigation.goBack()
+  }
+  const createTwoButtonAlert = () =>
+        Alert.alert(
+        "Delete Menu",
+        "Are you sure to delete this item?",
+        [
+            {
+            text: "Yes",
+            onPress: () => deleteThisMenu(),
+            style: "destructive"
+            },
+            { 
+                text: "No", 
+                onPress: () => console.log("No Pressed"),
+                style: "cancel"
+             }
+        ]
+    );
   return (
     <SafeAreaView>
     <ScrollView>
@@ -142,8 +171,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
       </View>
       </TouchableOpacity>
       <View style={styles.inputFields}>
-{err && <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
-}
+{err && <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>}
         <View style={styles.editMenu}>
           <TextInput
             fontSize={wp(11)}
@@ -152,11 +180,11 @@ const EditMenu = ({navigation, route, user_id, token, editMenu}) => {
             value={menu}
             width={wp(100)}
             multiline={true}
-            placeholder="Silema Menu"
+            placeholder="Ex. Breakfast, Lunch, Dinner"
             opacity={0.3}
             placeholderTextColor="#000000"
           />
-          {/* <Image source={require('../assets/images/icons/delete.png')} /> */}
+          <TouchableOpacity onPress={()=>createTwoButtonAlert()} style={{position:'absolute', right: 5, backgroundColor:'#fff', padding: 10, borderRadius: 8, elevation: 5}}><Image source={require('../assets/images/icons/delete.png')} style={{width: 18.5, height: 20}}/></TouchableOpacity>
         </View>
         <TextInput
           fontSize={15}
@@ -219,7 +247,7 @@ const mapStataeToProps = state => {
     token: state.auth.token
   }
 }
-export default connect(mapStataeToProps,{editMenu})(EditMenu);
+export default connect(mapStataeToProps,{editMenu, deleteMenu})(EditMenu);
 
 const styles = StyleSheet.create({
   heading: {
@@ -253,12 +281,13 @@ const styles = StyleSheet.create({
   },
   button: {},
   topElements: {
+    position: 'absolute',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 15,
-    marginVertical: 40,
+    marginTop: 30,
   },
   logoflat: {
     marginHorizontal: 55,
@@ -269,7 +298,7 @@ const styles = StyleSheet.create({
   },
   inputFields: {
     marginHorizontal: 15,
-    marginTop: hp('15%'),
+    // marginTop: hp('15%'),
   },
   input: {
     height: 50,
@@ -368,6 +397,7 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   editMenu: {
+    position: 'relative',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -386,10 +416,7 @@ const styles = StyleSheet.create({
     marginTop: hp(25),
   },
   altImage:{
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0, 
+    
     // backgroundColor:'red',
     width: wp(100),
     height: wp(100)*209/375

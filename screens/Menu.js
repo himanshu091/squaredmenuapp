@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import { connect } from 'react-redux'
 import HeaderSVG from '../components/HeaderSVG'
 import MenuButtons from '../components/MenuButtons'
 import NewMenuButton from '../components/NewMenuButton'
-import { getMenu } from '../store/action'
+import { getMenu, updateMenuOrder } from '../store/action'
+import DraggableFlatList, {
+    RenderItemParams,
+} from "react-native-draggable-flatlist";
 
-const Menu = ({navigation, user_id, token, getMenu, route}) => {
+const Menu = ({ navigation, user_id, token, getMenu, route, updateMenuOrder }) => {
     const [data, setdata] = useState(null)
+    const [dataItems, setDataItems] = useState([])
     useEffect(async () => {
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
@@ -16,6 +20,7 @@ const Menu = ({navigation, user_id, token, getMenu, route}) => {
         bodyFormData.append('restaurant_id', route.params.restaurant_id);
         const res = await getMenu(bodyFormData)
         setdata(res.data.data)
+        setDataItems(res.data.data.menu)
     }, [])
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -25,39 +30,72 @@ const Menu = ({navigation, user_id, token, getMenu, route}) => {
             bodyFormData.append('restaurant_id', route.params.restaurant_id);
             const res = await getMenu(bodyFormData)
             setdata(res.data.data)
+            setDataItems(res.data.data.menu)
         });
-    
+
         return unsubscribe;
     }, [navigation]);
-    return (
-        <SafeAreaView style={{flex: 1}}>
-            <ScrollView>
-                <HeaderSVG uri={route.params.brandImage}/>
-                <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
-                    <TouchableOpacity 
-                        style={styles.bell}
-                        onPress={()=>navigation.goBack()}
-                    >
-                        <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.previewBTN} onPress={()=>navigation.navigate('MenuPreview', {themeURL:route.params.themeURL})}>
-                        <Text style={styles.preview}>Preview</Text>
-                    </TouchableOpacity>
-                    <View style={styles.info}>
-                        <View style={styles.nameContainer}>
-                            <Text numberOfLines={2} style={styles.name}>{data && data.restaurant.name}</Text>
-                        </View>
-                    </View>
+    const handleSorting = async (data) =>{
+        const new_order = data.map(item=>item.menu_id);
+        // console.log(new_order)
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('menu_ids', new_order.toString());
+        const res = await updateMenuOrder(bodyFormData)
+    }
+    const renderItem = useCallback(
+        ({ item, index, drag, isActive }: RenderItemParams<Item>) => {
+            return (
+                <View style={{ backgroundColor: isActive ? "#635CC925" : "transparent" }}>
+                    <MenuButtons key={index} drag={drag} navigation={navigation} title={item.name} uri={item.image} data={item} restaurant_id={route.params.restaurant_id} themeURL={route.params.themeURL} public_url={route.params.public_url} brandImage={route.params.brandImage} />
                 </View>
-               {data && data.menu.map((item, idx) => {
-                   return <MenuButtons key={idx} navigation={navigation} title={item.name} uri={item.image} data={item} restaurant_id={route.params.restaurant_id} themeURL={route.params.themeURL} brandImage={route.params.brandImage}/>
-               })}
-                
-               <NewMenuButton action={()=>navigation.navigate('NewMenu',{restaurant_id:route.params.restaurant_id})}/>
-               <View style={{marginBottom: 150}}></View>
-            </ScrollView>
-            <TouchableOpacity style={styles.qrbutton} onPress={()=>navigation.navigate('QR',{restaurant_id:route.params.restaurant_id, img:route.params.brandImage})}>
-                <Image source={require('../assets/images/icons/qr.png')} style={{height:33, width:33}}/>
+            );
+        },
+        []
+    );
+    return (
+        <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1 }}>
+                <DraggableFlatList
+                    nestedScrollEnabled
+                    data={dataItems}
+                    renderItem={renderItem}
+                    dragItemOverflow={true}
+                    keyExtractor={(item, index) => `draggable-item-${index}`}
+                    onDragEnd={({ data }) => {setDataItems(data);handleSorting(data);}}
+
+                    ListHeaderComponent={() => {
+                        return <>
+                            <HeaderSVG uri={route.params.brandImage} />
+                            <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
+                                <TouchableOpacity
+                                    style={styles.bell}
+                                    onPress={() => navigation.goBack()}
+                                >
+                                    <Image source={require('../assets/images/onboarding/next.png')} style={{ height: 42, width: 42 }} />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.previewBTN} onPress={() => navigation.navigate('MenuPreview', { themeURL: route.params.themeURL })}>
+                                    <Text style={styles.preview}>Preview</Text>
+                                </TouchableOpacity>
+                                <View style={styles.info}>
+                                    <View style={styles.nameContainer}>
+                                        <Text numberOfLines={2} style={styles.name}>{data && data.restaurant.name}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </>
+                    }}
+                    ListFooterComponent={() => {
+                        return <>
+                            <NewMenuButton action={() => navigation.navigate('NewMenu', { restaurant_id: route.params.restaurant_id })} />
+                            <View style={{ marginBottom: 150 }}></View>
+                        </>
+                    }}
+                />
+            </SafeAreaView>
+            <TouchableOpacity style={styles.qrbutton} onPress={() => navigation.navigate('QR', { restaurant_id: route.params.restaurant_id, img: route.params.brandImage, url: route.params.public_url})}>
+                <Image source={require('../assets/images/icons/qr.png')} style={{ height: 33, width: 33 }} />
             </TouchableOpacity>
         </SafeAreaView>
     )
@@ -68,63 +106,63 @@ const mapStataeToProps = state => {
         token: state.auth.token
     }
 }
-export default connect(mapStataeToProps,{getMenu})(Menu)
+export default connect(mapStataeToProps, { getMenu, updateMenuOrder })(Menu)
 
 const styles = StyleSheet.create({
-    banner:{
+    banner: {
         position: 'relative',
         width: widthPercentageToDP(100),
         height: heightPercentageToDP(30),
         marginBottom: 25
     },
-    logoContainer:{
-        display:'flex',
-        flexDirection:'row',
-        justifyContent:'center',
+    logoContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
         marginTop: heightPercentageToDP(8.5)
     },
-    logo:{},
-    bell:{
-        position:'absolute',
+    logo: {},
+    bell: {
+        position: 'absolute',
         top: heightPercentageToDP(5),
-        left:widthPercentageToDP(3.5),
-        transform: [{ rotate: '180deg'}]
+        left: widthPercentageToDP(3.5),
+        transform: [{ rotate: '180deg' }]
     },
-    info:{
-        marginTop:heightPercentageToDP(14),
+    info: {
+        marginTop: heightPercentageToDP(14),
         paddingHorizontal: 20,
-        display:'flex',
+        display: 'flex',
         flexDirection: 'row',
         alignItems: 'center'
     },
-    nameContainer:{
+    nameContainer: {
         flexBasis: widthPercentageToDP(66),
-        flexDirection:'row'
+        flexDirection: 'row'
     },
-    name:{
-        flexWrap:'wrap',
+    name: {
+        flexWrap: 'wrap',
         fontFamily: 'Poppins Medium',
         fontStyle: 'normal',
         fontSize: 37,
         color: '#FFFFFF',
-        lineHeight:40,
+        lineHeight: 40,
         textTransform: 'capitalize'
     },
-    previewBTN:{
+    previewBTN: {
         backgroundColor: '#fff',
         paddingHorizontal: 18,
         paddingVertical: 7,
-        borderRadius:23,
-        position:'absolute',
+        borderRadius: 23,
+        position: 'absolute',
         top: heightPercentageToDP(5.4),
-        right:widthPercentageToDP(3.5),
+        right: widthPercentageToDP(3.5),
     },
-    preview:{
+    preview: {
         fontFamily: 'Poppins Medium',
         fontSize: 16,
         color: '#635CC9'
     },
-    card:{
+    card: {
         backgroundColor: '#fff',
         borderRadius: 17,
         width: widthPercentageToDP(84),
@@ -143,16 +181,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 97,
         height: '100%',
-        backgroundColor:'#635CC910',
+        backgroundColor: '#635CC910',
         borderRadius: 10,
     },
-    new:{
+    new: {
         fontFamily: 'Poppins Medium',
         color: '#635CC9',
         fontSize: 15,
         marginLeft: 15
     },
-    qrbutton:{
+    qrbutton: {
         position: 'absolute',
         right: 25,
         top: heightPercentageToDP(84),

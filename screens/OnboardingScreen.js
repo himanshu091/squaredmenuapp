@@ -15,20 +15,20 @@ const slideImages = [
 ]
 const data = [
     {
-        heading: "Create a menu",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        heading: "Crea your business local business",
+        content: "Add the details, and the number of tables (optional). This is the starting point. It will contain your menu, sections and items. "
     },
     {
-        heading: "Add Sections & Items",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        heading: "Add sections and Items (to your menu?)",
+        content: "Now add the sections (e.g. Breakfast, Hot Drinks, Burgers, Pizzas, ...). Each section contains items (i.e. your food/drink or product). Each item can have a single price or different price (variable) (e.g. Coke: small, medium, large). Got it?"
     },
     {
-        heading: "Add Allergens",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        heading: "Add allergens and dietary restrictions",
+        content: "You can add up to 14 allergens compliant with the EU regulation and the WHO. Plus 4 dietary restrictions: gluten free, lactose free, vegan and vegetarian"
     },
     {
-        heading: "Print QR Code",
-        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        heading: "Select your style and get your QR Code menu",
+        content: "You can preview how the menu will look and choose between several style templates that suit you best. And finally get your printable QR code so you can place it on your tables"
     },
 
     
@@ -138,16 +138,19 @@ const styles = StyleSheet.create({
         borderRadius: 30
     },
     text:{
-        fontFamily:'Poppins Bold'
+        fontFamily:'Poppins Bold',
+        color: '#635cc9'//To change
     },
     textContent:{
         position: 'absolute',
-        top: hp(57),
+        top: hp(56),
         width: '100%',
         flexDirection: 'column',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        
     },
     heading:{
+        paddingHorizontal: wp(3),
         textAlign: 'center',
         fontSize: 27,
         fontFamily: 'Poppins Bold',

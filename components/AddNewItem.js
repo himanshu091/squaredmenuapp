@@ -79,6 +79,14 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
             )
         }
     }
+    const checkPrice = (value) => {
+        if(value === ""){
+            setPrice(value)
+        }
+        if(!isNaN(value) && Number(value) > 0){
+            setPrice(value)
+        }
+    }
     return (
         <View style={styles.box}>
             <View>
@@ -102,7 +110,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                 
                 {!isOn && <TextInput
                     style={styles.input}
-                    onChangeText={setPrice}
+                    onChangeText={value=>checkPrice(value)}
                     value={price}
                     placeholder="Price"
                     textAlign="center"

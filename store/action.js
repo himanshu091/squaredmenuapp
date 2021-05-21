@@ -325,3 +325,33 @@ export const getCurrency = (data) => async (dispatch, getState) => {
     // console.log("Currency =>",res.data)
     return res
 }
+
+export const updateMenuOrder = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/update-menu-order`,data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })  
+    console.log("Menu Order =>",res.data)
+    return res
+}
+
+export const updateItemOrder = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/update-item-order`,data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Item Order =>",res.data)
+    return res
+}
+export const deleteMenu = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/delete-menu`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Delete Menu =>",res.data)
+    return res
+};

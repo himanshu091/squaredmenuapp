@@ -8,9 +8,26 @@ import RestaurantCard from '../components/RestaurantCard'
 import { getRestaurants, logout } from '../store/action'
 import { useFocusEffect } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
+import NetInfo from "@react-native-community/netinfo";
+import Offline from '../components/Offline'
 
 const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants }) => {
     const [data, setdata] = useState(null)
+    const [online, setonline] = useState(true)
+   
+    useEffect(() => {
+         // Subscribe
+        const unsubscribe = NetInfo.addEventListener(state => {
+            console.log("Connection type", state.type);
+            console.log("Is connected?", state.isConnected);
+            setonline(state.isConnected)
+        });
+        return () => {
+            // Unsubscribe
+            unsubscribe();
+        }
+    }, [])
+    
     useEffect(async () => {
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
@@ -36,8 +53,15 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
             <ScrollView>
                 <View>
                     <ImageBackground source={require('../assets/images/banners/lands.png')} style={styles.banner} resizeMode="stretch">
-                        {data && data.length > 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:data[0].logo})}><Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>}
-                        {data && data.length === 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification')}><Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>}
+                        {data && data.length > 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:data[0].logo})}>
+                            <View>
+                                <Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} />
+                                <View style={{position:'absolute', height: 20, width: 20, backgroundColor:'#FF3A44', top: -4, right: 1, flexDirection:'row', alignItems:'center', justifyContent:'center', borderRadius: 50}}>
+                                    <Text style={{color:'#fff', fontFamily: 'Poppins Medium', fontSize:13, textAlign:'center', marginBottom:1}}>2</Text>
+                                </View>
+                            </View>
+                            </TouchableOpacity>}
+                        {data && data.length === 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:null})}><Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>}
                         <View style={styles.logoContainer}>
                             <Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo} />
                         </View>
@@ -68,6 +92,7 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
                 </View>
                 <View style={{ marginBottom: 50 }}></View>
             </ScrollView>
+            {!online && <Offline/>}
         </SafeAreaView>
     )
 }

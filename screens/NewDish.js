@@ -263,7 +263,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             {types.map((item)=>{
                 return <TypeComponent key={item.item_type_id} data={item} selectThisType={(id)=>selectThisType(id)} deselectThisType={(id)=>deselectThisType(id)}/>
             })}
-
+            <Text  style={{fontFamily: 'Poppins Regular', fontSize: 18, color: '#000', marginTop: 20, marginLeft: widthPercentageToDP(2.4)}}>Allergens</Text>
             <View style={styles.optionContainer}>
                 {options.map((item)=>{
                     return <OptionComponent key={item.option_id} option_id={item.option_id} name={item.name} selectThisOption={(id)=>selectThisOption(id)} deselectThisOption={(id)=>deselectThisOption(id)}/>
@@ -272,7 +272,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             <View style={styles.line}></View>
 
             <View style={styles.hide}>
-                <Text style={styles.compText}>Hide/deactivate</Text>
+                <Text style={styles.compText}>Active</Text>
                 <ToggleSwitch
                     isOn={isOn}
                     onColor="#635CC9"

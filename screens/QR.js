@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView, Linking } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import HeaderSVG from '../components/HeaderSVG'
 import MenuSection from '../components/MenuSection'
@@ -9,7 +9,6 @@ import { connect } from 'react-redux'
 import { Button } from 'react-native-elements'
 import Clipboard from '@react-native-clipboard/clipboard';
 
-const ImageLink = '../';
 
 const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => {
     console.log("brandimage",route.params)
@@ -32,7 +31,7 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
         const res = await generateQR(bodyFormData)
         if(res.data.status){
             // Linking.openURL(res.data.data)
-            Clipboard.setString(res.data.data);
+            Clipboard.setString(res.data.data.public_url);
             alert('Copied to Clipboard!');
         }else{
             alert(res.data.message)
@@ -64,6 +63,9 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
                         <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
                     </TouchableOpacity>
                     <View style={styles.logoContainer}><Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo} /></View>
+                    <TouchableOpacity style={styles.previewBTN} onPress={() => Linking.openURL(route.params.url)}>
+                        <Text style={styles.preview}>Open Menu</Text>
+                    </TouchableOpacity>
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
                             <Text style={styles.name}>Your QR Code</Text>
@@ -110,12 +112,6 @@ const styles = StyleSheet.create({
         width: widthPercentageToDP(100),
         height: heightPercentageToDP(30),
         marginBottom: 25
-    },
-    logoContainer:{
-        display:'flex',
-        flexDirection:'row',
-        justifyContent:'center',
-        marginTop: heightPercentageToDP(8.5)
     },
     logo: {
         width: 167,
@@ -176,7 +172,8 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'row',
         justifyContent:'center',
-        marginTop: heightPercentageToDP(4.5)
+        marginTop: heightPercentageToDP(1.5),
+        marginBottom: heightPercentageToDP(3)
     },
     QRcontainer:{
         flexDirection: 'row',
@@ -227,5 +224,19 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'Poppins Medium',
         textAlign: 'center'
-    }
+    },
+    previewBTN: {
+        backgroundColor: '#fff',
+        paddingHorizontal: 18,
+        paddingVertical: 7,
+        borderRadius: 23,
+        position: 'absolute',
+        top: heightPercentageToDP(5.4),
+        right: widthPercentageToDP(3.5),
+    },
+    preview: {
+        fontFamily: 'Poppins Medium',
+        fontSize: 16,
+        color: '#635CC9'
+    },
 })

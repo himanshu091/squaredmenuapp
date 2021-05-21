@@ -1,20 +1,32 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Switch, TouchableOpacity, Image } from 'react-native'
 
 const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) => {
+    console.log("DEfault Price =", defaultprice)
     const [name, setname] = useState(defaultname)
-    const [price, setprice] = useState(defaultprice)
+    const [nprice, setnprice] = useState(defaultprice)
+    useEffect(() => {
+        setnprice(defaultprice)
+    }, [])
     const [err, seterr] = useState("")
     const handleSubmit = () => {
         if(name.trim().length < 1){
             seterr("Enter Valid Varient Name")
             return
-        }else if(price.trim().length < 1 ){
+        }else if(nprice.trim().length < 1 ){
             seterr("Enter Valid price")
             return
         }
-        editVariant(name,price,pos)
+        editVariant(name,nprice,pos)
         closeFunc()
+    }
+    const checkPrice = (value) => {
+        if(value === ""){
+            setnprice(value)
+        }
+        if(!isNaN(value) && Number(value) > 0){
+            setnprice(value)
+        }
     }
     return (
         <View style={styles.box}>
@@ -30,16 +42,18 @@ const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) =
                     placeholderTextColor="#635CC9"
                     
                 />
-                
                 <TextInput
                     style={styles.input}
-                    onChangeText={setprice}
-                    value={price}
+                    onChangeText={value=>checkPrice(value)}
+                    value={`${nprice}`}
                     placeholder="Price"
                     textAlign="center"
                     placeholderTextColor="#635CC9"
                     keyboardType="decimal-pad"
                 />
+                
+                
+                
             </View>
             <View style={styles.allBtn}>
                 <TouchableOpacity style={styles.btn1} onPress={closeFunc}>

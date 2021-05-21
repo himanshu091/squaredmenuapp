@@ -207,6 +207,13 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
             placeholderTextColor="#635CC9"
 
           />
+          <TouchableOpacity style={styles.locationContainer} onPress={showMap} >
+            <Image
+              source={require("../assets/images/icons/location.png")}
+              style={{height: 20, width: 20}}
+            />
+            <Text style={styles.locationText}>Locate me</Text>
+          </TouchableOpacity>
           <TextInput
             style={styles.input}
             onChangeText={onChangeAddress}
@@ -236,7 +243,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
           
           <TextInput
             style={styles.input}
-            onChangeText={onChangeTable}
+            onChangeText={value=>onChangeTable(value.replace(/[^0-9]/g, ''))}
             value={table}
             placeholder="Number of tables (optional)"
             textAlign="center"
@@ -261,13 +268,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
         </View>
         {/* {lat && <Text style={styles.latlong}>Latitude: {lat}</Text>}
         {long && <Text style={styles.latlong}>Longitude: {long}</Text>} */}
-        <TouchableOpacity style={styles.locationContainer} onPress={showMap} >
-          <Image
-            source={require("../assets/images/icons/location.png")}
-            style={{height: 20, width: 20}}
-          />
-          <Text style={styles.locationText}>Locate me</Text>
-        </TouchableOpacity>
+        
         <Button
           onPress={() => { handleSubmit()}}
           title="Add"
@@ -276,7 +277,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
           containerStyle={{ marginVertical: 15 }}
           loading={clicked}
         />
-
+        <View style={{height: hp(15)}}></View>
       </ScrollView>}
       {step === 2 && <LocationTest setLatLong={(lat, long, address)=>setLatLong(lat, long, address)} closeMap={()=>setStep(1)}/>}
       <RBSheet
@@ -333,7 +334,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     marginHorizontal: 15,
-    marginVertical: 40,
+    marginVertical: 30,
   },
   logoflat: {
     marginHorizontal: 55,
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#E7E6F3",
     fontFamily: "Poppins Regular",
     borderColor: "#E7E6F3",
-    paddingHorizontal: 7
+    paddingHorizontal: 20
   },
 
   btn1: {

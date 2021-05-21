@@ -5,7 +5,7 @@ import { widthPercentageToDP } from 'react-native-responsive-screen'
 
 const RestaurantCard = ({navigation, name, data}) => {
     return (
-        <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate(name,{restaurant_id:data.restaurant_id, brandImage:data.cover, themeURL: data.theme_url})}>
+        <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate(name,{restaurant_id:data.restaurant_id, brandImage:data.cover, themeURL: data.theme_url, public_url: data.public_url})}>
             <View style={styles.subBox}>
                 <FastImage
                     style={styles.thumbnail}
@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         color: '#635CC9',
         fontFamily: 'Poppins Medium',
-        fontSize: 24,
-        lineHeight: 28 * 0.75,
+        fontSize: 23,
+        lineHeight: 30 * 0.75,
         paddingTop: 40 - 35 * 0.75,
     },
     address:{

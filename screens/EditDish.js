@@ -299,7 +299,7 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                 
                 return <TypeComponentEdit key={item.item_type_id} data={item} selectThisType={(id)=>selectThisType(id)} deselectThisType={(id)=>deselectThisType(id)} is_checked={item.is_checked}/>
             })}
-
+<Text  style={{fontFamily: 'Poppins Medium', fontSize: 18, color: '#000', marginTop: 20, marginLeft: widthPercentageToDP(4)}}>Allergens</Text>
             <View style={styles.optionContainer}>
                 {options.map((item)=>{
                     return <OptionComponentEdit key={item.option_id} option_id={item.option_id} name={item.name} selectThisOption={(id)=>selectThisOption(id)} deselectThisOption={(id)=>deselectThisOption(id)} is_checked={item.is_checked}/>

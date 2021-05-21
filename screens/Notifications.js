@@ -37,7 +37,9 @@ const Notifications = ({ navigation, logout, user_id, token, image, getNotificat
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
                 <View>
-                    <HeaderSVG uri={route.params.brandImage}/>
+                    {route.params.brandImage && <HeaderSVG uri={route.params.brandImage}/>}
+                    {/* Change the below header */}
+                    {!route.params.brandImage && <Image source={require('../assets/images/banners/lands.png')} style={styles.bannerIMG} resizeMode="stretch"/>} 
                     <View  style={styles.banner}>
                         <TouchableOpacity 
                             style={styles.bell}
@@ -83,6 +85,11 @@ const mapStataeToProps = state => {
 export default connect(mapStataeToProps, { logout, getNotifications, getNotifications })(Notifications)
 
 const styles = StyleSheet.create({
+    bannerIMG:{
+        position:'absolute',
+        width: widthPercentageToDP(100),
+        height: heightPercentageToDP(30),
+    },
     banner: {
         position: 'relative',
         width: widthPercentageToDP(100),

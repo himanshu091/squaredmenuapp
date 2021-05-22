@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
+import React, { useRef, useState } from 'react'
+import {StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import HeaderSVG from '../components/HeaderSVG'
 import MenuButtons from '../components/MenuButtons'
@@ -8,70 +8,29 @@ import SubMenu from '../components/SubMenu'
 import RBSheet from "react-native-raw-bottom-sheet";
 import ThemeChooser from '../components/ThemeChooser'
 import { WebView } from 'react-native-webview';
-const data = [
-    {   
-        sectionName: "Sweet",
-        itemList: [
-            {
-                itemName: "Croissant",
-                varient: true,
-                varientList: [{
-                    name: "Small",
-                    cost: 2
-                },
-                {
-                    name: "Medium",
-                    cost: 4
-                }]
-            },
-            {
-                itemName: "White Sauce Pasta",
-                varient: false,
-                cost: 4
-            },
-            {
-                itemName: "Red Sauce Pasta",
-                varient: false,
-                cost: 4
-            },
-        ]
-        
-    },
-    {   
-        sectionName: "Spicy",
-        itemList: [
-            {
-                itemName: "Croissant",
-                varient: true,
-                varientList: [{
-                    name: "Small",
-                    cost: 2.5
-                },
-                {
-                    name: "Medium",
-                    cost: 4
-                }]
-            },
-            {
-                itemName: "White Sauce Pasta",
-                varient: false,
-                cost: 4
-            },
-            {
-                itemName: "Red Sauce Pasta",
-                varient: false,
-                cost: 4.99
-            },
-        ]
-        
-    },
 
-]
-const MenuPreview = ({navigation}) => {
+const MenuPreview = ({navigation, route}) => {
+    const [loading, setloading] = useState(true)
     const refRBSheet = useRef();
+    console.log(route.params.themeURL)
     return (
-        <SafeAreaView style={{backgroundColor:'#fff', flex:1}}>
-           <WebView source={{ uri:'http://ctportfolio.in/squaredmenu/home_0.html'}} />
+        <SafeAreaView style={{backgroundColor:'#fff', flex:1, overflow:'hidden'}}>
+            {!loading && <View style={styles.exitBtn}>
+                <TouchableOpacity style={styles.exbt} onPress={()=>{navigation.goBack()}}>
+                    <Text style={styles.btnText}>Exit Preview</Text>
+                </TouchableOpacity>
+            </View>}
+            {/* {loading && <View style={{flexDirection:'column', justifyContent:'center', height:'100%'}}>
+                <Text style={{fontFamily:'Poppins Medium', fontSize: 20, textAlign:'center'}}>Loading...</Text>
+            </View>} */}
+           <WebView
+                source={{ uri:route.params.themeURL}} 
+                onLoadEnd={()=>setloading(false)}
+                startInLoadingState={true}
+                renderLoading={() => <View style={{flexDirection:'column', justifyContent:'center', height:'100%'}}>
+                                        <ActivityIndicator size="large" color="#635cc9" />
+                                    </View>}
+            />
         </SafeAreaView>
     )
 }
@@ -165,5 +124,25 @@ const styles = StyleSheet.create({
         height: 50,
         width: 50,
         resizeMode: 'contain'
+    },
+    exitBtn:{
+        position: 'absolute',
+        top: 42,
+        right: widthPercentageToDP(50)-50,
+        zIndex: 1
+    },
+    exbt:{
+        backgroundColor: '#fff',
+        paddingTop: 4.5,
+        paddingBottom: 2.5,
+        paddingHorizontal: 11,
+        borderRadius: 50,
+        borderColor:'#635cc9',
+        borderWidth: 1,
+    },
+    btnText:{
+        color: '#635cc9',
+        fontFamily: 'Poppins SemiBold',
+        fontSize: 14
     }
 })

@@ -29,11 +29,11 @@ const ThankYouRegistration = ({navigation, verifyEmail, user_id}) => {
     alert(res)
   }
   return (
-    <SafeAreaView style={{flex:1,height:hp('100')}} >
+    <SafeAreaView style={{flex:1}} >
     <ScrollView>
     <ImageBackground 
     source={require('../assets/images/background/background.png')}
-    style={{width:wp(100),height:hp('100'),marginBottom:100,marginTop:-hp('10'),paddingTop:hp('5')}}
+    style={{width:wp(100),height:hp(115),marginBottom:100,marginTop:-hp('10'),paddingTop:hp('5')}}
     >
 
       <View style={styles.logoflat}>
@@ -72,7 +72,6 @@ const ThankYouRegistration = ({navigation, verifyEmail, user_id}) => {
         
         </View>
       </View>
-     
      </ImageBackground>
      </ScrollView>
     </SafeAreaView>

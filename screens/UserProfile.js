@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import {
   StyleSheet,
   Text,
@@ -24,8 +24,12 @@ import { SafeAreaView } from 'react-native';
 import FastImage from 'react-native-fast-image';
 import ImagePicker from 'react-native-image-crop-picker';
 import { Alert } from 'react-native';
+import { Linking } from 'react-native';
+import RBSheet from "react-native-raw-bottom-sheet";
+import ImageChoice from '../components/ImageChoice';
 
-const UserProfile = ({ navigation, name, email, logout, user_id,updatePic, token, profileInfo, updateProfilePic }) => {
+const UserProfile = ({ navigation, name, email, logout, user_id,updatePic, token, profileInfo, updateProfilePic, user_type }) => {
+  const refRBSheet = useRef();
   const [data, setdata] = useState(null)
   useEffect(async () => {
     var bodyFormData = new FormData();
@@ -80,6 +84,7 @@ const refresh = async () => {
       includeBase64: true
     }).then(async image => {
         // console.log(image)
+        refRBSheet.current.close()
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
         bodyFormData.append('token', token);
@@ -90,14 +95,45 @@ const refresh = async () => {
           uri: Platform.OS === 'android' ? image.path : image.path.replace('file://', ''),
         });
         const res = await updateProfilePic(bodyFormData)
-        
-          Alert.alert(  
-            'Success',  
-            res.data.message,  
-            [  
-                {text: 'OK', onPress: () => refresh()},  
-            ]  
-        );
+        refresh()
+        //   Alert.alert(  
+        //     'Success',  
+        //     res.data.message,  
+        //     [  
+        //         {text: 'OK', onPress: () => refresh()},  
+        //     ]  
+        // );
+    }).catch(err=>{
+        console.log(err);
+    });
+  }
+  const camerapick = () => {
+    ImagePicker.openCamera({
+      width: 200,
+      height: 200,
+      cropping: true,
+      includeBase64: true
+    }).then(async image => {
+      refRBSheet.current.close()
+        // console.log(image)
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('name', name);
+        bodyFormData.append('image', {
+          name: name,
+          type: image.mime,
+          uri: Platform.OS === 'android' ? image.path : image.path.replace('file://', ''),
+        });
+        const res = await updateProfilePic(bodyFormData)
+        refresh()
+        //   Alert.alert(  
+        //     'Success',  
+        //     res.data.message,  
+        //     [  
+        //         {text: 'OK', onPress: () => refresh()},  
+        //     ]  
+        // );
     }).catch(err=>{
         console.log(err);
     });
@@ -124,20 +160,20 @@ const refresh = async () => {
             />
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {user_type === "normal" && <TouchableOpacity
             style={styles.button}
             onPress={() => navigation.navigate('EditProfile')}>
             <Image
-              source={require('../assets/images/icons/edit2.png')}
-              style={styles.button_image}
+              source={require('../assets/images/icons/edit.png')}
+              style={styles.button_edit}
             />
-          </TouchableOpacity>
+          </TouchableOpacity>}
         </View>
 
-        {!data && <TouchableOpacity style={styles.imageView} onPress={imagepick}>
+        {!data && <TouchableOpacity style={styles.imageView} onPress={() => refRBSheet.current.open()}>
             <Image source={require('../assets/images/profile/profile.png')} style={styles.profilePic} />
         </TouchableOpacity>}
-        {data && <TouchableOpacity style={styles.imageView} onPress={imagepick}>
+        {data && <TouchableOpacity style={styles.imageView} onPress={() => refRBSheet.current.open()}>
           {(data.user.image.trim().length > 0)?<FastImage
                     style={styles.profilePic}
                     source={{
@@ -156,7 +192,7 @@ const refresh = async () => {
           <Text style={styles.nameText}>{name}</Text>
           <Text style={styles.smallText}>{email}</Text>
           <Text style={styles.smallText}>**********</Text>
-          <View style={styles.memberView}>
+          {/* <View style={styles.memberView}>
           <View style={styles.featuresView}>
             {data && data.plans.map(plan => {
              
@@ -176,24 +212,51 @@ const refresh = async () => {
                     <Text style={styles.renewText}>Renew Date</Text>
                     <Text style={styles.renewDateText}>{data && data.subscription.ends_at}</Text>
                   </View>
-                  </View>
+                  </View> */}
 
           <View style={styles.featuresView}>
             <View style={styles.share}>
               <View>
                 <Text style={styles.smallHeadingText}>Share the love 💜</Text>
-                <Text style={styles.smallShareText}>Share this code and get 1 month free premium features</Text>
+                {/* <Text style={styles.smallShareText}>Share this code and get 1 month free premium features</Text> */}
                 
               </View>
-              <TouchableOpacity onPress={()=>{onShare(data.web_url)}}>
+              <TouchableOpacity onPress={()=>{onShare(data.sharing_msg)}}>
                 <Image source={require('../assets/images/icons/share.png')} />
               </TouchableOpacity>
             </View>
-            <Text style={styles.smallBottomText}>{data && data.web_url}</Text>
+            {/* {data && <Text style={styles.smallBottomText} onPress={() => Linking.openURL(data.web_url)}>{data.web_url}</Text>} */}
           </View>
-          <TouchableOpacity onPress={logout}><Text style={{ textAlign: 'center' }}>Logout</Text></TouchableOpacity>
+          
         </View>
+          <View style={styles.bottomBtn}>
+            <TouchableOpacity onPress={() => Linking.openURL(data.web_url)} style={styles.shareBtn}>
+              <Image style={styles.styleImg} source={require('../assets/images/icons/share2.png')}/>
+              <Text style={styles.styleTxt}>Open Menu</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={logout} style={styles.logoutbtn}><Text style={styles.logoutTxt} >Logout</Text></TouchableOpacity>
+          </View>
       </ScrollView>
+      <RBSheet
+        ref={refRBSheet}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
+        customStyles={{
+          container: {
+            ...styles.container,
+            height: 180,
+            backgroundColor: '#f4f4f4'
+          },
+          wrapper: {
+            backgroundColor: "#00000028"
+          },
+          draggableIcon: {
+            backgroundColor: "#f4f4f4"
+          }
+        }}
+      >
+        <ImageChoice imagepick={()=>imagepick()} camerapick={()=>camerapick()}/>
+    </RBSheet>
     </SafeAreaView>
   );
 };
@@ -202,7 +265,8 @@ const mapStateToProps = state => {
     name: state.auth.name,
     email: state.auth.email,
     user_id: state.auth.user_id,
-    token: state.auth.token
+    token: state.auth.token,
+    user_type: state.auth.user_type
   }
 }
 export default connect(mapStateToProps, { logout, profileInfo, updateProfilePic, updatePic })(UserProfile);
@@ -227,9 +291,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     marginHorizontal: 15,
-    marginVertical: 40,
+    marginTop: 40,
+    marginBottom: 12,
   },
   logoflat: {
     marginHorizontal: 55,
@@ -237,6 +302,10 @@ const styles = StyleSheet.create({
   button_image: {
     height: 42,
     width: 42,
+  },
+  button_edit: {
+    height: 56,
+    width: 56,
   },
   inputFields: {
     marginHorizontal: 15,
@@ -327,8 +396,8 @@ const styles = StyleSheet.create({
   },
   share: {
     flexDirection: 'row',
-    justifyContent: 'space-between'
-
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   smallShareText: {
     fontSize: 15,
@@ -355,6 +424,42 @@ const styles = StyleSheet.create({
     width: 120,
     borderRadius: 100,
     resizeMode: 'cover',
+  },
+  logoutbtn:{
+    flexDirection: 'column',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: '#00000008',
+    height: 74,
+    width: wp('50')
+  },
+  shareBtn:{
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#00000008',
+    height: 74,
+    width: wp('50'),
+    
+  },
+  bottomBtn:{
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 50
+  },
+  logoutTxt:{
+    textAlign: 'center',fontFamily: 'Poppins Medium',fontSize: 16, color:'#00000035'
+  },
+  styleImg:{
+    height: 25,
+    width: 25,
+    marginRight: 10
+  },
+  styleTxt:{
+    fontFamily: 'Poppins Medium',
+    fontSize: 16,
+    color: '#635CC9'
   }
 
 });

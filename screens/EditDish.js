@@ -18,10 +18,14 @@ import AddNewVarient from '../components/AddNewVarient';
 import EditVarient from '../components/EditVarient';
 import TypeComponentEdit from '../components/TypeComponentEdit';
 import OptionComponentEdit from '../components/OptionComponentEdit';
+import ImageChoice from '../components/ImageChoice';
+import NonVarientPrice from '../components/NonVarientPrice';
 
 const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) => {
+    const refRBSheet = useRef();
     const refRBSheet1 = useRef();
     const refRBSheet2 = useRef();
+    const refRBSheet3 = useRef();
     const [fetched, setFetched] = useState(null)
     const [isOn, setisOn] = useState(false)
     const [options, setOptions] = useState([])
@@ -120,12 +124,27 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
           cropping: true,
           includeBase64: true
         }).then(image => {
-            // console.log(image)
-            setPhoto(image)
+          // console.log(image)
+          refRBSheet.current.close()
+          setPhoto(image)
         }).catch(err=>{
-            console.log(err);
+          console.log(err);
         });
-    }
+      }
+      const camerapick = () => {
+        ImagePicker.openCamera({
+          width: 375,
+          height: 209,
+          cropping: true,
+          includeBase64: true
+        }).then(image => {
+          // console.log(image)
+          refRBSheet.current.close()
+          setPhoto(image)
+        }).catch(err=>{
+          console.log(err);
+        });
+      }
     const addVariant = (name,price) => {
         const temp = [...variants]
         temp.push({
@@ -149,9 +168,9 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
         if(name.trim().length < 1){
             seterr("Enter Valid Item Name")
             return
-        }else if(desc.trim().length < 1){
-            seterr("Enter Valid Description")
-            return
+        // }else if(desc.trim().length < 1){
+        //     seterr("Enter Valid Description")
+        //     return
         }else if(has_variants === 1 && variants.length < 1){
             seterr("Enter atleast one varient.")
             return
@@ -186,13 +205,14 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
         const res = await addNewItem(bodyFormData)
         setClicked(false)
         if(res.data.status){
-            Alert.alert(  
-                'Success',  
-                res.data.message,  
-                [  
-                    {text: 'OK', onPress: () => navigation.navigate('MenuList', {menu_id:route.params.menu_id})},  
-                ]  
-            );
+            navigation.navigate('MenuList', {menu_id:route.params.menu_id})
+            // Alert.alert(  
+            //     'Success',  
+            //     res.data.message,  
+            //     [  
+            //         {text: 'OK', onPress: () => navigation.navigate('MenuList', {menu_id:route.params.menu_id})},  
+            //     ]  
+            // );
         }else{
             if(Platform.OS === 'android'){
                 ToastAndroid.showWithGravity(
@@ -209,14 +229,14 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
         <>
         {fetched && <SafeAreaView style={styles.body}>
             <ScrollView>
-            <TouchableOpacity onPress={imagepick}>
+            <TouchableOpacity onPress={() => refRBSheet.current.open()}>
                 <Image source={!photo?(!defaultImage?require('../assets/images/banners/imageUpload.png'):{uri: defaultImage}):{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.imageupload}/>                  
             </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.bell}
                 onPress={()=>navigation.goBack()}
             >
-                <Image source={require('../assets/images/onboarding/next.png')}/>
+                <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
             </TouchableOpacity>
             <View style={styles.part1}>
                 <View style={styles.dishNameContainer}>
@@ -232,9 +252,12 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                         placeholderTextColor="#00000090"
                     />
                 </View>
-                <TouchableOpacity style={styles.trademarks} onPress={()=>{setName('')}}>
+                {/* <TouchableOpacity style={styles.trademarks} onPress={()=>{setName('')}}>
                     <Image  style={styles.tm1} source={require('../assets/images/icons/delete.png')} />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
+                {price !== 0 && <View>
+                    <Text style={styles.nonPrice}>{route.params.currency.toUpperCase()} {parseFloat(price).toFixed(2).toString().replace('.',',')}</Text>
+                </View>}
             </View>
             <View style={styles.descBox}>
                 <TextInput
@@ -249,12 +272,20 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                 />
             </View>
             <View style={{marginTop: 20}}></View>
+            {has_variants===0 && <View style={styles.varientBody}>
+                            <Text style={styles.varientName}>Price</Text>
+                            <View style={styles.part2}>
+                                <Text style={styles.varientCost}>{route.params.currency.toUpperCase()} {parseFloat(price).toFixed(2).toString().replace('.',',')}</Text>
+                                <TouchableOpacity onPress={()=>{refRBSheet3.current.open();}}><Image style={styles.editIcon} source={require('../assets/images/icons/edit.png')}/></TouchableOpacity>
+                            </View>
+                        </View>
+            }
             {has_variants===1 && variants.map((item,idx) => {
                 return <View key={idx} style={styles.varientBody}>
                             <Text style={styles.varientName}>{item.name}</Text>
                             <View style={styles.part2}>
-                                <Text style={styles.varientCost}>${item.price}</Text>
-                                <TouchableOpacity onPress={()=>{setcurrentEditVarient({name:item.name, price:item.price, pos:idx});refRBSheet2.current.open();}}><Image source={require('../assets/images/icons/edit.png')}/></TouchableOpacity>
+                                <Text style={styles.varientCost}>{route.params.currency.toUpperCase()} {parseFloat(item.price).toFixed(2).toString().replace('.',',')}</Text>
+                                <TouchableOpacity onPress={()=>{setcurrentEditVarient({name:item.name, price:item.price, pos:idx});refRBSheet2.current.open();}}><Image style={styles.editIcon} source={require('../assets/images/icons/edit.png')}/></TouchableOpacity>
                             </View>
                         </View>
             })}
@@ -268,7 +299,7 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                 
                 return <TypeComponentEdit key={item.item_type_id} data={item} selectThisType={(id)=>selectThisType(id)} deselectThisType={(id)=>deselectThisType(id)} is_checked={item.is_checked}/>
             })}
-
+<Text  style={{fontFamily: 'Poppins Medium', fontSize: 18, color: '#000', marginTop: 20, marginLeft: widthPercentageToDP(4)}}>Allergens</Text>
             <View style={styles.optionContainer}>
                 {options.map((item)=>{
                     return <OptionComponentEdit key={item.option_id} option_id={item.option_id} name={item.name} selectThisOption={(id)=>selectThisOption(id)} deselectThisOption={(id)=>deselectThisOption(id)} is_checked={item.is_checked}/>
@@ -349,6 +380,47 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
                     pos={currentEditVarient.pos}
                 />
             </RBSheet>
+            <RBSheet
+                ref={refRBSheet3}
+                closeOnDragDown={true}
+                closeOnPressMask={false}
+                // height={80}
+                animationType='slide'
+                customStyles={{
+                    container: {
+                        ...styles.container,
+                        height: 360
+                      },
+                    wrapper: {
+                        backgroundColor: "#00000025"
+                    },
+                    draggableIcon: {
+                        backgroundColor: "#fff"
+                    }
+                }}
+            >
+                <NonVarientPrice closeFunc={() => refRBSheet3.current.close()} O_price={price} editPrice={(price)=>setPrice(price)} />
+            </RBSheet>
+            <RBSheet
+                ref={refRBSheet}
+                closeOnDragDown={true}
+                closeOnPressMask={true}
+                customStyles={{
+                container: {
+                    ...styles.container,
+                    height: 180,
+                    backgroundColor: '#f4f4f4'
+                },
+                wrapper: {
+                    backgroundColor: "#00000028"
+                },
+                draggableIcon: {
+                    backgroundColor: "#f4f4f4"
+                }
+                }}
+            >
+                <ImageChoice imagepick={()=>imagepick()} camerapick={()=>camerapick()}/>
+            </RBSheet>
         </SafeAreaView>}
         {!fetched && <SafeAreaView style={{flex: 1, height:heightPercentageToDP(100)}}>
                 <View style={{backgroundColor:'#fff',flexDirection:'column',justifyContent:'center', alignItems: 'center', height:heightPercentageToDP(100)}}>
@@ -384,7 +456,7 @@ const styles = StyleSheet.create({
     part1:{
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        // alignItems: 'center',
         paddingHorizontal: 15,
         marginTop: 15
     },
@@ -411,6 +483,11 @@ const styles = StyleSheet.create({
     tm2:{
         width: widthPercentageToDP(13),
         height: widthPercentageToDP(13),
+    },
+    nonPrice:{
+        fontSize: 18,
+        fontFamily: 'Poppins Medium',
+        marginTop: 20
     },
     descBox:{
         // paddingVertical: 13,
@@ -521,5 +598,9 @@ const styles = StyleSheet.create({
     imageupload:{
         width: widthPercentageToDP(100),
         height: widthPercentageToDP(100)*418/750,
+    },
+    editIcon:{
+        height: 45,
+        width: 45
     }
 })

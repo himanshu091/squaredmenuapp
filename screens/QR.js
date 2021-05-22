@@ -1,54 +1,106 @@
-import React from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView, Linking } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import HeaderSVG from '../components/HeaderSVG'
 import MenuSection from '../components/MenuSection'
 import FastImage from 'react-native-fast-image'
-const ImageLink = 'https://s3-alpha-sig.figma.com/img/47a5/945d/ae55611ab56a6f826a46055932cfb38a?Expires=1617580800&Signature=EKCvvFr84nP3GhRMSQ9uqSm8eQVI~Tf6RlCDVxME34ni~YgkE9K0DU~ApnBDjb~WT7ItSPayKunlqwmO7uaapdTpdhsAv-4FjmqbDhHQBgyWVfVqxMGym5sh9NrPsNfXKgsJib-tYTszxUadRhag8xnnG7GmZVdAiChUcfkY5ah6QHSDbvGRWouOCmZe1SDkCvpujh8YMmtnVZfvR3Gn3srELJfcsAxZrM8oyo3p8pCDvPaNW4RbtiseqRRhuFJ6HaAW7LJYjgT9Vpfjv1ix28SLxoVl345qeThS33QK0QGTBWJIHOsVkeu4SWNw4DA~ZZ2EpvdHxYQzi9htCep4Ow__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA';
-const QR = ({navigation}) => {
+import { generateQR, sendQrOverMail } from '../store/action'
+import { connect } from 'react-redux'
+import { Button } from 'react-native-elements'
+import Clipboard from '@react-native-clipboard/clipboard';
+
+
+const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => {
+    console.log("brandimage",route.params)
+    const [myQrLink, setMyQrLink] = useState(null)
+    const [loading, setloading] = useState(false)
+    const [copiedText, setCopiedText] = useState('');
+    const getQR = async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('restaurant_id', route.params.restaurant_id);
+        const res = await generateQR(bodyFormData)
+        setMyQrLink(res.data.data)
+    }
+    const browseQR = async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('restaurant_id', route.params.restaurant_id);
+        const res = await generateQR(bodyFormData)
+        if(res.data.status){
+            // Linking.openURL(res.data.data)
+            Clipboard.setString(res.data.data.public_url);
+            alert('Copied to Clipboard!');
+        }else{
+            alert(res.data.message)
+        }
+    }
+    const getQRByMail = async () => {
+        setloading(true)
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        bodyFormData.append('restaurant_id', route.params.restaurant_id);
+        const res = await sendQrOverMail(bodyFormData)
+        setloading(false)
+        if(res.data.status){
+            alert(res.data.message)
+        }else{
+            alert(res.data.message)
+        }
+    }
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
-                <HeaderSVG uri="https://s3-alpha-sig.figma.com/img/ad27/11d3/af86a9765d0ac9a0ad17ee7d95d3e855?Expires=1617580800&Signature=OsQaZ62WVy4mNZII~tzmTHTaLjbivYMslOZHxIuzZUgPV7o1rh20xkkPk7fgWXRORF~P8RtSXEGxWwpVNaRCXEuXyHySaTTg0YVsbudnnOhoKYwshty6kepkZcXbwuWa5DN-ZAdik2cKAd2NSYCXFjdAWsykfugR2zHjWw5wkiEyLuwjlWZmv8slkh2EMlHR2lPKWVPhpnF2FzHc3WUv8GmR7dncGsVThq4OOZJYXSuAxJn8IhQhu2kEznzb-cUBRFxQTSwN~NBBHxsiLmCSNSLDWaqBL3YDmzvo~huiGAVUWBufemTfGR~jQK12Fjc1hxTDexMHs-wrmJNhu6gHcQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"/>
-                <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
-                    {/* <TouchableOpacity 
+                <HeaderSVG uri={route.params.img}/>
+                <View  style={styles.banner} >
+                    <TouchableOpacity 
                         style={styles.bell}
                         onPress={()=>navigation.goBack()}
                     >
-                        <Image source={require('../assets/images/onboarding/next.png')}/>
-                    </TouchableOpacity> */}
-                    <View style={styles.logo}><Image source={require('../assets/images/logoinapp/logoflat.png')} /></View>
+                        <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
+                    </TouchableOpacity>
+                    <View style={styles.logoContainer}><Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo} /></View>
+                    <TouchableOpacity style={styles.previewBTN} onPress={() => Linking.openURL(route.params.url)}>
+                        <Text style={styles.preview}>Open Menu</Text>
+                    </TouchableOpacity>
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
                             <Text style={styles.name}>Your QR Code</Text>
                         </View>
                     </View>
                 </View>
-                <TouchableOpacity style={styles.QRcontainer}>
+                <TouchableOpacity style={styles.QRcontainer} onPress={getQRByMail}>
                     <FastImage
                         style={styles.qrBox}
-                        source={{
-                            uri: ImageLink,
-                            headers: { Authorization: 'someAuthToken' },
-                            priority: FastImage.priority.normal,
-                        }}
+                        source={require('../assets/images/icons/qr-code.png')}
                         resizeMode={FastImage.resizeMode.contain}
                     />
                 </TouchableOpacity>
                 <Text style={styles.hint}>Tap to view printable version</Text>
-                <TouchableOpacity style={styles.btn1}>
+                <TouchableOpacity style={styles.btn1} onPress={browseQR}>
                     <Text style={styles.btnText1}>Copy URL</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btn2}>
+                {!loading && <TouchableOpacity style={styles.btn2} onPress={getQRByMail}>
                     <Text style={styles.btnText2}>Get the printable PDF</Text>
-                </TouchableOpacity>
+                </TouchableOpacity>}
+                {loading && <TouchableOpacity style={styles.btn2} onPress={getQRByMail}>
+                    <Text style={styles.btnText2}>Generating...</Text>
+                </TouchableOpacity>}
                 <View style={{marginBottom:97}}></View>
             </ScrollView>
         </SafeAreaView>
     )
 }
-
-export default QR
+const mapStateToProps = (state) => {
+    return {
+        token: state.auth.token,
+        user_id: state.auth.user_id
+    }
+}
+export default connect(mapStateToProps,{generateQR, sendQrOverMail})(QR)
 
 const styles = StyleSheet.create({
     container:{
@@ -61,13 +113,10 @@ const styles = StyleSheet.create({
         height: heightPercentageToDP(30),
         marginBottom: 25
     },
-    logoContainer:{
-        display:'flex',
-        flexDirection:'row',
-        justifyContent:'center',
-        marginTop: heightPercentageToDP(8.5)
+    logo: {
+        width: 167,
+        height: 22.5
     },
-    logo:{},
     bell:{
         position:'absolute',
         top: heightPercentageToDP(5),
@@ -123,20 +172,16 @@ const styles = StyleSheet.create({
         display:'flex',
         flexDirection:'row',
         justifyContent:'center',
-        marginTop: heightPercentageToDP(8.5)
-    },
-    logo:{
-        flexDirection: 'row',
-        justifyContent:'center',
-        marginTop: 20
+        marginTop: heightPercentageToDP(1.5),
+        marginBottom: heightPercentageToDP(3)
     },
     QRcontainer:{
         flexDirection: 'row',
         justifyContent: 'center',
     },
     qrBox:{
-        width: widthPercentageToDP(80), 
-        height: widthPercentageToDP(80),
+        width: widthPercentageToDP(65), 
+        height: widthPercentageToDP(65),
         borderWidth: 3,
         borderColor: '#726AE9',
         borderRadius: 37,
@@ -179,5 +224,19 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontFamily: 'Poppins Medium',
         textAlign: 'center'
-    }
+    },
+    previewBTN: {
+        backgroundColor: '#fff',
+        paddingHorizontal: 18,
+        paddingVertical: 7,
+        borderRadius: 23,
+        position: 'absolute',
+        top: heightPercentageToDP(5.4),
+        right: widthPercentageToDP(3.5),
+    },
+    preview: {
+        fontFamily: 'Poppins Medium',
+        fontSize: 16,
+        color: '#635CC9'
+    },
 })

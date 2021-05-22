@@ -16,6 +16,14 @@ const AddNewVarient = ({closeFunc, addVariant}) => {
         addVariant(name,price)
         closeFunc()
     }
+    const checkPrice = (value) => {
+        if(value === ""){
+            setprice(value)
+        }
+        if(!isNaN(value) && Number(value) > 0){
+            setprice(value)
+        }
+    }
     return (
         <View style={styles.box}>
             <View>
@@ -33,12 +41,12 @@ const AddNewVarient = ({closeFunc, addVariant}) => {
                 
                 <TextInput
                     style={styles.input}
-                    onChangeText={setprice}
+                    onChangeText={(value)=>checkPrice(value)}
                     value={price}
                     placeholder="Price"
                     textAlign="center"
                     placeholderTextColor="#635CC9"
-                    
+                    keyboardType="decimal-pad"
                 />
             </View>
             <View style={styles.allBtn}>

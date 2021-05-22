@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import {Button} from 'react-native-elements'
 import Bg1 from '../assets/images/banners/bg1.svg'
-
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
@@ -42,6 +42,8 @@ GoogleSignin.configure({
 })
 
 const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
+    const [iceye, setIceye] = React.useState("visibility-off");
+    const [showPassword, setShowPassword] = React.useState(true);
     const [name, onChangeName] = React.useState("");
     const [number, onChangeNumber] = React.useState("");
     const [email, onChangeEmail] = React.useState("");
@@ -69,11 +71,12 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
         bodyFormData.append('platform', 'google');
         bodyFormData.append('name', userInfo.user.name);
         bodyFormData.append('email', userInfo.user.email);
-        bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
+        bodyFormData.append('image', userInfo.user.photo);
+        bodyFormData.append('firebase_token', userInfo.idToken);
         bodyFormData.append('device_name', device_name);
         bodyFormData.append('device_modal', device_model);
         bodyFormData.append('device_os', device_os);
-        const res = await signInAPIGoogle(bodyFormData)
+        const res = await signInAPIGoogle(bodyFormData, "google")
         if(res.data.status){
           if(Platform.OS === 'android'){
             ToastAndroid.showWithGravity(
@@ -103,7 +106,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
     const getInfoFromToken = async token => {
       const PROFILE_REQUEST_PARAMS = {
         fields: {
-          string: 'id,name,first_name,last_name, email',
+          string: 'id,name,first_name,last_name, email, picture',
         },
       };
       const profileRequest = new GraphRequest(
@@ -123,11 +126,12 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
             bodyFormData.append('platform', 'facebook');
             bodyFormData.append('name', user.name);
             bodyFormData.append('email', user.email);
+            bodyFormData.append('image', user.picture.data.url);
             bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
             bodyFormData.append('device_name', device_name);
             bodyFormData.append('device_modal', device_model);
             bodyFormData.append('device_os', device_os);
-            const res = await signInAPIGoogle(bodyFormData)
+            const res = await signInAPIGoogle(bodyFormData,"facebook")
             if(res.data.status){
               if(Platform.OS === 'android'){
                 ToastAndroid.showWithGravity(
@@ -215,6 +219,15 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
           )
       }
     }
+    changePwdType = () => {
+    if (showPassword) {
+      setIceye('visibility')
+      setShowPassword(false)
+    } else {
+      setIceye('visibility-off')
+      setShowPassword(true)
+    }
+  };
   return (
     <ScrollView>
   <Bg1
@@ -242,6 +255,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
           <View style={styles.logoflat}>
             <Image
               source={require('../assets/images/logoinapp/logoflat.png')}
+              style={styles.logo}
             />
           </View>
         </View>
@@ -279,15 +293,24 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
         placeholderTextColor="#635CC9"
         keyboardType="phone-pad"
       />
-       <TextInput
-        style={styles.input}
-        onChangeText={onChangePassword}
-        value={password}
-        placeholder="Password"
-        textAlign="center"
-        placeholderTextColor="#635CC9"
-        secureTextEntry
-      />
+      <View style={{position:'relative'}}>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangePassword}
+          value={password}
+          placeholder="Password"
+          textAlign="center"
+          placeholderTextColor="#635CC9"
+          secureTextEntry={showPassword}
+
+        />
+        <Icon style={styles.showicon}
+            name={iceye}
+            size={26}
+            color='#635CC9'
+            onPress={changePwdType}
+        />
+        </View>
       <TextInput
         style={styles.input}
         onChangeText={onChangePromocode}
@@ -362,6 +385,10 @@ const styles = StyleSheet.create({
   logoflat: {
     marginHorizontal: 55,
   },
+  logo: {
+    width: 167,
+    height: 22.5
+},
   button_image: {
     height: 42,
     width: 42,
@@ -428,6 +455,11 @@ marginTop:30
     alignItems:'center',
     justifyContent:'center'
 
+},
+showicon: {
+  position: 'absolute',
+  top: 16,
+  right: 60
 },
 icon:{
     marginHorizontal:10,

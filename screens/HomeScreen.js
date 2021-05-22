@@ -8,15 +8,33 @@ import RestaurantCard from '../components/RestaurantCard'
 import { getRestaurants, logout } from '../store/action'
 import { useFocusEffect } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
+import NetInfo from "@react-native-community/netinfo";
+import Offline from '../components/Offline'
 
 const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants }) => {
     const [data, setdata] = useState(null)
+    const [online, setonline] = useState(true)
+   
+    useEffect(() => {
+         // Subscribe
+        const unsubscribe = NetInfo.addEventListener(state => {
+            console.log("Connection type", state.type);
+            console.log("Is connected?", state.isConnected);
+            setonline(state.isConnected)
+        });
+        return () => {
+            // Unsubscribe
+            unsubscribe();
+        }
+    }, [])
+    
     useEffect(async () => {
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
         bodyFormData.append('token', token);
         const res = await getRestaurants(bodyFormData)
         setdata(res)
+        console.log(res[0].logo)
     }, [])
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -35,7 +53,15 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
             <ScrollView>
                 <View>
                     <ImageBackground source={require('../assets/images/banners/lands.png')} style={styles.banner} resizeMode="stretch">
-                        <TouchableOpacity style={styles.bell}><Image source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>
+                        {data && data.length > 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:data[0].logo})}>
+                            <View>
+                                <Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} />
+                                <View style={{position:'absolute', height: 20, width: 20, backgroundColor:'#FF3A44', top: -4, right: 1, flexDirection:'row', alignItems:'center', justifyContent:'center', borderRadius: 50}}>
+                                    <Text style={{color:'#fff', fontFamily: 'Poppins Medium', fontSize:13, textAlign:'center', marginBottom:1}}>2</Text>
+                                </View>
+                            </View>
+                            </TouchableOpacity>}
+                        {data && data.length === 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:null})}><Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>}
                         <View style={styles.logoContainer}>
                             <Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo} />
                         </View>
@@ -62,10 +88,11 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
                             return <RestaurantCard key={idx} name='Menu' navigation={navigation} data={item} />
                         })}
                         {data.length < 1 && <AddNewButton name='AddABusiness' navigation={navigation} />}
-                    </> : <View style={styles.loading}><Text style={styles.loadingText}>Fetching Data...</Text></View>}
+                    </> : <View style={styles.loading}><Text style={styles.loadingText}></Text></View>}
                 </View>
                 <View style={{ marginBottom: 50 }}></View>
             </ScrollView>
+            {!online && <Offline/>}
         </SafeAreaView>
     )
 }
@@ -89,9 +116,12 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: heightPercentageToDP(8.5)
+        marginTop: heightPercentageToDP(6.5)
     },
-    logo: {},
+    logo: {
+        width: 167,
+        height: 22.5
+    },
     bell: {
         position: 'absolute',
         top: heightPercentageToDP(5),

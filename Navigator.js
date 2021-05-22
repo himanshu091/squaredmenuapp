@@ -19,6 +19,7 @@ import MenuPreview from './screens/MenuPreview';
 import UserProfile from './screens/UserProfile';
 import EditProfile from './screens/EditProfile';
 import EditMenu from './screens/EditMenu';
+import Notifications from './screens/Notifications';
 import QR from './screens/QR';
 import DishDetail from './screens/DishDetail';
 import EditDish from './screens/EditDish';
@@ -88,6 +89,7 @@ function MainStack(){
                 <Main.Screen name="QR" component={QR} />
                 <Main.Screen name="DishDetail" component={DishDetail} />
                 <Main.Screen name="EditDish" component={EditDish} />
+                <Main.Screen name="Notification" component={Notifications} />
                 {/* <Main.Screen name="LocationTest" component={LocationTest} /> */}
                 <Main.Screen name="NewDish" component={NewDish} />
             </Main.Navigator>

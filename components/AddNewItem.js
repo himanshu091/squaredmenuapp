@@ -6,7 +6,7 @@ import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { addNewItem } from '../store/action';
 
-const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClose, navigation}) => {
+const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClose, navigation, currency}) => {
     const [isOn, setisOn] = useState(false)
     const [photo, setPhoto] = useState(null)
     const [name, setName] = useState("")
@@ -21,7 +21,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
             setErr("Please enter Price")
             return
         }
-        navigation.navigate('NewDish',{menu_id:menu_id, name:name, has_variants:!isOn?0:1, price:price})
+        navigation.navigate('NewDish',{menu_id:menu_id, name:name, has_variants:!isOn?0:1, price:price, currency:currency})
         closeFunc()
     }
     const imagepick = () => {
@@ -79,6 +79,14 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
             )
         }
     }
+    const checkPrice = (value) => {
+        if(value === ""){
+            setPrice(value)
+        }
+        if(!isNaN(value) && Number(value) > 0){
+            setPrice(value)
+        }
+    }
     return (
         <View style={styles.box}>
             <View>
@@ -102,12 +110,12 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                 
                 {!isOn && <TextInput
                     style={styles.input}
-                    onChangeText={setPrice}
+                    onChangeText={value=>checkPrice(value)}
                     value={price}
                     placeholder="Price"
                     textAlign="center"
                     placeholderTextColor="#635CC9"
-                    
+                    keyboardType="decimal-pad"
                 />}
                 <View style={styles.switchBox}>
                     <ToggleSwitch
@@ -168,7 +176,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     btn1:{
-
+        // backgroundColor:'red',
+        paddingVertical: 14,
+        paddingLeft: 25,
+        paddingRight: 25,
     },
     btnText1:{
         color: '#635CC9',

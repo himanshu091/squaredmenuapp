@@ -1,59 +1,39 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Switch, TouchableOpacity, Image } from 'react-native'
-
-const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) => {
-    console.log("DEfault Price =", defaultprice)
-    const [name, setname] = useState(defaultname)
-    const [nprice, setnprice] = useState(defaultprice)
-    useEffect(() => {
-        setnprice(defaultprice)
-    }, [])
+import ToggleSwitch from 'toggle-switch-react-native'
+const NonVarientPrice = ({closeFunc, O_price, editPrice}) => {
+    const [price, setprice] = useState(O_price)
     const [err, seterr] = useState("")
     const handleSubmit = () => {
-        if(name.trim().length < 1){
-            seterr("Enter Valid Varient Name")
-            return
-        }else if(nprice.trim().length < 1 ){
+        if(price.trim().length < 1 ){
             seterr("Enter Valid price")
             return
         }
-        editVariant(name,nprice,pos)
+        editPrice(price)
         closeFunc()
     }
     const checkPrice = (value) => {
         if(value === ""){
-            setnprice(value)
+            setprice(value)
         }
         if(!isNaN(value) && Number(value) > 0){
-            setnprice(value)
+            setprice(value)
         }
     }
     return (
         <View style={styles.box}>
             <View>
-                <Text style={styles.title}>Edit Varient</Text>
+                <Text style={styles.title}>Edit Price</Text>
                 <Text style={{textAlign: 'center', fontFamily: 'Poppins Medium', color: 'red'}}>{err}</Text>
                 <TextInput
                     style={styles.input}
-                    onChangeText={setname}
-                    value={name}
-                    placeholder="Name"
-                    textAlign="center"
-                    placeholderTextColor="#635CC9"
-                    
-                />
-                <TextInput
-                    style={styles.input}
                     onChangeText={value=>checkPrice(value)}
-                    value={`${nprice}`}
+                    value={`${price}`}
                     placeholder="Price"
                     textAlign="center"
                     placeholderTextColor="#635CC9"
                     keyboardType="decimal-pad"
                 />
-                
-                
-                
             </View>
             <View style={styles.allBtn}>
                 <TouchableOpacity style={styles.btn1} onPress={closeFunc}>
@@ -61,14 +41,14 @@ const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) =
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn2} onPress={handleSubmit}>
                     <Image source={require('../assets/images/icons/tick.png')} />
-                    <Text style={styles.btnText2}>Add</Text>
+                    <Text style={styles.btnText2}>Update</Text>
                 </TouchableOpacity>
             </View>
         </View>
     )
 }
 
-export default EditVarient
+export default NonVarientPrice
 
 const styles = StyleSheet.create({
     box:{

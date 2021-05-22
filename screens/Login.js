@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,6 +12,7 @@ import {
   AlertIOS,
 
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button } from 'react-native-elements'
 import {
   widthPercentageToDP as wp,
@@ -33,7 +34,8 @@ import {
   GraphRequestManager,
   LoginManager,
 } from 'react-native-fbsdk';
-
+import NetInfo from "@react-native-community/netinfo";
+import Offline from '../components/Offline'
 
 GoogleSignin.configure({
   webClientId:"955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
@@ -41,6 +43,8 @@ GoogleSignin.configure({
   // offlineAccess: true
 })
 const Login = ({ navigation,login, signInAPIGoogle }) => {
+  const [iceye, setIceye] = React.useState("visibility-off");
+  const [showPassword, setShowPassword] = React.useState(true);
   const [email, onChangeEmail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
   const [error, setError] = React.useState("");
@@ -49,6 +53,20 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
   const [userGoogleInfo, setUserGoogleInfo] = React.useState({});
   const [loaded, setLoaded] = React.useState(false);
   const [userFacebookInfo, setUserFacebookInfo] = React.useState({});
+  const [online, setonline] = useState(true)
+   
+  useEffect(() => {
+        // Subscribe
+      const unsubscribe = NetInfo.addEventListener(state => {
+          console.log("Connection type", state.type);
+          console.log("Is connected?", state.isConnected);
+          setonline(state.isConnected)
+      });
+      return () => {
+          // Unsubscribe
+          unsubscribe();
+      }
+  }, [])
 
   const signinWithGoogle = async () => {
     try{
@@ -66,11 +84,12 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
       bodyFormData.append('platform', 'google');
       bodyFormData.append('name', userInfo.user.name);
       bodyFormData.append('email', userInfo.user.email);
-      bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
+      bodyFormData.append('image', userInfo.user.photo);
+      bodyFormData.append('firebase_token', userInfo.idToken);
       bodyFormData.append('device_name', device_name);
       bodyFormData.append('device_modal', device_model);
       bodyFormData.append('device_os', device_os);
-      const res = await signInAPIGoogle(bodyFormData)
+      const res = await signInAPIGoogle(bodyFormData, "google")
       if(res.data.status){
         if(Platform.OS === 'android'){
           ToastAndroid.showWithGravity(
@@ -100,7 +119,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
   const getInfoFromToken = async token => {
     const PROFILE_REQUEST_PARAMS = {
       fields: {
-        string: 'id,name,first_name,last_name, email',
+        string: 'id,name,first_name,last_name, email, picture',
       },
     };
     const profileRequest = new GraphRequest(
@@ -120,11 +139,12 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
           bodyFormData.append('platform', 'facebook');
           bodyFormData.append('name', user.name);
           bodyFormData.append('email', user.email);
+          bodyFormData.append('image', user.picture.data.url);
           bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
           bodyFormData.append('device_name', device_name);
           bodyFormData.append('device_modal', device_model);
           bodyFormData.append('device_os', device_os);
-          const res = await signInAPIGoogle(bodyFormData)
+          const res = await signInAPIGoogle(bodyFormData, "facebook")
           if(res.data.status){
             if(Platform.OS === 'android'){
               ToastAndroid.showWithGravity(
@@ -214,6 +234,15 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
       }
     }
   }
+  changePwdType = () => {
+    if (showPassword) {
+      setIceye('visibility')
+      setShowPassword(false)
+    } else {
+      setIceye('visibility-off')
+      setShowPassword(true)
+    }
+  };
   return (
     <ScrollView>
       <Bg1
@@ -229,15 +258,16 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
       />
 
       <View style={styles.topElements}>
-        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RegistrationScreen')}>
+        {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RegistrationScreen')}>
           <Image
             source={require('../assets/images/topbar/back.png')}
             style={styles.button_image}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <View style={styles.logoflat}>
           <Image
             source={require('../assets/images/logoinapp/logoflat.png')}
+            style={styles.logo}
           />
         </View>
       </View>
@@ -258,6 +288,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
           autoCapitalize="none"
 
         />
+        <View style={{position:'relative'}}>
         <TextInput
           style={styles.input}
           onChangeText={onChangePassword}
@@ -265,9 +296,17 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
           placeholder="Password"
           textAlign="center"
           placeholderTextColor="#635CC9"
-          secureTextEntry
+          secureTextEntry={showPassword}
 
         />
+        <Icon style={styles.showicon}
+            name={iceye}
+            size={26}
+            color='#635CC9'
+            onPress={changePwdType}
+        />
+        </View>
+        
         <Button
           onPress={startLogin}
           title="Login"
@@ -297,7 +336,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
         <Text style={styles.bottomText} onPress={() => navigation.navigate('RegistrationScreen')} >I don't have an account</Text>
 
       </View>
-
+      {!online && <Offline/>}
     </ScrollView>
   );
 };
@@ -324,14 +363,18 @@ const styles = StyleSheet.create({
   topElements: {
     display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     alignItems: 'center',
-    marginHorizontal: 15,
+    marginHorizontal: 40,
     marginVertical: 40,
   },
   logoflat: {
     marginHorizontal: 55,
   },
+  logo: {
+    width: 167,
+    height: 22.5
+},
   button_image: {
     height: 42,
     width: 42,
@@ -392,6 +435,11 @@ const styles = StyleSheet.create({
     justifyContent:'center',
     marginTop:10
 
+},
+showicon: {
+  position: 'absolute',
+  top: 16,
+  right: 60
 },
 icon:{
     marginHorizontal:10,

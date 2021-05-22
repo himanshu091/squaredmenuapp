@@ -11,6 +11,7 @@ import { getItemDetail } from '../store/action';
 const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
 
     const [data, setdata] = useState(null)
+    const [allergensAvailable, setAllergensAvailable] = useState(false)
 
     useEffect(async () => {
         var bodyFormData = new FormData();
@@ -19,6 +20,14 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
         bodyFormData.append('item_id', route.params.item_id);
         const res = await getItemDetail(bodyFormData)
         setdata(res.data.data)
+        total_allegrens = 0
+        res.data.data.extra_options.map(opt => {
+            if(opt.is_checked !== 0){
+                total_allegrens += 1
+        }})
+        if(total_allegrens > 0){
+            setAllergensAvailable(true)
+        }
     }, [])
     return (
         <>
@@ -32,17 +41,18 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
                 }}
                 resizeMode={FastImage.resizeMode.cover}
             />
+            
             <TouchableOpacity 
                 style={styles.bell}
                 onPress={()=>navigation.goBack()}
             >
-                <Image source={require('../assets/images/onboarding/next.png')}/>
+                <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
             </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.edit}
-                onPress={()=>{navigation.navigate('EditDish',{item_id: route.params.item_id, menu_id: route.params.menu_id})}}
+                onPress={()=>{navigation.navigate('EditDish',{item_id: route.params.item_id, menu_id: route.params.menu_id, currency:route.params.currency})}}
                 >
-                <Image source={require('../assets/images/icons/edit.png')}/>
+                <Image source={require('../assets/images/icons/edit.png')} style={styles.editIcon}/>
             </TouchableOpacity>
             <View style={styles.part1}>
                 <View style={styles.dishNameContainer}><Text style={styles.dishName}>{data.item.name}</Text></View>
@@ -51,17 +61,17 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
                     <Image  style={styles.tm2} source={require('../assets/images/icons/vegan.png')} />
                 </View> */}
             </View>
-            <View style={styles.descBox}>
+            {data.item.description !== "" && <View style={styles.descBox}>
                 <Text style={styles.desc}>{data.item.description}</Text>
-            </View>
+            </View>}
             {data.item.has_variants === 1 && data.item.variants.map(vari => {
                 return <View key={vari.variant_id} style={styles.varientBody}>
                             <Text style={styles.varientName}>{vari.option}</Text>
-                            <Text style={styles.varientCost}>${vari.price}</Text>
+                            <Text style={styles.varientCost}>{vari.price_formatted}</Text>
                         </View>
             })}
             <View style={{borderTopWidth: 1, borderColor: '#00000010', paddingTop:20}}></View>
-            <View style={{paddingLeft: 20}}>
+            <View style={{paddingLeft: 20, marginBottom:20}}>
                 {data.item_types.map(type =>{
                     if(type.is_checked !== 0){
                         return  <View key={type.item_type_id} style={styles.compPart1}>
@@ -78,9 +88,12 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
                     }
                 })}
             </View>
+            {allergensAvailable && <Text  style={{fontFamily: 'Poppins Medium', fontSize: 18, color: '#000', marginTop: 20, marginLeft: widthPercentageToDP(4)}}>Allergens</Text>}
             <View style={{display:'flex', flexDirection:'row', flexWrap:'wrap'}}>
                 {data.extra_options.map(opt => {
+                    console.log(opt.is_checked)
                     if(opt.is_checked !== 0){
+                        
                         return <View style={styles.active} key={opt.option_id}>
                                     <Image style={styles.jar} source={require('../assets/images/icons/jar_white.png')} />
                                     <Text style={styles.activeText}>{opt.name}</Text>
@@ -124,9 +137,9 @@ const styles = StyleSheet.create({
     },
     edit:{
         position:'absolute',
-        top: heightPercentageToDP(1),
+        top: heightPercentageToDP(3),
         right:widthPercentageToDP(3.5),
-        transform: [{ rotate: '180deg'}]
+        transform: [{ rotate: '180deg'}],
     },
     part1:{
         flexDirection: 'row',
@@ -230,5 +243,9 @@ const styles = StyleSheet.create({
     tick:{
         height: 13.7,
         width: 18
+    },
+    editIcon:{
+        height: 58,
+        width: 58
     }
 })

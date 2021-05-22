@@ -60,7 +60,8 @@ const TrialScreen = ({navigation, updateSubscription, user_id, token}) => {
         </TouchableOpacity>
       </View>
       <View style={styles.logoflat}>
-          <Image source={require('../assets/images/logoinapp/logoflat.png')} />
+          <Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo}/>
+          
         </View>
 
       <View style={styles.heading}>
@@ -153,6 +154,10 @@ const styles = StyleSheet.create({
     alignItems:"center",
     marginBottom:60
   },
+  logo: {
+    width: 167,
+    height: 22.5
+},
   button_image: {
     height: 42,
     width: 42,

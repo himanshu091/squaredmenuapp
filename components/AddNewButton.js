@@ -43,5 +43,9 @@ const styles = StyleSheet.create({
         color: '#635CC9',
         fontSize: 15,
         marginLeft: 15
+    },
+    plus:{
+        height: 25,
+        width: 25
     }
 })

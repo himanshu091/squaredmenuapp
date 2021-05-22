@@ -6,7 +6,8 @@ const initialState = {
     plan_expired: null,
     plan_id: null,
     image: "",
-    new_device: true
+    new_device: true,
+    user_type: "normal"
 }
 export default (state = initialState, action) => {
     switch (action.type) {
@@ -20,7 +21,8 @@ export default (state = initialState, action) => {
                 plan_expired: action.payload.plan_expired,
                 plan_id: action.payload.plan_id,
                 image: action.payload.image,
-                new_device: false
+                new_device: false,
+                user_type: action.payload.user_type
             }
         case 'SIGNUP':
             return {

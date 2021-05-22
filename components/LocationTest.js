@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, ActivityIndicator, Button,StyleSheet,Dimensions } from 'react-native';
+import { Text, View, ActivityIndicator, Button,StyleSheet,Dimensions, TouchableOpacity } from 'react-native';
 import MapView from "react-native-maps";
 import Geolocation from '@react-native-community/geolocation';
+import { Image } from 'react-native';
 
 
 // Disable yellow box warning messages
@@ -41,7 +42,7 @@ export default class LocationTest extends Component {
         });
       },
       (error) => {
-        alert(error);
+        alert(JSON.stringify(error));
         this.setState({
           error: error.message,
           loading: false
@@ -78,9 +79,9 @@ export default class LocationTest extends Component {
 
   // Action to be taken after select location button click
   onLocationSelect = () => {
-    console.log(this.state.region);
+    console.log(this.state);
     // alert(this.state.userLocation);
-    this.props.setLatLong(this.state.region.latitude,this.state.region.longitude)
+    this.props.setLatLong(this.state.region.latitude,this.state.region.longitude, this.state.userLocation)
   }
   render() {
     if (this.state.loading) {
@@ -92,6 +93,15 @@ export default class LocationTest extends Component {
     } else {
       return (
         <View style={styles.container}>
+          <View style={styles.back}>
+              <TouchableOpacity onPress={this.props.closeMap}>
+                <Image
+                  source={require('../assets/images/topbar/back.png')}
+                  style={styles.button_image}
+                  
+                />
+              </TouchableOpacity>
+            </View>
           <View style={{ flex: 2 }}>
             {!!this.state.region.latitude && !!this.state.region.longitude &&
               <MapView
@@ -120,6 +130,7 @@ export default class LocationTest extends Component {
                 title="PICK THIS LOCATION"
                 disabled={this.state.regionChangeProgress}
                 onPress={this.onLocationSelect}
+                color='#635CC9'
               >
               </Button>
             </View>
@@ -137,6 +148,18 @@ const styles = StyleSheet.create({
     display: "flex",
     height: Dimensions.get("screen").height,
     width: Dimensions.get("screen").width
+  },
+  back:{
+    position: 'absolute',
+    top: 15,
+    left:15,
+    backgroundColor: '#635CC9',
+    borderRadius: 10,
+    zIndex: 1000
+  },
+  button_image: {
+    height: 42,
+    width: 42,
   },
   map: {
     flex: 1

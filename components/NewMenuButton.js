@@ -8,7 +8,7 @@ const NewMenuButton = ({navigation, uri, title,action}) => {
                 <View style={styles.subBox}>
                     <Image source={require('../assets/images/icons/plus.png')} style={styles.plus} />
                 </View>
-                <Text style={styles.new}>New Menu</Text>
+                <Text style={styles.new}>Add Section</Text>
         </TouchableOpacity>
     )
 }
@@ -49,4 +49,8 @@ const styles = StyleSheet.create({
         fontSize: 15,
         marginLeft: 15
     },
+    plus:{
+        height: 25,
+        width: 25
+    }
 })

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
 import { connect } from 'react-redux'
 import { deleteItem } from '../store/action'
 
-const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh, menu_id}) => {
+const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh, menu_id, currency, drag}) => {
 
     const deleteThisItem = async () => {
         var bodyFormData = new FormData();
@@ -15,18 +15,37 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
             refresh()
         }
     }
+    const createTwoButtonAlert = () =>
+        Alert.alert(
+        "Delete Item",
+        "Are you sure to delete this item?",
+        [
+            {
+            text: "Yes",
+            onPress: () => deleteThisItem(),
+            style: "destructive"
+            },
+            { 
+                text: "No", 
+                onPress: () => console.log("No Pressed"),
+                style: "cancel"
+             }
+        ]
+    );
     return (
         <View style={styles.mainContainer}>
             <View style={styles.sectionHeader}>
-                <Text style={styles.sectionText}></Text>
-                <TouchableOpacity style={styles.delete} onPress={deleteThisItem}>
-                    <Image source={require('../assets/images/icons/delete.png')}/>
+                <TouchableOpacity onPressIn={drag}><Image source={require('../assets/images/icons/drag_icon.png')} style={{width: 18, height: 18}}/></TouchableOpacity>
+                <TouchableOpacity style={styles.delete} onPress={createTwoButtonAlert}>
+                    <Image source={require('../assets/images/icons/delete.png')} style={{height: 16, width: 14}}/>
                 </TouchableOpacity>
             </View>
                 <View style={styles.menuItem}>
                     <View style={styles.menuSubItem}>
-                        <TouchableOpacity onPress={()=>navigation.navigate('DishDetail', {item_id:data.item_id, menu_id:menu_id})}><Text style={styles.itemName}>{menuName}</Text></TouchableOpacity>
-                        {data.has_variants === 0 && <Text style={styles.cost}>${parseFloat(data.price).toFixed(2)}</Text>}
+                        <TouchableOpacity style={styles.dishNameCont} onPress={()=>navigation.navigate('DishDetail', {item_id:data.item_id, menu_id:menu_id, currency:currency})}>
+                            <Text numberOfLines={1} style={styles.itemName}>{menuName}</Text>
+                        </TouchableOpacity>
+                        {data.has_variants === 0 && <Text style={styles.cost}>{data.price_formatted}</Text>}
                     </View>
                     
                     {
@@ -34,9 +53,9 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
                             return <View key={idx1} style={styles.varientBox}>
                                 <View style={styles.part1}>
                                     <Image source={require('../assets/images/icons/bullet.png')}/>
-                                    <Text style={styles.varientItemName}>{varItem.option}</Text>
+                                    <Text numberOfLines={1} style={styles.varientItemName}>{varItem.option}</Text>
                                 </View>
-                                <Text style={styles.cost}>${parseFloat(varItem.price).toFixed(2)}</Text>
+                                <Text style={styles.cost}>{varItem.price_formatted}</Text>
                             </View>
                         })
                     }
@@ -62,10 +81,10 @@ export default connect(mapStateToProps,{deleteItem})(MenuSection)
 const styles = StyleSheet.create({
     mainContainer:{
         backgroundColor: '#fff',
-        borderTopRightRadius: 17,
-        borderTopLeftRadius: 17,
+        borderRadius: 17,
         marginHorizontal: 25,
         marginBottom: 15,
+        paddingBottom: 10,
         elevation: 2
     },
     sectionHeader:{
@@ -91,7 +110,11 @@ const styles = StyleSheet.create({
     },
     itemName:{
         fontSize: 15,
-        fontFamily: 'Poppins Medium'
+        fontFamily: 'Poppins Medium',
+        textTransform: 'capitalize',
+    },
+    dishNameCont:{
+        flexBasis: '50%'
     },
     varientBox:{
         flexDirection: 'row',

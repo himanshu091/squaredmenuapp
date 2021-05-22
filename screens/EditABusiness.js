@@ -1,4 +1,4 @@
-import React, {useState, useEffect}from 'react';
+import React, {useState, useEffect, useRef}from 'react';
 import {
   StyleSheet,
   Text,
@@ -22,13 +22,15 @@ import ImagePicker from 'react-native-image-crop-picker';
 import Geolocation from '@react-native-community/geolocation';
 import { Platform } from 'react-native';
 import { connect } from 'react-redux';
-import {addNewRestaurant} from '../store/action'
+import {addNewRestaurant, getCurrency} from '../store/action'
 import { SafeAreaView } from 'react-native';
 import LocationTest from '../components/LocationTest';
+import RBSheet from "react-native-raw-bottom-sheet";
+import ImageChoice from '../components/ImageChoice';
+import {Picker} from '@react-native-picker/picker';
 
-
-
-const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) => {
+const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , getCurrency}) => {
+  const refRBSheet = useRef();
   const [step, setStep] = React.useState(1);
   const [name, onChangeName] = React.useState(route.params.data.name);
   const [address, onChangeAddress] = React.useState(route.params.data.address);
@@ -37,12 +39,23 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
   const [city, onChangeCity] = React.useState("");
   const [table, onChangeTable] = React.useState(`${route.params.data.total_tables}`);
   const [photo, onChangephoto] = React.useState(null);
-  const [defaultimage, setdefaultImage] = React.useState(route.params.data.logo);
+  const [defaultimage, setdefaultImage] = React.useState(route.params.data.cover);
   const [err, setErr] = React.useState("");
   const [lat, setlat] = React.useState(route.params.data.lat);
   const [long, setlong] = React.useState(route.params.data.lng);
   const [clicked, setclicked] = React.useState(false);
-
+  const [curr, setcurr] = React.useState(route.params.data.currency);
+  const [denominations, setDenominations] = React.useState([]);
+  useEffect(() => {
+    getListOfCurrency()
+  }, [])
+  const getListOfCurrency = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('user_id', user_id);
+    bodyFormData.append('token', token);
+    const res = await getCurrency(bodyFormData)
+    setDenominations(res.data.data)
+  }
   const imagepick = () => {
     ImagePicker.openPicker({
       width: 375,
@@ -51,6 +64,21 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
       includeBase64: true
     }).then(image => {
       // console.log(image)
+      refRBSheet.current.close()
+      onChangephoto(image)
+    }).catch(err=>{
+      console.log(err);
+    });
+  }
+  const camerapick = () => {
+    ImagePicker.openCamera({
+      width: 375,
+      height: 209,
+      cropping: true,
+      includeBase64: true
+    }).then(image => {
+      // console.log(image)
+      refRBSheet.current.close()
       onChangephoto(image)
     }).catch(err=>{
       console.log(err);
@@ -58,7 +86,8 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
   }
   const showMap = () => {setStep(2)}
   const hideMap = () => {setStep(1)}
-  const setLatLong = (lat, long) => {
+  const setLatLong = (lat, long, address) => {
+    onChangeAddress(address)
     setlat(lat);
     setlong(long);
     console.log(lat, long)
@@ -71,6 +100,9 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
     }else if(address.trim().length < 1){
       setErr("Enter Valid Address")
       return
+    }else if(curr.trim().length < 1){
+      setErr("Enter Valid Currency")
+      return
     }
     setclicked(true)
     var bodyFormData = new FormData();
@@ -80,8 +112,16 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
     bodyFormData.append('address', `${address}`);
     bodyFormData.append('lat', lat);
     bodyFormData.append('lng', long);
+    bodyFormData.append('currency', curr);
     if(photo){
       bodyFormData.append('image', {
+        name: name,
+        type: photo.mime,
+        uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+      });
+    }
+    if(photo){
+      bodyFormData.append('cover', {
         name: name,
         type: photo.mime,
         uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
@@ -94,13 +134,14 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
     bodyFormData.append('token', token);
     const res = await addNewRestaurant(bodyFormData)
     if(res.data.status){
-      Alert.alert(  
-        'Success',  
-        res.data.message,  
-        [  
-            {text: 'OK', onPress: () => navigation.goBack()},  
-        ]  
-      );
+      navigation.goBack()
+      // Alert.alert(  
+      //   'Success',  
+      //   res.data.message,  
+      //   [  
+      //       {text: 'OK', onPress: () => navigation.goBack()},  
+      //   ]  
+      // );
     }else{
       alert(res.data.message)
       setclicked(false)
@@ -127,21 +168,21 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
             style={styles.button_image}
           />
         </TouchableOpacity>
-        <View style={styles.logoflat}>
+        {/* <View style={styles.logoflat}>
 
           <Image
             source={require('../assets/images/logoinapp/logoflat.png')}
           />
-        </View>
+        </View> */}
       </View>
 
       <View style={styles.heading}>
-        <Text style={styles.headingText}>Add Business</Text>
+        <Text style={styles.headingText}>Edit Business</Text>
       </View>
 
       <View style={styles.inputFields}>
 
-        <TouchableOpacity onPress={imagepick} style={styles.imageContainer}>
+        <TouchableOpacity onPress={() => refRBSheet.current.open()} style={styles.imageContainer}>
           <Image
             source={!photo?(defaultimage?{uri: defaultimage}:require("../assets/images/icons/imageicon.png")):{uri:`data:${photo.mime};base64,${photo.data}`}}
             style={styles.imageIcon}
@@ -158,6 +199,13 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
           placeholderTextColor="#635CC9"
 
         />
+        <TouchableOpacity style={styles.locationContainer} onPress={showMap}>
+        <Image
+          source={require("../assets/images/icons/location.png")}
+          style={{height: 20, width: 20}}
+        />
+        <Text style={styles.locationText}>Locate me</Text>
+      </TouchableOpacity>
         <TextInput
           style={styles.input}
           onChangeText={onChangeAddress}
@@ -189,24 +237,33 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
         /> */}
         <TextInput
           style={styles.input}
-          onChangeText={onChangeTable}
+          onChangeText={value=>onChangeTable(value.replace(/[^0-9]/g, ''))}
           value={table}
           placeholder="Number of tables (optional)"
           textAlign="center"
           placeholderTextColor="#635CC9"
           keyboardType="number-pad"
         />
+         <View style={styles.inputselect}>
 
+          <Picker
+            selectedValue={curr}
+            dropdownIconColor="#000000"
+            onValueChange={(itemValue, itemIndex) =>
+              setcurr(itemValue)
+          }>
+            
+            {denominations.map((denom, idx) => {
+              return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#00000099" fontFamily="Poppins Light"/>
+            })}
+          </Picker>
+            </View>
       </View>
-      <TouchableOpacity style={styles.locationContainer} onPress={showMap}>
-        <Image
-          source={require("../assets/images/icons/location.png")}
-        />
-        <Text style={styles.locationText}>Locate me</Text>
-      </TouchableOpacity>
+      
+      
       <Button
         onPress={() => { handleSubmit()}}
-        title="Add"
+        title="Update"
         titleStyle={{ fontSize: 15 }}
         buttonStyle={styles.btn1}
         containerStyle={{ marginVertical: 15 }}
@@ -214,7 +271,27 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route }) 
       />
 
     </ScrollView>}
-    {step === 2 && <LocationTest setLatLong={(lat, long)=>setLatLong(lat, long)} />}
+    {step === 2 && <LocationTest setLatLong={(lat, long, around)=>setLatLong(lat, long, around)} closeMap={()=>setStep(1)} />}
+    <RBSheet
+        ref={refRBSheet}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
+        customStyles={{
+          container: {
+            ...styles.container,
+            height: 180,
+            backgroundColor: '#f4f4f4'
+          },
+          wrapper: {
+            backgroundColor: "#00000028"
+          },
+          draggableIcon: {
+            backgroundColor: "#f4f4f4"
+          }
+        }}
+      >
+        <ImageChoice imagepick={()=>imagepick()} camerapick={()=>camerapick()}/>
+    </RBSheet>
     </SafeAreaView>
   );
 };
@@ -224,7 +301,7 @@ const mapStateToProps = state => {
     token: state.auth.token
   }
 }
-export default connect(mapStateToProps,{addNewRestaurant})(EditABusiness);
+export default connect(mapStateToProps,{addNewRestaurant, getCurrency})(EditABusiness);
 
 const styles = StyleSheet.create({
   heading: {
@@ -275,7 +352,18 @@ const styles = StyleSheet.create({
 
 
   },
-
+  inputselect: {
+    height: 50,
+    marginVertical: 5,
+    marginHorizontal: 40,
+    borderWidth: 1,
+    borderRadius: 25,
+    fontSize: 15,
+    backgroundColor: "#E7E6F3",
+    fontFamily: "Poppins Regular",
+    borderColor: "#E7E6F3",
+    paddingHorizontal: 20
+  },
   btn1: {
 
     backgroundColor: "#635CC9",

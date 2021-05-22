@@ -1,4 +1,4 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useState, useRef} from 'react';
 import {
   StyleSheet,
   Text,
@@ -22,8 +22,12 @@ import Bg1 from '../assets/images/banners/backgroundimage.svg';
 import { connect } from 'react-redux';
 import { addMenu } from '../store/action';
 import ImagePicker from 'react-native-image-crop-picker';
+import RBSheet from "react-native-raw-bottom-sheet";
+import ImageChoice from '../components/ImageChoice';
+import { SafeAreaView } from 'react-native';
 
 const NewMenu = ({navigation, route, user_id, token, addMenu}) => {
+  const refRBSheet = useRef();
   const [menu, onChangeMenu] = React.useState("");
   const [note, onChangeNote] = React.useState("");
   const [isOn, setisOn] = useState(true);
@@ -37,10 +41,25 @@ const NewMenu = ({navigation, route, user_id, token, addMenu}) => {
       cropping: true,
       includeBase64: true
     }).then(image => {
-        // console.log(image)
-        onChangephoto(image)
+      // console.log(image)
+      refRBSheet.current.close()
+      onChangephoto(image)
     }).catch(err=>{
-        console.log(err);
+      console.log(err);
+    });
+  }
+  const camerapick = () => {
+    ImagePicker.openCamera({
+      width: 375,
+      height: 209,
+      cropping: true,
+      includeBase64: true
+    }).then(image => {
+      // console.log(image)
+      refRBSheet.current.close()
+      onChangephoto(image)
+    }).catch(err=>{
+      console.log(err);
     });
   }
 const handleSubmit = async () => {
@@ -50,10 +69,11 @@ const handleSubmit = async () => {
     }else if(!photo){
         setErr("Please select an Image")
         return
-    }else if(note.trim().length < 1){
-      setErr("Please enter Note/Description")
-      return
     }
+    // else if(note.trim().length < 1){
+    //   setErr("Please enter Note/Description")
+    //   return
+    // }
     setclicked(true)
     var bodyFormData = new FormData();
     bodyFormData.append('user_id', user_id);
@@ -69,33 +89,30 @@ const handleSubmit = async () => {
     bodyFormData.append('description', menu);
     const res = await addMenu(bodyFormData)
     if(res.data.status){
-        Alert.alert(  
-            'Success',  
-            res.data.message,  
-            [  
-                {text: 'OK', onPress: () => navigation.goBack()},  
-            ]  
-          );
+        // Alert.alert(  
+        //     'Success',  
+        //     res.data.message,  
+        //     [  
+        //         {text: 'OK', onPress: () => navigation.goBack()},  
+        //     ]  
+        //   );
           setclicked(false)
+          navigation.goBack()
     }else{
         setclicked(false)
         alert(res.data.message)
     }
 }
   return (
+    <SafeAreaView>
     <ScrollView>
-      <TouchableOpacity onPress={()=>imagepick()} >
-        {!photo?<Bg1
-          height={hp(30)}
-          width={wp('100%')}
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-          }}
-          marginTop={-4}
-          resizeMode="cover"
+        <TouchableOpacity onPress={() => refRBSheet.current.open()} >
+        {!photo?<Image
+        source={require('../assets/images/banners/imageUpload.png')}
+         
+          style={{height:wp(100)*418/750, width: wp(100)}}
+          // marginTop={-4}
+          resizeMode="contain"
         />:<Image source={{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.altImage} resizeMode="cover" />}
       
 
@@ -123,17 +140,17 @@ const handleSubmit = async () => {
         <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
         <View style={styles.editMenu}>
           <TextInput
-            fontSize={48}
+            fontSize={wp(11)}
             fontFamily={'Poppins Medium'}
             onChangeText={onChangeMenu}
             value={menu}
-            width={wp(60)}
+            width={wp(100)}
             multiline={true}
-            placeholder="Silema Menu"
+            placeholder="e.g. Breakfast, Lunch, Dinner"
             opacity={0.3}
             placeholderTextColor="#000000"
           />
-          <Image source={require('../assets/images/icons/delete.png')} />
+          {/* <Image source={require('../assets/images/icons/delete.png')} /> */}
         </View>
         <TextInput
           fontSize={15}
@@ -168,6 +185,27 @@ const handleSubmit = async () => {
         </View>
       </View>
     </ScrollView>
+    <RBSheet
+    ref={refRBSheet}
+    closeOnDragDown={true}
+    closeOnPressMask={true}
+    customStyles={{
+      container: {
+        ...styles.container,
+        height: 180,
+        backgroundColor: '#f4f4f4'
+      },
+      wrapper: {
+        backgroundColor: "#00000028"
+      },
+      draggableIcon: {
+        backgroundColor: "#f4f4f4"
+      }
+    }}
+  >
+    <ImageChoice imagepick={()=>imagepick()} camerapick={()=>camerapick()}/>
+</RBSheet>
+</SafeAreaView>
   );
 };
 const mapStateToProps = state => {
@@ -210,12 +248,13 @@ const styles = StyleSheet.create({
   },
   button: {},
   topElements: {
+    position: 'absolute',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginHorizontal: 15,
-    marginVertical: 40,
+    marginTop: 25,
   },
   logoflat: {
     marginHorizontal: 55,
@@ -226,7 +265,7 @@ const styles = StyleSheet.create({
   },
   inputFields: {
     marginHorizontal: 15,
-    marginTop: hp('15%'),
+    // marginTop: hp('15%'),
   },
   input: {
     height: 50,
@@ -343,11 +382,11 @@ const styles = StyleSheet.create({
     marginTop: 120,
   },
   altImage:{
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0, 
-    backgroundColor:'red',
+    // position: 'absolute',
+    // top: 0,
+    // left: 0,
+    // right: 0, 
+    // backgroundColor:'red',
     width: wp(100),
     height: wp(100)*209/375
   }

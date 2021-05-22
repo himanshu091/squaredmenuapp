@@ -1,6 +1,7 @@
+import { GoogleSignin } from '@react-native-community/google-signin';
 import axios from 'axios'
 
-const API_URL = "http://scanorderpay.ctportfolio.in/api/restaurant";
+const API_URL = "http://squaredmenudevs.ctportfolio.in/api/restaurant";
 
 export const SIGNIN= 'SIGNIN';
 export const login = (data) => async (dispatch, getState) => {
@@ -16,7 +17,7 @@ export const login = (data) => async (dispatch, getState) => {
         if(res.data.status){
             dispatch({
                 type: SIGNIN,
-                payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id, image: res.data.data.image}
+                payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id, image: res.data.data.image, user_type:"normal"}
             })
         }
         return res
@@ -54,7 +55,11 @@ export const beginAuth = () => async (dispatch, getState) => {
 };
 export const LOGOUT= 'LOGOUT';
 export const logout = () => async (dispatch, getState) => {
-    
+    // console.log(getState().auth.user_type)
+    if(getState().auth.user_type === "google"){
+        await GoogleSignin.revokeAccess();
+        await GoogleSignin.signOut();
+    }
     dispatch({
         type: LOGOUT,
     });
@@ -174,7 +179,7 @@ export const addNewRestaurant = (data) => async (dispatch, getState) => {
     return res
 };
 
-export const signInAPIGoogle = (data) => async (dispatch, getState) => {
+export const signInAPIGoogle = (data, platform) => async (dispatch, getState) => {
     const res = await axios({
         method: 'post',
         url: `${API_URL}/social-media-login`,
@@ -185,7 +190,7 @@ export const signInAPIGoogle = (data) => async (dispatch, getState) => {
     if(res.data.status){
         dispatch({
             type: SIGNIN,
-            payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id, image: res.data.data.image}
+            payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id, image: res.data.data.image, user_type:platform}
         })
     }
     return res
@@ -281,5 +286,72 @@ export const updateProfilePic = (data) => async (dispatch, getState) => {
         headers: {'Content-Type': 'multipart/form-data' }
     })
     console.log("Update Profile =>",res.data)
+    return res
+};
+
+export const sendQrOverMail = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/download-qrcode`,data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("QR Send Over Mail =>",res.data)
+    return res
+}
+export const generateQR = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/generate-qrcode`,data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("QR Send Over Mail =>",res.data)
+    return res
+}
+export const getNotifications = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/get-notifications`,data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Notifications =>",res.data)
+    return res
+}
+export const getCurrency = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/get-currency`,data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    // console.log("Currency =>",res.data)
+    return res
+}
+
+export const updateMenuOrder = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/update-menu-order`,data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })  
+    console.log("Menu Order =>",res.data)
+    return res
+}
+
+export const updateItemOrder = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/update-item-order`,data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Item Order =>",res.data)
+    return res
+}
+export const deleteMenu = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/delete-menu`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Delete Menu =>",res.data)
     return res
 };

@@ -51,6 +51,7 @@ const RegisterPromoCode = ({navigation}) => {
           <View style={styles.logoflat}>
             <Image
               source={require('../assets/images/logoinapp/logoflat.png')}
+              style={styles.logo}
             />
           </View>
         </View>
@@ -155,6 +156,10 @@ const styles = StyleSheet.create({
   logoflat: {
     marginHorizontal: 55,
   },
+  logo: {
+    width: 167,
+    height: 22.5
+},
   button_image: {
     height: 42,
     width: 42,

@@ -77,8 +77,8 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
   }
   return (
     <ScrollView>
-      <TouchableOpacity onPress={imagepick}>
-        <ImageBackground source={require('../assets/images/banners/imageUpload.png')} style={{ width: wp(100), height:wp(100)*418/750 }}>
+      <View>
+        <ImageBackground source={require('../assets/images/banners/lands.png')} style={{ width: wp(100), height:wp(100)*224/375 }}>
           <View style={styles.topElements}>
             <TouchableOpacity
               style={styles.button}
@@ -89,17 +89,17 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
               />
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={styles.button}
               onPress={() => navigation.navigate('RegistrationScreen')}>
               <Image
                 source={require('../assets/images/icons/edit2.png')}
                 style={styles.button_image}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
         </ImageBackground>
-      </TouchableOpacity>
+      </View>
 
 
 

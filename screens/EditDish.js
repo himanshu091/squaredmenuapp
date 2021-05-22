@@ -120,7 +120,7 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
     const imagepick = () => {
         ImagePicker.openPicker({
           width: 375,
-          height: 209,
+          height: 225,
           cropping: true,
           includeBase64: true
         }).then(image => {
@@ -134,7 +134,7 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
       const camerapick = () => {
         ImagePicker.openCamera({
           width: 375,
-          height: 209,
+          height: 225,
           cropping: true,
           includeBase64: true
         }).then(image => {
@@ -308,7 +308,7 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
             <View style={styles.line}></View>
 
             <View style={styles.hide}>
-                <Text style={styles.compText}>Hide/deactivate</Text>
+                <Text style={styles.compText}>Active</Text>
                 <ToggleSwitch
                     isOn={isOn}
                     onColor="#635CC9"

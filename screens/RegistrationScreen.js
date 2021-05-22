@@ -270,7 +270,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
         style={styles.input}
         onChangeText={onChangeName}
         value={name}
-        placeholder="Name"
+        placeholder="Full Name"
         textAlign="center"
         placeholderTextColor="#635CC9"
         

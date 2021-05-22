@@ -27,7 +27,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
     const imagepick = () => {
         ImagePicker.openPicker({
           width: 375,
-          height: 209,
+          height: 225,
           cropping: true,
           includeBase64: true
         }).then(image => {

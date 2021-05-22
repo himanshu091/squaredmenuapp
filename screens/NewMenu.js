@@ -37,7 +37,7 @@ const NewMenu = ({navigation, route, user_id, token, addMenu}) => {
   const imagepick = () => {
     ImagePicker.openPicker({
       width: 375,
-      height: 209,
+      height: 225,
       cropping: true,
       includeBase64: true
     }).then(image => {
@@ -51,7 +51,7 @@ const NewMenu = ({navigation, route, user_id, token, addMenu}) => {
   const camerapick = () => {
     ImagePicker.openCamera({
       width: 375,
-      height: 209,
+      height: 225,
       cropping: true,
       includeBase64: true
     }).then(image => {

@@ -40,7 +40,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
   const imagepick = () => {
     ImagePicker.openPicker({
       width: 375,
-      height: 209,
+      height: 225,
       cropping: true,
       includeBase64: true
     }).then(image => {
@@ -54,7 +54,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
   const camerapick = () => {
     ImagePicker.openCamera({
       width: 375,
-      height: 209,
+      height: 225,
       cropping: true,
       includeBase64: true
     }).then(image => {

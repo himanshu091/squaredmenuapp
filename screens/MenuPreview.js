@@ -8,6 +8,7 @@ import SubMenu from '../components/SubMenu'
 import RBSheet from "react-native-raw-bottom-sheet";
 import ThemeChooser from '../components/ThemeChooser'
 import { WebView } from 'react-native-webview';
+import { Platform } from 'react-native'
 
 const MenuPreview = ({navigation, route}) => {
     const [loading, setloading] = useState(true)
@@ -127,22 +128,21 @@ const styles = StyleSheet.create({
     },
     exitBtn:{
         position: 'absolute',
-        top: 42,
-        right: widthPercentageToDP(50)-50,
+        top: Platform.OS==='ios'?75:42,
+        right: 3,
         zIndex: 1
     },
     exbt:{
         backgroundColor: '#fff',
-        paddingTop: 4.5,
-        paddingBottom: 2.5,
-        paddingHorizontal: 11,
-        borderRadius: 50,
-        borderColor:'#635cc9',
-        borderWidth: 1,
+        paddingHorizontal: 18,
+        paddingVertical: 7,
+        borderRadius: 23,
+       
+      
     },
     btnText:{
         color: '#635cc9',
         fontFamily: 'Poppins SemiBold',
-        fontSize: 14
+        fontSize: 16
     }
 })

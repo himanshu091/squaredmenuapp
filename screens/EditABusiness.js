@@ -59,7 +59,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
   const imagepick = () => {
     ImagePicker.openPicker({
       width: 375,
-      height: 209,
+      height: 225,
       cropping: true,
       includeBase64: true
     }).then(image => {
@@ -73,7 +73,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
   const camerapick = () => {
     ImagePicker.openCamera({
       width: 375,
-      height: 209,
+      height: 225,
       cropping: true,
       includeBase64: true
     }).then(image => {

@@ -84,7 +84,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
     const imagepick = () => {
         ImagePicker.openPicker({
           width: 375,
-          height: 209,
+          height: 225,
           cropping: true,
           includeBase64: true
         }).then(image => {
@@ -98,7 +98,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
       const camerapick = () => {
         ImagePicker.openCamera({
           width: 375,
-          height: 209,
+          height: 225,
           cropping: true,
           includeBase64: true
         }).then(image => {

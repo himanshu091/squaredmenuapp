@@ -27,6 +27,7 @@ import { Alert } from 'react-native';
 import { Linking } from 'react-native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const UserProfile = ({ navigation, name, email, logout, user_id,updatePic, token, profileInfo, updateProfilePic, user_type }) => {
   const refRBSheet = useRef();
@@ -221,9 +222,12 @@ const refresh = async () => {
                 {/* <Text style={styles.smallShareText}>Share this code and get 1 month free premium features</Text> */}
                 
               </View>
-              <TouchableOpacity onPress={()=>{onShare(data.sharing_msg)}}>
+              {data && <TouchableOpacity onPress={()=>{onShare(data.sharing_msg)}}>
                 <Image source={require('../assets/images/icons/share.png')} />
-              </TouchableOpacity>
+              </TouchableOpacity>}
+              {!data && <TouchableOpacity>
+                <Image source={require('../assets/images/icons/share.png')} />
+              </TouchableOpacity>}
             </View>
             {/* {data && <Text style={styles.smallBottomText} onPress={() => Linking.openURL(data.web_url)}>{data.web_url}</Text>} */}
           </View>
@@ -234,7 +238,11 @@ const refresh = async () => {
               <Image style={styles.styleImg} source={require('../assets/images/icons/share2.png')}/>
               <Text style={styles.styleTxt}>Open Menu</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={logout} style={styles.logoutbtn}><Text style={styles.logoutTxt} >Logout</Text></TouchableOpacity>
+            <TouchableOpacity onPress={logout} style={styles.shareBtn}>
+              <Icon style={styles.styleImg} name="logout" size={25} color="#635CC9"/>
+              <Text style={styles.styleTxt}>Logout</Text>
+            </TouchableOpacity>
+            {/* <TouchableOpacity onPress={} style={styles.logoutbtn}><Text style={styles.logoutTxt} >Logout</Text></TouchableOpacity> */}
           </View>
       </ScrollView>
       <RBSheet

@@ -24,7 +24,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
     const refRBSheet1 = useRef();
     const refRBSheet2 = useRef();
     const refRBSheet3 = useRef();
-    const [isOn, setisOn] = useState(false)
+    const [isOn, setisOn] = useState(true)
     const [options, setOptions] = useState([])
     const [selectedOptions, setSelectedOptions] = useState([])
     const [types, setTypes] = useState([])

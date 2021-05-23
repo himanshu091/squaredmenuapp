@@ -2,11 +2,11 @@ import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
-const MenuButtons = ({uri, title,navigation, data, restaurant_id, themeURL, brandImage, drag}) => {
+const MenuButtons = ({uri, title,navigation, data, restaurant_id, themeURL, brandImage, drag, public_url}) => {
     console.log(data)
     return (
         <View style={styles.card}>
-            <TouchableOpacity onPress={()=>{navigation.navigate('MenuList', {menu_id:data.menu_id, themeURL:themeURL, brandImage: brandImage, restaurant_id:restaurant_id})}} style={styles.part1}>
+            <TouchableOpacity onPress={()=>{navigation.navigate('MenuList', {menu_id:data.menu_id, themeURL:themeURL, public_url:public_url, brandImage: brandImage, restaurant_id:restaurant_id})}} style={styles.part1}>
                 <View style={styles.subBox}>
                     <Image source={{uri:uri}} style={styles.plus} />
                 </View>

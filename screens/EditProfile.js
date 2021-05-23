@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   TextInput,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button } from 'react-native-elements';
 import {
   widthPercentageToDP as wp,
@@ -30,14 +31,26 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
   const [confirm, onChangeConfirm] = React.useState("")
   const [newpassword, onChangeNewPassword] = React.useState("");
   const [photo, setPhoto] = React.useState(null);
+  const [clicked, setclicked] = React.useState(false);
+  
+
+  const [iceye1, setIceye1] = React.useState("visibility-off");
+  const [showPassword1, setShowPassword1] = React.useState(true);
+
+  const [iceye2, setIceye2] = React.useState("visibility-off");
+  const [showPassword2, setShowPassword2] = React.useState(true);
+
+  const [iceye3, setIceye3] = React.useState("visibility-off");
+  const [showPassword3, setShowPassword3] = React.useState(true);
 
   const handleSubmit = async () => {
     var bodyFormData = new FormData();
     bodyFormData.append('current_pass', old);
     bodyFormData.append('new_pass', newpassword);
     bodyFormData.append('user_id', user_id);
+    setclicked(true)
     const res = await changePassword(bodyFormData)
-
+    setclicked(false)
     ToastAndroid.showWithGravity(
       res.data.message,
       ToastAndroid.SHORT,
@@ -75,6 +88,36 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
         console.log(err);
     });
   }
+  changePwdType = (position) => {
+    if(position === 1){
+      if (showPassword1) {
+        setIceye1('visibility')
+        setShowPassword1(false)
+      } else {
+        setIceye1('visibility-off')
+        setShowPassword1(true)
+      }
+    }
+    if(position === 2){
+      if (showPassword2) {
+        setIceye2('visibility')
+        setShowPassword2(false)
+      } else {
+        setIceye2('visibility-off')
+        setShowPassword2(true)
+      }
+    }
+    if(position === 3){
+      if (showPassword3) {
+        setIceye3('visibility')
+        setShowPassword3(false)
+      } else {
+        setIceye3('visibility-off')
+        setShowPassword3(true)
+      }
+    }
+    
+  };
   return (
     <ScrollView>
       <View>
@@ -107,44 +150,72 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
       <View style={styles.inputFields}>
 
         <Text style={styles.nameText}>{name}</Text>
-        <TextInput
-          fontSize={15}
-          fontFamily={"Poppins Regular"}
-          onChangeText={onChangeOld}
-          value={old}
-          placeholder="Old Password"
-          opacity={0.3}
-          placeholderTextColor="#000000"
-          secureTextEntry
-        />
-        <TextInput
-          fontSize={15}
-          fontFamily={"Poppins Regular"}
-          onChangeText={onChangeNewPassword}
-          value={newpassword}
-          placeholder="New Password"
-          opacity={0.3}
-          placeholderTextColor="#000000"
-          secureTextEntry
-        />
-        <TextInput
-          fontSize={15}
-          fontFamily={"Poppins Regular"}
-          onChangeText={onChangeConfirm}
-          value={confirm}
-          placeholder="Confirm New Password"
-          opacity={0.3}
-          placeholderTextColor="#000000"
-          secureTextEntry
-        />
+        <View style={{position:'relative'}}>
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeOld}
+            value={old}
+            placeholder="Old Password"
+            textAlign="center"
+            placeholderTextColor="#635CC9"
+            secureTextEntry={showPassword1}
+          />
+          <Icon style={styles.showicon}
+              name={iceye1}
+              size={26}
+              color='#635CC9'
+              onPress={()=>changePwdType(1)}
+          />
+        </View>
+        <View style={{position:'relative'}}>
+          <TextInput
+            style={styles.input}
+            fontSize={15}
+            fontFamily={"Poppins Regular"}
+            onChangeText={onChangeNewPassword}
+            value={newpassword}
+            placeholder="New Password"
+            textAlign="center"
+            placeholderTextColor="#635CC9"
+            secureTextEntry={showPassword2}
+          />
+          <Icon style={styles.showicon}
+              name={iceye2}
+              size={26}
+              color='#635CC9'
+              onPress={()=>changePwdType(2)}
+          />
+        </View>
+        <View style={{position:'relative'}}>
+          <TextInput
+            style={styles.input}
+            fontSize={15}
+            fontFamily={"Poppins Regular"}
+            onChangeText={onChangeConfirm}
+            value={confirm}
+            placeholder="Confirm New Password"
+            textAlign="center"
+            placeholderTextColor="#635CC9"
+            secureTextEntry={showPassword3}
+          />
+          <Icon style={styles.showicon}
+              name={iceye3}
+              size={26}
+              color='#635CC9'
+              onPress={()=>changePwdType(3)}
+          />
+        </View>
+        
+        
+        
 
         <Button
           onPress={handleSubmit}
           title="Salva"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
-          containerStyle={{ marginTop: 80 }}
-
+          containerStyle={{ marginTop: 40 }}
+          loading={clicked}
         />
       </View>
     </ScrollView>
@@ -209,17 +280,7 @@ const styles = StyleSheet.create({
   },
   inputFields: {
     marginHorizontal: 15,
-    marginTop: 50,
-  },
-  input: {
-    height: 50,
-    marginVertical: 5,
-    marginHorizontal: 40,
-    borderWidth: 1,
-    borderRadius: 25,
-    fontSize: 15,
-    backgroundColor: '#E7E6F3',
-    borderColor: '#E7E6F3',
+    marginTop: 20,
   },
   forgotText: {
     fontSize: 15,
@@ -246,7 +307,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins Medium',
     lineHeight: 60 * 0.75,
     paddingTop: 40 - 35 * 0.75,
-    textTransform: 'capitalize'
+    textTransform: 'capitalize',
+    marginBottom: 20
   },
   smallText: {
     fontSize: 15,
@@ -310,6 +372,20 @@ const styles = StyleSheet.create({
     color: '#B3B3B3',
     fontFamily: 'Poppins Regular',
     marginVertical: 20
-  }
-
+  },
+  input: {
+    height: 50,
+    marginVertical: 5,
+    marginHorizontal: 15,
+    borderWidth: 1,
+    borderRadius: 25,
+    fontSize: 15,
+    backgroundColor: "#E7E6F3",
+    borderColor: "#E7E6F3",
+  },
+  showicon: {
+    position: 'absolute',
+    top: 16,
+    right: 35
+  },
 });

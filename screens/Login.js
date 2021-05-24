@@ -36,6 +36,7 @@ import {
 } from 'react-native-fbsdk';
 import NetInfo from "@react-native-community/netinfo";
 import Offline from '../components/Offline'
+import { SafeAreaView } from 'react-native';
 
 GoogleSignin.configure({
   webClientId:"955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
@@ -244,6 +245,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
     }
   };
   return (
+    <SafeAreaView style={{flex:1}}>
     <ScrollView>
       <Bg1
         height={hp('40%')}
@@ -338,6 +340,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
       </View>
       {!online && <Offline/>}
     </ScrollView>
+    </SafeAreaView>
   );
 };
 
@@ -381,7 +384,7 @@ const styles = StyleSheet.create({
   },
   inputFields: {
     marginVertical: 15,
-    marginTop: 90
+    marginTop: Platform.OS === 'ios'? 120:90
   },
   input: {
     height: 50,
@@ -419,6 +422,14 @@ const styles = StyleSheet.create({
     shadowRadius: 5.84,
 
     elevation: 5,
+//ios
+        shadowColor: "#d4d4d4",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
 
   },
   bottomText: {

@@ -143,7 +143,7 @@ const refresh = async () => {
     <SafeAreaView>
       <ScrollView>
         <Bg1
-          height={hp('40%')}
+          height={Platform.OS === 'ios'?hp('31'):hp('40')}
           width={wp('100%')}
           style={{
             position: 'absolute',
@@ -234,7 +234,7 @@ const refresh = async () => {
           
         </View>
           <View style={styles.bottomBtn}>
-            <TouchableOpacity onPress={() => Linking.openURL(data.web_url)} style={styles.shareBtn}>
+            <TouchableOpacity onPress={() => data.has_restaurant===1?Linking.openURL(data.web_url):alert("Please create a restaurant.")} style={styles.shareBtn}>
               <Image style={styles.styleImg} source={require('../assets/images/icons/share2.png')}/>
               <Text style={styles.styleTxt}>Open Menu</Text>
             </TouchableOpacity>

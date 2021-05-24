@@ -171,7 +171,7 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
           <TextInput
             style={styles.input}
             fontSize={15}
-            fontFamily={"Poppins Regular"}
+            fontFamily="Poppins Regular"
             onChangeText={onChangeNewPassword}
             value={newpassword}
             placeholder="New Password"
@@ -190,7 +190,7 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
           <TextInput
             style={styles.input}
             fontSize={15}
-            fontFamily={"Poppins Regular"}
+            fontFamily="Poppins Regular"
             onChangeText={onChangeConfirm}
             value={confirm}
             placeholder="Confirm New Password"
@@ -252,6 +252,14 @@ const styles = StyleSheet.create({
     shadowRadius: 5.84,
 
     elevation: 5,
+//ios
+        shadowColor: "#d4d4d4",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
 
   },
   headingText: {

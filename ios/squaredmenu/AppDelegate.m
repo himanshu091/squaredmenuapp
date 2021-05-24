@@ -54,6 +54,15 @@ static void InitializeFlipper(UIApplication *application) {
   [RNSplashScreen show];
   [[FBSDKApplicationDelegate sharedInstance] application:application 
   didFinishLaunchingWithOptions:launchOptions];
+  for (NSString* family in [UIFont familyNames])
+  {
+      NSLog(@"%@", family);
+
+      for (NSString* name in [UIFont fontNamesForFamilyName: family])
+      {
+          NSLog(@"Family name:  %@", name);
+      }
+  }
   return YES;
 }
 

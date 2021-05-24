@@ -85,7 +85,15 @@ const styles = StyleSheet.create({
         marginHorizontal: 25,
         marginBottom: 15,
         paddingBottom: 10,
-        elevation: 2
+        elevation:2,
+//ios
+        shadowColor: "#d4d4d4",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
     },
     sectionHeader:{
         flexDirection: 'row',

@@ -35,7 +35,23 @@ const styles = StyleSheet.create({
         padding: 10,
         marginHorizontal: widthPercentageToDP(8),
         marginTop: 15,
-        elevation: 2,
+        elevation:2,
+//ios
+        shadowColor: "#d4d4d4",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
+        //ios
+        shadowColor: "#d4d4d4",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.10,
+        shadowRadius: 3.84,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',

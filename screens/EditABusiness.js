@@ -9,12 +9,12 @@ import {
   TouchableOpacity,
   TextInput,
   Alert,
-
 } from 'react-native';
 import { Button } from 'react-native-elements'
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
+  heightPercentageToDP,
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
@@ -31,6 +31,7 @@ import {Picker} from '@react-native-picker/picker';
 
 const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , getCurrency}) => {
   const refRBSheet = useRef();
+  const refRBSheetCurrency = useRef();
   const [step, setStep] = React.useState(1);
   const [name, onChangeName] = React.useState(route.params.data.name);
   const [address, onChangeAddress] = React.useState(route.params.data.address);
@@ -46,6 +47,9 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
   const [clicked, setclicked] = React.useState(false);
   const [curr, setcurr] = React.useState(route.params.data.currency);
   const [denominations, setDenominations] = React.useState([]);
+  const [searchText, setSearchText] = React.useState("");
+
+  const updateCurr = () =>{};
   useEffect(() => {
     getListOfCurrency()
   }, [])
@@ -152,7 +156,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
     <SafeAreaView>
     {step === 1 && <ScrollView>
       <Bg1
-        height={hp('40%')}
+        height={Platform.OS === 'ios'?hp('31'):hp('40')}
         width={wp('100%')}
         style={{
           position: 'absolute',
@@ -244,7 +248,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
           placeholderTextColor="#635CC9"
           keyboardType="number-pad"
         />
-         <View style={styles.inputselect}>
+         {Platform.OS === 'android' && <View style={styles.inputselect}>
 
           <Picker
             selectedValue={curr}
@@ -257,10 +261,12 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
               return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#00000099" fontFamily="Poppins Light"/>
             })}
           </Picker>
-            </View>
+            </View>}
       </View>
       
-      
+      {Platform.OS === 'ios' && <TouchableOpacity style={styles.inputselectSheet} onPress={()=>refRBSheetCurrency.current.open()}>
+        <Text>{curr}</Text>
+      </TouchableOpacity>}
       <Button
         onPress={() => { handleSubmit()}}
         title="Update"
@@ -291,6 +297,47 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
         }}
       >
         <ImageChoice imagepick={()=>imagepick()} camerapick={()=>camerapick()}/>
+    </RBSheet>
+    <RBSheet
+        ref={refRBSheetCurrency}
+        closeOnDragDown={false}
+        closeOnPressMask={true}
+        customStyles={{
+          container: {
+            ...styles.container,
+            height: heightPercentageToDP(65),
+            backgroundColor: '#f4f4f4'
+          },
+          wrapper: {
+            backgroundColor: "#00000028"
+          },
+          draggableIcon: {
+            backgroundColor: "#000"
+          }
+        }}
+      > 
+        <>
+          <TextInput
+            onChangeText={setSearchText}
+            placeholder="Search..."
+            style={styles.currSearch}
+            value={searchText}
+            placeholderTextColor="#635CC9"
+            autoCapitalize={false}          
+          />
+          <ScrollView>
+            {denominations.map((item, idx)=>{
+              if(item.full_name.toLowerCase().includes(searchText.toLowerCase())){
+                return <TouchableOpacity 
+                        style={{backgroundColor:'#0000010', paddingVertical:20, borderBottomWidth:1, borderBottomColor:'#00000050'}}
+                        onPress={()=>{setcurr(item.currency_code);refRBSheetCurrency.current.close();}}
+                        >
+                <Text style={{textAlign:'center', fontFamily:'Poppins Regular', color:'#00000099', fontSize: 15}}>{item.full_name}</Text>
+              </TouchableOpacity>
+              }
+            })}
+          </ScrollView>
+        </>
     </RBSheet>
     </SafeAreaView>
   );
@@ -339,11 +386,25 @@ const styles = StyleSheet.create({
     marginTop: hp('10%')
   },
   input: {
-    // height: 50,
+    minHeight: 50,
     marginVertical: 5,
     marginHorizontal: 40,
     borderWidth: 1,
     borderRadius: 25,
+    fontSize: 15,
+    backgroundColor: "#E7E6F3",
+    fontFamily: "Poppins Regular",
+    borderColor: "#E7E6F3",
+
+
+
+  },
+  currSearch: {
+    minHeight: 50,
+    marginVertical: 10,
+    marginTop: 30,
+    paddingHorizontal: 40,
+    borderWidth: 1,
     fontSize: 15,
     backgroundColor: "#E7E6F3",
     fontFamily: "Poppins Regular",
@@ -364,6 +425,21 @@ const styles = StyleSheet.create({
     borderColor: "#E7E6F3",
     paddingHorizontal: 20
   },
+  inputselectSheet: {
+    height: 50,
+    marginVertical: 5,
+    marginHorizontal: 40,
+    borderWidth: 1,
+    borderRadius: 25,
+    fontSize: 15,
+    backgroundColor: "#E7E6F3",
+    fontFamily: "Poppins Regular",
+    borderColor: "#E7E6F3",
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   btn1: {
 
     backgroundColor: "#635CC9",
@@ -379,6 +455,14 @@ const styles = StyleSheet.create({
     shadowRadius: 5.84,
 
     elevation: 5,
+//ios
+        shadowColor: "#d4d4d4",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 3.84,
 
   },
   bottomText: {

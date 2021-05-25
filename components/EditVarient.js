@@ -13,7 +13,7 @@ const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) =
         if(name.trim().length < 1){
             seterr("Enter Valid Varient Name")
             return
-        }else if(nprice.trim().length < 1 ){
+        }else if(`${nprice}`.trim().length < 1 ){
             seterr("Enter Valid price")
             return
         }

@@ -95,7 +95,7 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
                     if(opt.is_checked !== 0){
                         
                         return <View style={styles.active} key={opt.option_id}>
-                                    <Image style={styles.jar} source={require('../assets/images/icons/jar_white.png')} />
+                                    <Image style={styles.jar} source={{uri: opt.image}} />
                                     <Text style={styles.activeText}>{opt.name}</Text>
                                     <Image style={styles.tick} source={require('../assets/images/icons/option_tick.png')} />
                                 </View>

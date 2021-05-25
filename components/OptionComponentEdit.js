@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
 
-const OptionComponentEdit = ({name, option_id, selectThisOption, deselectThisOption, is_checked}) => {
+const OptionComponentEdit = ({name, option_id, selectThisOption, deselectThisOption, is_checked, image}) => {
     const [active, setactive] = useState(is_checked === 1? true: false)
     const toggleActivity = () => {
         
@@ -18,7 +18,8 @@ const OptionComponentEdit = ({name, option_id, selectThisOption, deselectThisOpt
     }
     return (
         <TouchableOpacity style={active?styles.active:styles.inactive} onPress={toggleActivity}>
-            <Image style={styles.jar} source={active?require('../assets/images/icons/jar_white.png'):require('../assets/images/icons/jar.png')} />
+            {/* <Image style={styles.jar} source={active?require('../assets/images/icons/jar_white.png'):require('../assets/images/icons/jar.png')} /> */}
+            <Image style={styles.jar} source={{uri: image}} />
             <Text style={active?styles.activeText:styles.inactiveText}>{name}</Text>
             {active && <Image style={styles.tick} source={require('../assets/images/icons/option_tick.png')} />}
         </TouchableOpacity>

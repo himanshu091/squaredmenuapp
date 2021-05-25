@@ -266,7 +266,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             <Text  style={{fontFamily: 'Poppins Regular', fontSize: 18, color: '#000', marginTop: 20, marginLeft: widthPercentageToDP(2.4)}}>Allergens</Text>
             <View style={styles.optionContainer}>
                 {options.map((item)=>{
-                    return <OptionComponent key={item.option_id} option_id={item.option_id} name={item.name} selectThisOption={(id)=>selectThisOption(id)} deselectThisOption={(id)=>deselectThisOption(id)}/>
+                    return <OptionComponent key={item.option_id} image={item.image} option_id={item.option_id} name={item.name} selectThisOption={(id)=>selectThisOption(id)} deselectThisOption={(id)=>deselectThisOption(id)}/>
                 })}
             </View>
             <View style={styles.line}></View>

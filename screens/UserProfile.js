@@ -233,7 +233,7 @@ const refresh = async () => {
           </View>
           
         </View>
-          <View style={styles.bottomBtn}>
+          {data && <View style={styles.bottomBtn}>
             <TouchableOpacity onPress={() => data.has_restaurant===1?Linking.openURL(data.web_url):alert("Please create a restaurant.")} style={styles.shareBtn}>
               <Image style={styles.styleImg} source={require('../assets/images/icons/share2.png')}/>
               <Text style={styles.styleTxt}>Open Menu</Text>
@@ -243,7 +243,7 @@ const refresh = async () => {
               <Text style={styles.styleTxt}>Logout</Text>
             </TouchableOpacity>
             {/* <TouchableOpacity onPress={} style={styles.logoutbtn}><Text style={styles.logoutTxt} >Logout</Text></TouchableOpacity> */}
-          </View>
+          </View>}
       </ScrollView>
       <RBSheet
         ref={refRBSheet}

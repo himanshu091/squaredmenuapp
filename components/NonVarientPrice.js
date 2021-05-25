@@ -4,20 +4,28 @@ import ToggleSwitch from 'toggle-switch-react-native'
 const NonVarientPrice = ({closeFunc, O_price, editPrice}) => {
     const [price, setprice] = useState(O_price)
     const [err, seterr] = useState("")
+    const [changed, setChanged] = useState(false)
     const handleSubmit = () => {
-        if(price.trim().length < 1 ){
-            seterr("Enter Valid price")
-            return
+        
+        if(changed){ //Check for change in value
+            if(price.trim().length < 1 ){
+                seterr("Enter Valid price")
+                return
+            }
+            editPrice(price)
+            closeFunc()
+        }else{
+            closeFunc()
         }
-        editPrice(price)
-        closeFunc()
+        
     }
     const checkPrice = (value) => {
         if(value === ""){
             setprice(value)
         }
         if(!isNaN(value) && Number(value) > 0){
-            setprice(value)
+            setChanged(true);
+            setprice(value);
         }
     }
     return (

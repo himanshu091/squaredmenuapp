@@ -288,7 +288,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             <View style={styles.btnContainer}>
                 <Button
                     onPress={handleSubmit}
-                    title="Salva"
+                    title="Save"
                     titleStyle={styles.btnText}
                     buttonStyle={styles.btn}
                     loading={clicked}
@@ -416,7 +416,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'flex-start',
         paddingHorizontal: 15,
-        marginTop: 15
+        marginTop: 15,
+        marginBottom: Platform.OS === 'ios'? 15: 0,
     },
     trademarks:{
         backgroundColor: '#f5f5f5',
@@ -425,7 +426,8 @@ const styles = StyleSheet.create({
     },
     dishNameContainer:{
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        
     },
     dishName:{
         flexBasis: '70%',
@@ -443,7 +445,7 @@ const styles = StyleSheet.create({
         height: widthPercentageToDP(13),
     },
     descBox:{
-        // paddingVertical: 13,
+        paddingVertical: Platform.OS === 'ios'?50:0,
         borderColor:'#00000010',
         borderTopWidth: 1,
         borderBottomWidth: 1,
@@ -452,7 +454,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         fontFamily: 'Poppins Regular',
         paddingHorizontal: 15,
-        color: '#989898'
+        color: '#989898',
     },
     varientBody:{
         flexDirection: 'row',

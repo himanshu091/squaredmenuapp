@@ -324,7 +324,7 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
             <View style={styles.btnContainer}>
                 <Button
                     onPress={handleSubmit}
-                    title="Salva"
+                    title="Update"
                     titleStyle={styles.btnText}
                     buttonStyle={styles.btn}
                     loading={clicked}
@@ -490,7 +490,7 @@ const styles = StyleSheet.create({
         marginTop: 20
     },
     descBox:{
-        // paddingVertical: 13,
+        paddingVertical: Platform.OS === 'ios'?50:0,
         borderColor:'#00000010',
         borderTopWidth: 1,
         borderBottomWidth: 1,

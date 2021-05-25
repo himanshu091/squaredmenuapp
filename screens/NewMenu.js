@@ -176,7 +176,7 @@ const handleSubmit = async () => {
           </View>
           <Button
             onPress={handleSubmit}
-            title="Salva"
+            title="Save"
             titleStyle={{fontSize: 15}}
             buttonStyle={styles.btn1}
             containerStyle={{marginTop: 20}}

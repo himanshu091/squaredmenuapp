@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  AlertIOS
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button } from 'react-native-elements';
@@ -32,6 +33,8 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
   const [newpassword, onChangeNewPassword] = React.useState("");
   const [photo, setPhoto] = React.useState(null);
   const [clicked, setclicked] = React.useState(false);
+  const [err, seterr] = React.useState("");
+
   
 
   const [iceye1, setIceye1] = React.useState("visibility-off");
@@ -44,18 +47,44 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
   const [showPassword3, setShowPassword3] = React.useState(true);
 
   const handleSubmit = async () => {
+    if(confirm !== newpassword){
+      seterr("New Password & Confirm Password should be same.")
+      return
+    }
     var bodyFormData = new FormData();
     bodyFormData.append('current_pass', old);
     bodyFormData.append('new_pass', newpassword);
     bodyFormData.append('user_id', user_id);
+    bodyFormData.append('token', token);
     setclicked(true)
     const res = await changePassword(bodyFormData)
+    console.log("Change Password",res.data)
     setclicked(false)
-    ToastAndroid.showWithGravity(
-      res.data.message,
-      ToastAndroid.SHORT,
-      ToastAndroid.BOTTOM
-    )
+    if(res.data.status){
+      if(Platform.OS === 'android'){
+        ToastAndroid.showWithGravity(
+        res.data.message,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      )
+      }else{
+        Alert.alert(res.data.message)
+      }
+      onChangeOld("")
+      onChangeConfirm("")
+      onChangeNewPassword("")
+    }else{
+      if(Platform.OS === 'android'){
+        ToastAndroid.showWithGravity(
+        res.data.message,
+        ToastAndroid.SHORT,
+        ToastAndroid.BOTTOM
+      )
+      }else{
+        
+        Alert.alert(res.data.message)
+      }
+    }
   }
   const imagepick = () => {
     ImagePicker.openPicker({
@@ -150,11 +179,14 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
       <View style={styles.inputFields}>
 
         <Text style={styles.nameText}>{name}</Text>
+        <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
         <View style={{position:'relative'}}>
           <TextInput
             style={styles.input}
+            fontSize={15}
             onChangeText={onChangeOld}
             value={old}
+            fontFamily="Poppins Regular"
             placeholder="Old Password"
             textAlign="center"
             placeholderTextColor="#635CC9"
@@ -211,7 +243,7 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
 
         <Button
           onPress={handleSubmit}
-          title="Salva"
+          title="Update"
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
           containerStyle={{ marginTop: 40 }}

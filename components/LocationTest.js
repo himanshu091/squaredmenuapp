@@ -121,7 +121,7 @@ export default class LocationTest extends Component {
 
           </View>
           <View style={styles.deatilSection}>
-            <Text style={{ fontSize: 16, fontWeight: "bold", fontFamily: "roboto", marginBottom: 20 }}>Move map for location</Text>
+            <Text style={{ fontSize: 16, fontWeight: "bold", fontFamily: "Poppins Medium", marginBottom: 20 }}>Move map for location</Text>
             <Text style={{ fontSize: 10, color: "#999" }}>LOCATION</Text>
             <Text numberOfLines={2} style={{ fontSize: 14, paddingVertical: 10, borderBottomColor: "silver", borderBottomWidth: 0.5 }}>
               {!this.state.regionChangeProgress ? this.state.userLocation : "Identifying Location..."}</Text>

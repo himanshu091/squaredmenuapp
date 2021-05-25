@@ -46,6 +46,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
   const [long, setlong] = React.useState(route.params.data.lng);
   const [clicked, setclicked] = React.useState(false);
   const [curr, setcurr] = React.useState(route.params.data.currency);
+  const [currencyDetail, setCurrencyDetail] = React.useState(null)
   const [denominations, setDenominations] = React.useState([]);
   const [searchText, setSearchText] = React.useState("");
 
@@ -265,7 +266,8 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
       </View>
       
       {Platform.OS === 'ios' && <TouchableOpacity style={styles.inputselectSheet} onPress={()=>refRBSheetCurrency.current.open()}>
-        <Text>{curr}</Text>
+        {!currencyDetail && <Text>{curr}</Text>}
+        {currencyDetail && <Text>{currencyDetail}</Text>}
       </TouchableOpacity>}
       <Button
         onPress={() => { handleSubmit()}}
@@ -330,7 +332,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
               if(item.full_name.toLowerCase().includes(searchText.toLowerCase())){
                 return <TouchableOpacity 
                         style={{backgroundColor:'#0000010', paddingVertical:20, borderBottomWidth:1, borderBottomColor:'#00000050'}}
-                        onPress={()=>{setcurr(item.currency_code);refRBSheetCurrency.current.close();}}
+                        onPress={()=>{setcurr(item.currency_code);setCurrencyDetail(item.full_name);refRBSheetCurrency.current.close();}}
                         >
                 <Text style={{textAlign:'center', fontFamily:'Poppins Regular', color:'#00000099', fontSize: 15}}>{item.full_name}</Text>
               </TouchableOpacity>

@@ -1,4 +1,5 @@
 import React, { useState, useContext } from 'react'
+import { Platform } from 'react-native';
 import { StyleSheet, Text, View,SafeAreaView, Image, TouchableOpacity } from 'react-native'
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     },
     start_button_container:{
         position:'absolute',
-        top:hp(89),
+        top:Platform.OS === 'ios'?hp(84):hp(87),
         width: wp(100),
         display:'flex',
         flexDirection: 'row',

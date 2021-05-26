@@ -210,7 +210,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
                         fontFamily={'Poppins Medium'}
                         onChangeText={setName}
                         value={name}
-                        width={widthPercentageToDP(60)}
+                        width={has_variants!==1?widthPercentageToDP(60):widthPercentageToDP(90)}
                         multiline={true}
                         placeholder="Item Name"
                         opacity={0.9}
@@ -220,7 +220,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
                 {/* <TouchableOpacity style={styles.trademarks} onPress={()=>{setName('')}}>
                     <Image  style={styles.tm1} source={require('../assets/images/icons/delete.png')} />
                 </TouchableOpacity> */}
-                {price.trim().length > 0 && <View>
+                {has_variants!==1 && price.trim().length > 0 && <View>
                     <Text style={styles.nonPrice}>{route.params.currency.toUpperCase()} {parseFloat(price).toFixed(2).toString().replace('.',',')}</Text>
                 </View>}
             </View>

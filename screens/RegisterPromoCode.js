@@ -203,14 +203,6 @@ marginTop:hp('8%')
     shadowRadius: 5.84,
 
     elevation: 5,
-//ios
-        shadowColor: "#d4d4d4",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 3.84,
     
   },
   bottomText:{

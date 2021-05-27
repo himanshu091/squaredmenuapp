@@ -1,7 +1,11 @@
 import { GoogleSignin } from '@react-native-community/google-signin';
 import axios from 'axios'
 
-const API_URL = "http://squaredmenudevs.ctportfolio.in/api/restaurant";
+// Development API URL
+// const API_URL = "http://squaredmenudevs.ctportfolio.in/api/restaurant";
+
+// Production API URL
+const API_URL = "https://admin.squaredmenu.com/api/restaurant";
 
 export const SIGNIN= 'SIGNIN';
 export const login = (data) => async (dispatch, getState) => {

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-const API_URL = 'http://scanorderpay.ctportfolio.in/api/restaurant';
+// const API_URL = 'http://scanorderpay.ctportfolio.in/api/restaurant';
+const API_URL = 'https://admin.squaredmenu.com/api/restaurant';
 
 export const login = async (data) => {
     // var bodyFormData = new FormData();

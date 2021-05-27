@@ -204,7 +204,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
             style={styles.input}
             onChangeText={onChangeName}
             value={name}
-            placeholder="Name"
+            placeholder="Local Business"
             textAlign="center"
             placeholderTextColor="#635CC9"
 

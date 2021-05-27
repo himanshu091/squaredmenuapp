@@ -20,8 +20,8 @@ const data = [
         content: "Add the details, and the number of tables (optional). This is the starting point. It will contain your menu, sections and items. "
     },
     {
-        heading: "Add sections and Items (to your menu?)",
-        content: "Now add the sections (e.g. Breakfast, Hot Drinks, Burgers, Pizzas, ...). Each section contains items (i.e. your food/drink or product). Each item can have a single price or different price (variable) (e.g. Coke: small, medium, large). Got it?"
+        heading: "Add sections and Items",
+        content: "Now add the sections (e.g. Breakfast, Hot Drinks, Burgers, Pizzas, ...). Each section contains items (i.e. your food/drink or product). Each item can have a single price or different price (variable) (e.g. Coke: small, medium, large)."
     },
     {
         heading: "Add allergens and dietary restrictions",
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     },
     start_button_container:{
         position:'absolute',
-        top:Platform.OS === 'ios'?hp(84):hp(87),
+        top:Platform.OS === 'ios'?hp(83):hp(86),
         width: wp(100),
         display:'flex',
         flexDirection: 'row',

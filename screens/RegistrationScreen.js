@@ -317,7 +317,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
         style={styles.input}
         onChangeText={onChangePromocode}
         value={promocode}
-        placeholder="Promocode"
+        placeholder="Promo Code"
         textAlign="center"
         placeholderTextColor="#635CC9"
         

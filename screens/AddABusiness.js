@@ -19,7 +19,6 @@ import {
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
 import ImagePicker from 'react-native-image-crop-picker';
-import Geolocation from '@react-native-community/geolocation';
 import { Platform } from 'react-native';
 import { connect } from 'react-redux';
 import {addNewRestaurant, getCurrency} from '../store/action'
@@ -28,6 +27,8 @@ import { SafeAreaView } from 'react-native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
 import {Picker} from '@react-native-picker/picker';
+import Geolocation from '@react-native-community/geolocation';
+import { ActivityIndicator } from 'react-native';
 
 const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrency }) => {
   const refRBSheet = useRef();
@@ -46,6 +47,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
   const [clicked, setclicked] = React.useState(false);
   const [denominations, setDenominations] = React.useState([]);
   const [searchText, setSearchText] = React.useState("");
+  const [locationLoading, setLocationLoading] = React.useState(false);
   useEffect(() => {
     getListOfCurrency()
   }, [])
@@ -157,6 +159,24 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
     console.log(lat, long)
     hideMap()
   }
+  const isLocationEnabled = async () => {
+    if(Platform.OS === 'ios'){
+      showMap()
+    }else{
+      setLocationLoading(true)
+      Geolocation.getCurrentPosition(
+        (position) => {
+          setLocationLoading(false)
+          showMap()
+        },
+        (error) => {
+          setLocationLoading(false)
+          alert("Turn On Location and try again")
+        },
+        { enableHighAccuracy: false, timeout: 200000, maximumAge: 5000 },
+      );
+    }
+  }
   return (
     <SafeAreaView>
       {step === 1 && <ScrollView>
@@ -209,12 +229,13 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
             placeholderTextColor="#635CC9"
 
           />
-          <TouchableOpacity style={styles.locationContainer} onPress={showMap} >
+          <TouchableOpacity style={styles.locationContainer} onPress={()=>{isLocationEnabled()}} >
             <Image
               source={require("../assets/images/icons/location.png")}
               style={{height: 20, width: 20}}
             />
             <Text style={styles.locationText}>Locate me</Text>
+            {locationLoading && <ActivityIndicator size="small" color="#635cc9" />}
           </TouchableOpacity>
           <TextInput
             style={styles.input}

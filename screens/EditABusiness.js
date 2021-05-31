@@ -28,6 +28,7 @@ import LocationTest from '../components/LocationTest';
 import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
 import {Picker} from '@react-native-picker/picker';
+import { ActivityIndicator } from 'react-native';
 
 const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , getCurrency}) => {
   const refRBSheet = useRef();
@@ -49,6 +50,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
   const [currencyDetail, setCurrencyDetail] = React.useState(null)
   const [denominations, setDenominations] = React.useState([]);
   const [searchText, setSearchText] = React.useState("");
+  const [locationLoading, setLocationLoading] = React.useState(false);
 
   const updateCurr = () =>{};
   useEffect(() => {
@@ -152,7 +154,24 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
       setclicked(false)
     }
   }
-
+  const isLocationEnabled = async () => {
+    if(Platform.OS === 'ios'){
+      showMap()
+    }else{
+      setLocationLoading(true)
+      Geolocation.getCurrentPosition(
+        (position) => {
+          setLocationLoading(false)
+          showMap()
+        },
+        (error) => {
+          setLocationLoading(false)
+          alert("Turn On Location and try again")
+        },
+        { enableHighAccuracy: false, timeout: 200000, maximumAge: 5000 },
+      );
+    }
+  }
   return (
     <SafeAreaView>
     {step === 1 && <ScrollView>
@@ -204,12 +223,13 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
           placeholderTextColor="#635CC9"
 
         />
-        <TouchableOpacity style={styles.locationContainer} onPress={showMap}>
+        <TouchableOpacity style={styles.locationContainer} onPress={()=>{isLocationEnabled()}}>
         <Image
           source={require("../assets/images/icons/location.png")}
           style={{height: 20, width: 20}}
         />
         <Text style={styles.locationText}>Locate me</Text>
+        {locationLoading && <ActivityIndicator size="small" color="#635cc9" />}
       </TouchableOpacity>
         <TextInput
           style={styles.input}

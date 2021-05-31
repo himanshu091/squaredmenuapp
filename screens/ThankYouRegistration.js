@@ -63,14 +63,14 @@ const ThankYouRegistration = ({navigation, verifyEmail, user_id}) => {
 
         />
         </View>
-        <View style={styles.bottomView}>
+        <TouchableOpacity style={styles.bottomView}>
           <Text
             onPress={resendVerification}
             style={styles.bottomText}>
            Resend Verification Link
           </Text>
         
-        </View>
+        </TouchableOpacity>
       </View>
      </ImageBackground>
      </ScrollView>
@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
   },
   bottomText: {
     color: '#635CC9',
-
     fontSize: 15,
     fontFamily: 'Poppins Medium',
   },

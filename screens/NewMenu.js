@@ -147,12 +147,12 @@ const handleSubmit = async () => {
             width={wp(100)}
             multiline={true}
             placeholder="e.g. Breakfast, Lunch, Dinner"
-            opacity={0.3}
+            opacity={0.45}
             placeholderTextColor="#000000"
           />
           {/* <Image source={require('../assets/images/icons/delete.png')} /> */}
         </View>
-        <TextInput
+        {/* <TextInput
           fontSize={15}
           fontFamily={'Poppins Regular'}
           onChangeText={onChangeNote}
@@ -161,7 +161,7 @@ const handleSubmit = async () => {
           opacity={0.3}
           multiline={true}
           placeholderTextColor="#000000"
-        />
+        /> */}
         <View style={styles.bottomSection}>
           <View style={styles.switch}>
             <Text style={styles.activeText}>Active</Text>

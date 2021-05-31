@@ -43,7 +43,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
   const [err, setErr] = React.useState("");
   const [lat, setlat] = React.useState(0);
   const [long, setlong] = React.useState(0);
-  const [curr, setcurr] = React.useState("USD");
+  const [curr, setcurr] = React.useState("EUR");
   const [clicked, setclicked] = React.useState(false);
   const [denominations, setDenominations] = React.useState([]);
   const [searchText, setSearchText] = React.useState("");
@@ -160,9 +160,9 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
     hideMap()
   }
   const isLocationEnabled = async () => {
-    if(Platform.OS === 'ios'){
-      showMap()
-    }else{
+    // if(Platform.OS === 'ios'){
+    //   showMap()
+    // }else{
       setLocationLoading(true)
       Geolocation.getCurrentPosition(
         (position) => {
@@ -175,7 +175,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
         },
         { enableHighAccuracy: false, timeout: 200000, maximumAge: 5000 },
       );
-    }
+    // }
   }
   return (
     <SafeAreaView>
@@ -224,7 +224,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
             style={styles.input}
             onChangeText={onChangeName}
             value={name}
-            placeholder="Local Business"
+            placeholder="Business Name"
             textAlign="center"
             placeholderTextColor="#635CC9"
 
@@ -273,23 +273,10 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
             placeholderTextColor="#635CC9"
             keyboardType="number-pad"
           />
-          {Platform.OS === 'android' &&  <View style={styles.inputselect}>
-
-          <Picker
-            selectedValue={curr}
-            dropdownIconColor="#000000"
-            onValueChange={(itemValue, itemIndex) =>
-              setcurr(itemValue)
-          }>
-            
-            {denominations.map((denom, idx) => {
-              return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#635CC9" />
-            })}
-          </Picker>
-            </View>}
-            {Platform.OS === 'ios' && <TouchableOpacity style={styles.inputselectSheet} onPress={()=>refRBSheetCurrency.current.open()}>
-        <Text>{curr}</Text>
-      </TouchableOpacity>}
+          
+          <TouchableOpacity style={styles.inputselectSheet} onPress={()=>refRBSheetCurrency.current.open()}>
+            <Text>{curr}</Text>
+          </TouchableOpacity>
           
         </View>
         {/* {lat && <Text style={styles.latlong}>Latitude: {lat}</Text>}

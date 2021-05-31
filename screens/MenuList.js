@@ -103,7 +103,7 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
                                         <Image source={require('../assets/images/onboarding/next.png')} style={{ height: 42, width: 42 }} />
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.previewBTN} onPress={() => navigation.navigate('MenuPreview', { themeURL: route.params.themeURL })}>
-                                        <Text style={styles.preview}>Preview</Text>
+                                        <Text style={styles.preview}>Style</Text>
                                     </TouchableOpacity>
                                     <View style={styles.info}>
                                         <View style={styles.nameContainer}>
@@ -117,7 +117,7 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
                         }}
                         ListFooterComponent={() => {
                             return <TouchableOpacity style={styles.newSection} onPress={() => refRBSheet.current.open()}>
-                                <Text style={styles.sectionName}>Add New Item</Text>
+                                <Text style={styles.sectionName}>Add New Menu Item</Text>
                                 <Image style={styles.plus} source={require('../assets/images/icons/plus.png')} />
                             </TouchableOpacity>
                         }}

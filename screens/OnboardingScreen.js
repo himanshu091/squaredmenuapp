@@ -16,20 +16,20 @@ const slideImages = [
 ]
 const data = [
     {
-        heading: "Crea your business local business",
-        content: "Add the details, and the number of tables (optional). This is the starting point. It will contain your menu, sections and items. "
+        heading: "Crea your business",
+        content: "Add your business name, details and the number of tables"
     },
     {
         heading: "Add sections and Items",
-        content: "Now add the sections (e.g. Breakfast, Hot Drinks, Burgers, Pizzas, ...). Each section contains items (i.e. your food/drink or product). Each item can have a single price or different price (variable) (e.g. Coke: small, medium, large)."
+        content: "Now add sections (e.g. Breakfast, Hot Drinks, Burgers, Pizzas, ...). Each section contains items (i.e. your food/drink or product). Each item can have a single price or different price (variable) (e.g. Coke: small, medium, large). Got it?"
     },
     {
-        heading: "Add allergens and dietary restrictions",
-        content: "You can add up to 14 allergens compliant with the EU regulation and the WHO. Plus 4 dietary restrictions: gluten free, lactose free, vegan and vegetarian"
+        heading: "Show allergens and dietary restrictions",
+        content: "You can add up to 14 allergens, plus 4 dietary restrictions: gluten free, lactose free, vegan and vegetarian"
     },
     {
-        heading: "Select your style and get your QR Code menu",
-        content: "You can preview how the menu will look and choose between several style templates that suit you best. And finally get your printable QR code so you can place it on your tables"
+        heading: "Preview, style it and get your QR Code menu!",
+        content: "Preview your menu and choose between free style template. And get your free QR code and place it on the table"
     },
 
     

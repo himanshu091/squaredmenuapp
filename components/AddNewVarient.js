@@ -33,7 +33,7 @@ const AddNewVarient = ({closeFunc, addVariant}) => {
                     style={styles.input}
                     onChangeText={setname}
                     value={name}
-                    placeholder="Name"
+                    placeholder="ex. medium, large, small"
                     textAlign="center"
                     placeholderTextColor="#635CC9"
                     

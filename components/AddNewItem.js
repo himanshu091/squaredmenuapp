@@ -122,7 +122,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                         isOn={isOn}
                         onColor="#635CC9"
                         offColor="#635CC920"
-                        label="Has Varients?"
+                        label="Has Different price"
                         labelStyle={{ color: "black", fontFamily: 'Poppins Medium'}}
                         size='medium'
                         onToggle={() => setisOn(!isOn)}

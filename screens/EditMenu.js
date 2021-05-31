@@ -181,12 +181,12 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
             width={wp(100)}
             multiline={true}
             placeholder="Ex. Breakfast, Lunch, Dinner"
-            opacity={0.3}
+            opacity={0.45}
             placeholderTextColor="#000000"
           />
           <TouchableOpacity onPress={()=>createTwoButtonAlert()} style={{position:'absolute', right: 5, backgroundColor:'#fff', padding: 10, borderRadius: 8, elevation: 5}}><Image source={require('../assets/images/icons/delete.png')} style={{width: 18.5, height: 20}}/></TouchableOpacity>
         </View>
-        <TextInput
+        {/* <TextInput
           fontSize={15}
           fontFamily={'Poppins Regular'}
           onChangeText={onChangeNote}
@@ -194,7 +194,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
           placeholder="Notes"
           opacity={0.3}
           placeholderTextColor="#000000"
-        />
+        /> */}
         <View style={styles.bottomSection}>
           <View style={styles.switch}>
             <Text style={styles.activeText}>Active</Text>

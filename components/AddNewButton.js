@@ -8,7 +8,7 @@ const AddNewButton = ({navigation, name}) => {
             <View style={styles.subBox}>
                 <Image source={require('../assets/images/icons/plus.png')} style={styles.plus} />
             </View>
-            <Text style={styles.new}>Add New</Text>
+            <Text style={styles.new}>Add New Business</Text>
         </TouchableOpacity>
     )
 }

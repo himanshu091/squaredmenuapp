@@ -41,14 +41,18 @@ GoogleSignin.configure({
   
   // offlineAccess: true
 })
+var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
 const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
     const [iceye, setIceye] = React.useState("visibility-off");
     const [showPassword, setShowPassword] = React.useState(true);
+    const [iceye1, setIceye1] = React.useState("visibility-off");
+    const [showPassword1, setShowPassword1] = React.useState(true);
     const [name, onChangeName] = React.useState("");
     const [number, onChangeNumber] = React.useState("");
     const [email, onChangeEmail] = React.useState("");
     const [password, onChangePassword] = React.useState("");
+    const [password1, onChangePassword1] = React.useState("");
     const [error, setError] = React.useState("");
     const [clicked, setclicked] = React.useState(false);
     const [promocode, onChangePromocode] = React.useState("");
@@ -189,6 +193,12 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
       }else if(password.trim().length < 1){
         setError("Enter Password")
         return
+      }else if(password !== password1){
+        setError("Password does not match.")
+        return
+      }else if(!strongRegex.test(password)){
+        setError("Please Choose Strong Password.")
+        return
       }else if(number.trim().length < 1){
         setError("Enter Contact Number")
         return
@@ -221,14 +231,23 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
       }
     }
     changePwdType = () => {
-    if (showPassword) {
-      setIceye('visibility')
-      setShowPassword(false)
-    } else {
-      setIceye('visibility-off')
-      setShowPassword(true)
-    }
-  };
+      if (showPassword) {
+        setIceye('visibility')
+        setShowPassword(false)
+      } else {
+        setIceye('visibility-off')
+        setShowPassword(true)
+      }
+    };
+    changePwdType1 = () => {
+      if (showPassword1) {
+        setIceye1('visibility')
+        setShowPassword1(false)
+      } else {
+        setIceye1('visibility-off')
+        setShowPassword1(true)
+      }
+    };
   return (
     <SafeAreaView style={{flex:1}}>
     <ScrollView>
@@ -295,6 +314,14 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
         placeholderTextColor="#635CC9"
         keyboardType="phone-pad"
       />
+      {/* <View style={styles.hintBox}>
+        <Text style={styles.hint}>Password should have</Text>
+        <Text style={styles.hint}>atleast 1 lowercase alphabet,</Text>
+        <Text style={styles.hint}>atleast 1 uppercase alphabet,</Text>
+        <Text style={styles.hint}>atleast 1 numeric character,</Text>
+        <Text style={styles.hint}>one special character,</Text>
+        <Text style={styles.hint}>minimum 8 character</Text>
+      </View> */}
       <View style={{position:'relative'}}>
         <TextInput
           style={styles.input}
@@ -312,12 +339,30 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
             color='#635CC9'
             onPress={changePwdType}
         />
-        </View>
+      </View>
+      <View style={{position:'relative'}}>
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangePassword1}
+          value={password1}
+          placeholder="Password"
+          textAlign="center"
+          placeholderTextColor="#635CC9"
+          secureTextEntry={showPassword1}
+
+        />
+        <Icon style={styles.showicon}
+            name={iceye1}
+            size={26}
+            color='#635CC9'
+            onPress={changePwdType1}
+        />
+      </View>
       <TextInput
         style={styles.input}
         onChangeText={onChangePromocode}
         value={promocode}
-        placeholder="Promo Code"
+        placeholder="Referral Code"
         textAlign="center"
         placeholderTextColor="#635CC9"
         
@@ -468,5 +513,16 @@ icon:{
     marginHorizontal:10,
     height:46,
     width:46
+},
+hintBox:{
+  marginHorizontal:40,
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems:'center'
+},
+hint:{
+  fontFamily: 'Poppins Light',
+  fontSize: 12,
+  lineHeight: 13
 }
 });

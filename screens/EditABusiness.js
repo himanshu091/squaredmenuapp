@@ -155,9 +155,9 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
     }
   }
   const isLocationEnabled = async () => {
-    if(Platform.OS === 'ios'){
-      showMap()
-    }else{
+    // if(Platform.OS === 'ios'){
+    //   showMap()
+    // }else{
       setLocationLoading(true)
       Geolocation.getCurrentPosition(
         (position) => {
@@ -170,7 +170,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
         },
         { enableHighAccuracy: false, timeout: 200000, maximumAge: 5000 },
       );
-    }
+    // }
   }
   return (
     <SafeAreaView>
@@ -269,26 +269,12 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
           placeholderTextColor="#635CC9"
           keyboardType="number-pad"
         />
-         {Platform.OS === 'android' && <View style={styles.inputselect}>
-
-          <Picker
-            selectedValue={curr}
-            dropdownIconColor="#000000"
-            onValueChange={(itemValue, itemIndex) =>
-              setcurr(itemValue)
-          }>
-            
-            {denominations.map((denom, idx) => {
-              return <Picker.Item key={idx} label={denom.full_name} value={denom.currency_code} color="#00000099" fontFamily="Poppins Light"/>
-            })}
-          </Picker>
-            </View>}
       </View>
       
-      {Platform.OS === 'ios' && <TouchableOpacity style={styles.inputselectSheet} onPress={()=>refRBSheetCurrency.current.open()}>
+      <TouchableOpacity style={styles.inputselectSheet} onPress={()=>refRBSheetCurrency.current.open()}>
         {!currencyDetail && <Text>{curr}</Text>}
         {currencyDetail && <Text>{currencyDetail}</Text>}
-      </TouchableOpacity>}
+      </TouchableOpacity>
       <Button
         onPress={() => { handleSubmit()}}
         title="Update"

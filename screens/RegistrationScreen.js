@@ -345,7 +345,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
           style={styles.input}
           onChangeText={onChangePassword1}
           value={password1}
-          placeholder="Password"
+          placeholder="Confirm Password"
           textAlign="center"
           placeholderTextColor="#635CC9"
           secureTextEntry={showPassword1}

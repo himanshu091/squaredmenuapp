@@ -56,9 +56,9 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
                         {data && data.length > 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:data[0].logo})}>
                             <View>
                                 <Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} />
-                                <View style={{position:'absolute', height: 20, width: 20, backgroundColor:'#FF3A44', top: -4, right: 1, flexDirection:'row', alignItems:'center', justifyContent:'center', borderRadius: 50}}>
+                                {/* <View style={{position:'absolute', height: 20, width: 20, backgroundColor:'#FF3A44', top: -4, right: 1, flexDirection:'row', alignItems:'center', justifyContent:'center', borderRadius: 50}}>
                                     <Text style={{color:'#fff', fontFamily: 'Poppins Medium', fontSize:13, textAlign:'center', marginBottom:1}}>2</Text>
-                                </View>
+                                </View> */}
                             </View>
                             </TouchableOpacity>}
                         {data && data.length === 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:null})}><Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>}

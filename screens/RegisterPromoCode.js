@@ -27,7 +27,7 @@ const RegisterPromoCode = ({navigation}) => {
     const [password, onChangePassword] = React.useState(null);
   return (
     <ScrollView>
-  <Bg1
+  {/* <Bg1
   height={hp('40%')}
   width={wp('100%')}
     style={{
@@ -36,8 +36,9 @@ const RegisterPromoCode = ({navigation}) => {
     }}
     resizeMode="stretch"
     
-    />
-     
+    /> */}
+                     <Image source={require('../assets/images/banners/addABuisness.png')} style={styles.banner}/>
+
      
        
         <View style={styles.topElements}>

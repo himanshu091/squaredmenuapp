@@ -38,7 +38,7 @@ const ForgotPassword = ({ navigation,forgotPassword }) => {
   }
   return (
     <ScrollView>
-      <Bg1
+      {/* <Bg1
         height={hp('40%')}
         width={wp('100%')}
         style={{
@@ -47,7 +47,8 @@ const ForgotPassword = ({ navigation,forgotPassword }) => {
         }}
         resizeMode="stretch"
 
-      />
+      /> */}
+                <Image source={require('../assets/images/banners/addABuisness.png')} style={styles.banner}/>
 
 
 
@@ -108,6 +109,12 @@ const ForgotPassword = ({ navigation,forgotPassword }) => {
 export default connect(null,{forgotPassword})(ForgotPassword);
 
 const styles = StyleSheet.create({
+  banner: {
+    position: 'absolute',
+    width: wp(100),
+    height: hp(35),
+    marginBottom: 30,
+  },
   heading: {
 
     justifyContent: 'flex-end',

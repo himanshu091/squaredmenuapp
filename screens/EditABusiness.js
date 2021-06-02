@@ -175,7 +175,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
   return (
     <SafeAreaView>
     {step === 1 && <ScrollView>
-      <Bg1
+      {/* <Bg1
         height={Platform.OS === 'ios'?hp('31'):hp('40')}
         width={wp('100%')}
         style={{
@@ -183,7 +183,8 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
 
         }}
         resizeMode="stretch"
-      />
+      /> */}
+                <Image source={require('../assets/images/banners/addABuisness.png')} style={styles.banner}/>
 
       <View style={styles.topElements}>
         <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
@@ -359,6 +360,12 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps,{addNewRestaurant, getCurrency})(EditABusiness);
 
 const styles = StyleSheet.create({
+  banner: {
+    position: 'absolute',
+    width: wp(100),
+    height: hp(35),
+    marginBottom: 30,
+  },
   heading: {
 
     justifyContent: 'flex-end',

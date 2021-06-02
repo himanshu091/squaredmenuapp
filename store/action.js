@@ -60,10 +60,15 @@ export const beginAuth = () => async (dispatch, getState) => {
 export const LOGOUT= 'LOGOUT';
 export const logout = () => async (dispatch, getState) => {
     // console.log(getState().auth.user_type)
-    if(getState().auth.user_type === "google"){
-        await GoogleSignin.revokeAccess();
-        await GoogleSignin.signOut();
+    try{
+        if(getState().auth.user_type === "google"){
+            await GoogleSignin.revokeAccess();
+            await GoogleSignin.signOut();
+        }
+    }catch(err){
+        console.log(err)
     }
+    
     dispatch({
         type: LOGOUT,
     });

@@ -247,7 +247,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
   return (
     <SafeAreaView style={{flex:1}}>
     <ScrollView>
-      <Bg1
+      {/* <Bg1
         height={hp('40%')}
         width={wp('100%')}
         style={{
@@ -257,7 +257,8 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
         resizeMode="stretch"
 
 
-      />
+      /> */}
+                <Image source={require('../assets/images/banners/addABuisness.png')} style={styles.banner}/>
 
       <View style={styles.topElements}>
         {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RegistrationScreen')}>
@@ -347,6 +348,12 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
 export default connect(null, {login, signInAPIGoogle})(Login);
 
 const styles = StyleSheet.create({
+  banner: {
+    position: 'absolute',
+    width: wp(100),
+    height: hp(35),
+    // marginBottom: 30,
+  },
   heading: {
 
     justifyContent: 'flex-end',
@@ -384,7 +391,7 @@ const styles = StyleSheet.create({
   },
   inputFields: {
     marginVertical: 15,
-    marginTop: Platform.OS === 'ios'? 120:90
+    marginTop: Platform.OS === 'ios'? hp(10):90
   },
   input: {
     height: 50,

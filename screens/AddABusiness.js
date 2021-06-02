@@ -15,6 +15,8 @@ import { Button } from 'react-native-elements'
 import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
+  widthPercentageToDP,
+  heightPercentageToDP,
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
@@ -150,8 +152,10 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
   const showMap = () => {setStep(2)}
   const hideMap = () => {setStep(1)}
   const setLatLong = (lat, long, address) => {
+    // let tempAddress = "lorem, epsim, 870 Market St #1277, San Francisco, CA 94102, USA"
     console.log(address.split(","))
-    onChangeAddress(address.split(",").slice(-4)[0])
+    // console.log("Address",address.split(",").slice(0,address.split(",").length-3).join(","))
+    onChangeAddress(address.split(",").slice(0,address.split(",").length-3).join(","))
     onChangeCity(address.split(",").slice(-3)[0])
     onChangeState(address.split(",").slice(-2)[0])
     setlat(lat);
@@ -180,7 +184,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
   return (
     <SafeAreaView>
       {step === 1 && <ScrollView>
-        <Bg1
+        {/* <Bg1
           height={Platform.OS === 'ios'?hp('31'):hp('40')}
           width={wp('100%')}
           style={{
@@ -188,7 +192,8 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
 
           }}
           resizeMode="stretch"
-        />
+        /> */}
+                <Image source={require('../assets/images/banners/addABuisness.png')} style={styles.banner}/>
 
         <View style={styles.topElements}>
           <TouchableOpacity style={styles.button} onPress={() => navigation.goBack()}>
@@ -366,6 +371,12 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps,{addNewRestaurant, getCurrency})(AddABusiness);
 
 const styles = StyleSheet.create({
+  banner: {
+    position: 'absolute',
+    width: widthPercentageToDP(100),
+    height: heightPercentageToDP(35),
+    marginBottom: 30,
+  },
   heading: {
 
     justifyContent: 'flex-end',

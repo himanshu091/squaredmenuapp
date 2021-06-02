@@ -15,6 +15,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
   heightPercentageToDP,
+  widthPercentageToDP,
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg';
@@ -142,15 +143,15 @@ const refresh = async () => {
   return (
     <SafeAreaView>
       <ScrollView>
-        <Bg1
+        {/* <Bg1
           height={Platform.OS === 'ios'?hp('31'):hp('40')}
           width={wp('100%')}
           style={{
             position: 'absolute',
           }}
           resizeMode="stretch"
-        />
-
+        /> */}
+        <Image source={require('../assets/images/banners/addABuisness.png')} style={styles.banner}/>
         <View style={styles.topElements}>
           <TouchableOpacity
             style={styles.button}
@@ -284,6 +285,12 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, { logout, profileInfo, updateProfilePic, updatePic })(UserProfile);
 
 const styles = StyleSheet.create({
+  banner: {
+    position: 'absolute',
+    width: widthPercentageToDP(100),
+    height: heightPercentageToDP(35),
+    marginBottom: 30,
+  },
   heading: {
     justifyContent: 'flex-end',
     alignItems: 'flex-start',

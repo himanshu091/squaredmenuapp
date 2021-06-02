@@ -98,6 +98,17 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                         <Image source={!photo?require('../assets/images/icons/imageicon.png'):{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.imageupload}/>                  
                     </TouchableOpacity>
                 </View> */}
+                <View style={styles.switchBox}>
+                    <ToggleSwitch
+                        isOn={isOn}
+                        onColor="#635CC9"
+                        offColor="#635CC920"
+                        label="Has multiple prices"
+                        labelStyle={{ color: "black", fontFamily: 'Poppins Medium', marginRight:30}}
+                        size='medium'
+                        onToggle={() => setisOn(!isOn)}
+                    />
+                </View>
                 <TextInput
                     style={styles.input}
                     onChangeText={setName}
@@ -117,17 +128,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                     placeholderTextColor="#635CC9"
                     keyboardType="decimal-pad"
                 />}
-                <View style={styles.switchBox}>
-                    <ToggleSwitch
-                        isOn={isOn}
-                        onColor="#635CC9"
-                        offColor="#635CC920"
-                        label="Has Different price"
-                        labelStyle={{ color: "black", fontFamily: 'Poppins Medium'}}
-                        size='medium'
-                        onToggle={() => setisOn(!isOn)}
-                    />
-                </View>
+                
             </View>
             <View style={styles.allBtn}>
                 <TouchableOpacity style={styles.btn1} onPress={closeFunc}>
@@ -217,7 +218,9 @@ const styles = StyleSheet.create({
       switchBox:{
           flexDirection: 'row',
           justifyContent: 'center',
-          marginTop: 10
+          marginTop: 10,
+          marginBottom: 10,
+          marginRight: 30
       },
       imageupload:{
           width: 70,

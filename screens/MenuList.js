@@ -103,7 +103,7 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
                                         <Image source={require('../assets/images/onboarding/next.png')} style={{ height: 42, width: 42 }} />
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.previewBTN} onPress={() => navigation.navigate('MenuPreview', { themeURL: route.params.themeURL })}>
-                                        <Text style={styles.preview}>Style</Text>
+                                        <Text style={styles.preview}>Change Style</Text>
                                     </TouchableOpacity>
                                     <View style={styles.info}>
                                         <View style={styles.nameContainer}>

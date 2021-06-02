@@ -186,6 +186,7 @@ const styles = StyleSheet.create({
     QRcontainer:{
         flexDirection: 'row',
         justifyContent: 'center',
+        marginTop: 15
     },
     qrBox:{
         width: widthPercentageToDP(65), 

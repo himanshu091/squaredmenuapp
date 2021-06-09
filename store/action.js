@@ -65,6 +65,9 @@ export const logout = () => async (dispatch, getState) => {
             await GoogleSignin.revokeAccess();
             await GoogleSignin.signOut();
         }
+        else if(getState().auth.user_type === "apple"){
+            //Nothing Yet to do
+        }
     }catch(err){
         console.log(err)
     }
@@ -200,6 +203,22 @@ export const signInAPIGoogle = (data, platform) => async (dispatch, getState) =>
         dispatch({
             type: SIGNIN,
             payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id, image: res.data.data.image, user_type:platform}
+        })
+    }
+    return res
+};
+export const signInAPIApple = (data) => async (dispatch, getState) => {
+    const res = await axios({
+        method: 'post',
+        url: `${API_URL}/social-media-login`,
+        data: data,
+        headers: {'Content-Type': 'multipart/form-data' }
+    })
+    console.log("Login Apple =>",res.data)
+    if(res.data.status){
+        dispatch({
+            type: SIGNIN,
+            payload: {email:res.data.data.email, name:res.data.data.name, token:res.data.data.token, user_id:res.data.data.user_id, new_device: false, plan_expired: res.data.data.plan_expired, plan_id: res.data.data.plan_id, image: res.data.data.image, user_type:"apple"}
         })
     }
     return res

@@ -20,7 +20,7 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
-import { login, signInAPIGoogle } from '../store/action';
+import { login, signInAPIGoogle , signInAPIApple} from '../store/action';
 import { connect } from 'react-redux';
 import { getBaseOs,getModel,getDeviceName } from 'react-native-device-info';
 import { Platform } from 'react-native';
@@ -49,7 +49,7 @@ GoogleSignin.configure({
   
   // offlineAccess: true
 })
-const Login = ({ navigation,login, signInAPIGoogle }) => {
+const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
   const [iceye, setIceye] = React.useState("visibility-off");
   const [showPassword, setShowPassword] = React.useState(true);
   const [email, onChangeEmail] = React.useState("");
@@ -75,7 +75,6 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
       }
   }, [])
   const onAppleButtonPress = async () => {
-    /* Sign in logic will go here */
     try {
       const appleAuthRequestResponse = await appleAuth.performRequest({
         requestedOperation: appleAuth.Operation.LOGIN,
@@ -89,7 +88,49 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
       // use credentialState response to ensure the user is authenticated
       if (credentialState === appleAuth.State.AUTHORIZED) {
         // user is authenticated
-        alert(JSON.stringify(appleAuthRequestResponse))
+
+        let userInfo = {
+          email: appleAuthRequestResponse.email,
+          name: `${appleAuthRequestResponse.fullName.givenName} ${appleAuthRequestResponse.fullName.givenName}`,
+          identityToken: appleAuthRequestResponse.identityToken,
+          user: appleAuthRequestResponse.user
+        }
+        let device_os = Platform.OS;
+        let device_model = await getModel();
+        let device_name = await getDeviceName();
+        var bodyFormData = new FormData();
+        bodyFormData.append('sm_id', userInfo.user);
+        bodyFormData.append('platform', 'apple');
+        bodyFormData.append('name', userInfo.name);
+        bodyFormData.append('email', userInfo.email);
+        // bodyFormData.append('image', "");
+        bodyFormData.append('firebase_token', userInfo.identityToken);
+        bodyFormData.append('device_name', device_name);
+        bodyFormData.append('device_modal', device_model);
+        bodyFormData.append('device_os', device_os);
+
+        const res = await signInAPIApple(bodyFormData)
+        if(res.data.status){
+          if(Platform.OS === 'android'){
+            ToastAndroid.showWithGravity(
+            res.data.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM
+          )
+          }else{
+            AlertIOS.alert(res.data.message)
+          }
+        }else{
+          if(Platform.OS === 'android'){
+            ToastAndroid.showWithGravity(
+            res.data.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM
+          )
+          }else{
+            AlertIOS.alert(res.data.message)
+          }
+        }
       }
     }catch (error) {
       if (error.code === AppleAuthError.CANCELED) {
@@ -383,7 +424,7 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
   );
 };
 
-export default connect(null, {login, signInAPIGoogle})(Login);
+export default connect(null, {login, signInAPIGoogle, signInAPIApple})(Login);
 
 const styles = StyleSheet.create({
   banner: {

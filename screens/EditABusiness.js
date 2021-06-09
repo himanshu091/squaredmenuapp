@@ -233,7 +233,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
         {locationLoading && <ActivityIndicator size="small" color="#635cc9" />}
       </TouchableOpacity>
         <TextInput
-          style={styles.input}
+          style={styles.inputAddress}
           onChangeText={onChangeAddress}
           value={address}
           placeholder="Address"
@@ -413,6 +413,19 @@ const styles = StyleSheet.create({
 
 
 
+  },
+  inputAddress: {
+    marginVertical: 5,
+    marginHorizontal: 40,
+    paddingHorizontal: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
+    borderWidth: 1,
+    borderRadius: 25,
+    fontSize: 15,
+    backgroundColor: "#E7E6F3",
+    fontFamily: "Poppins Regular",
+    borderColor: "#E7E6F3",
   },
   currSearch: {
     minHeight: 50,

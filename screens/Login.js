@@ -91,7 +91,7 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
 
         let userInfo = {
           email: appleAuthRequestResponse.email,
-          name: `${appleAuthRequestResponse.fullName.givenName} ${appleAuthRequestResponse.fullName.givenName}`,
+          name: `${appleAuthRequestResponse.fullName.givenName} ${appleAuthRequestResponse.fullName.familyName}`,
           identityToken: appleAuthRequestResponse.identityToken,
           user: appleAuthRequestResponse.user
         }

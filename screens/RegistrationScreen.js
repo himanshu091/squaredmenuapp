@@ -17,8 +17,9 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from 'react-native-responsive-screen';
+import { Linking } from 'react-native';
 import SocialMediaIcon from '../components/SocialMediaIcon';
-import { register, signInAPIGoogle } from '../store/action';
+import { register, signInAPIGoogle, signInAPIApple } from '../store/action';
 import { connect } from 'react-redux';
 import { ToastAndroid } from 'react-native';
 import { getBaseOs,getModel,getDeviceName } from 'react-native-device-info';
@@ -34,7 +35,12 @@ import {
   LoginManager,
 } from 'react-native-fbsdk';
 import { SafeAreaView } from 'react-native';
-
+import appleAuth, {
+  AppleButton,
+  AppleAuthError,
+  AppleAuthRequestScope,
+  AppleAuthRequestOperation,
+} from '@invertase/react-native-apple-authentication'
 
 GoogleSignin.configure({
   webClientId:"955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
@@ -43,7 +49,7 @@ GoogleSignin.configure({
 })
 var strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
-const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
+const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApple}) => {
     const [iceye, setIceye] = React.useState("visibility-off");
     const [showPassword, setShowPassword] = React.useState(true);
     const [iceye1, setIceye1] = React.useState("visibility-off");
@@ -60,6 +66,73 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
     const [loaded, setLoaded] = React.useState(false);
     const [userFacebookInfo, setUserFacebookInfo] = React.useState({});
   
+    const onAppleButtonPress = async () => {
+      try {
+        const appleAuthRequestResponse = await appleAuth.performRequest({
+          requestedOperation: appleAuth.Operation.LOGIN,
+          requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+        });
+        console.log("response =>",appleAuthRequestResponse)
+        // get current authentication state for user
+        // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+        const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+      
+        // use credentialState response to ensure the user is authenticated
+        if (credentialState === appleAuth.State.AUTHORIZED) {
+          // user is authenticated
+  
+          let userInfo = {
+            email: appleAuthRequestResponse.email,
+            name: `${appleAuthRequestResponse.fullName.givenName} ${appleAuthRequestResponse.fullName.familyName}`,
+            identityToken: appleAuthRequestResponse.identityToken,
+            user: appleAuthRequestResponse.user
+          }
+          let device_os = Platform.OS;
+          let device_model = await getModel();
+          let device_name = await getDeviceName();
+          var bodyFormData = new FormData();
+          bodyFormData.append('sm_id', userInfo.user);
+          bodyFormData.append('platform', 'apple');
+          bodyFormData.append('name', userInfo.name);
+          bodyFormData.append('email', userInfo.email);
+          // bodyFormData.append('image', "");
+          bodyFormData.append('firebase_token', userInfo.identityToken);
+          bodyFormData.append('device_name', device_name);
+          bodyFormData.append('device_modal', device_model);
+          bodyFormData.append('device_os', device_os);
+  
+          const res = await signInAPIApple(bodyFormData)
+          if(res.data.status){
+            if(Platform.OS === 'android'){
+              ToastAndroid.showWithGravity(
+              res.data.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM
+            )
+            }else{
+              AlertIOS.alert(res.data.message)
+            }
+          }else{
+            if(Platform.OS === 'android'){
+              ToastAndroid.showWithGravity(
+              res.data.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM
+            )
+            }else{
+              AlertIOS.alert(res.data.message)
+            }
+          }
+        }
+      }catch (error) {
+        if (error.code === AppleAuthError.CANCELED) {
+          console.log("User Cancelled Login with Apple")
+      
+        } else {
+          console.log("error apple login =>", error)
+        }
+      }
+   }
     const signinWithGoogle = async () => {
       try{
         await GoogleSignin.hasPlayServices()
@@ -393,9 +466,24 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
             source={require('../assets/images/icons/google.png')}
             />
           </TouchableOpacity>
+          {Platform.OS === "ios" && <TouchableOpacity onPress={onAppleButtonPress} style={styles.appleBtnContainer}>
+            <Image
+             style={styles.appleButton}
+
+            source={require('../assets/images/icons/apple.png')}
+            />
+          </TouchableOpacity>}
         </View>
       {/* <Text onPress={()=>navigation.navigate('RegisterPromoCode')} style={styles.bottomText}>Register using promo code</Text> */}
-      <Text style={styles.registerText}>Policy and T&C</Text>
+      <View style={{display:'flex', flexDirection:'row', justifyContent:'center'}}>
+        <TouchableOpacity onPress={()=>{Linking.openURL("https://www.squaredmenu.com/privacy.html")}}>
+          <Text style={styles.registerText}>Policy </Text>
+        </TouchableOpacity>
+        <Text style={styles.registerText}>and</Text>
+        <TouchableOpacity onPress={()=>{Linking.openURL("https://www.squaredmenu.com/terms.html")}}>
+          <Text style={styles.registerText}> T&C</Text>
+        </TouchableOpacity>
+      </View>
         
     </View>
 
@@ -404,13 +492,13 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle}) => {
   );
 };
 
-export default connect(null, {register, signInAPIGoogle})(RegistrationScreen);
+export default connect(null, {register, signInAPIGoogle, signInAPIApple})(RegistrationScreen);
 
 const styles = StyleSheet.create({
   banner: {
     position: 'absolute',
     width: wp(100),
-    height: hp(40),
+    height: hp(36),
     marginBottom: 30,
   },
   heading: {
@@ -423,7 +511,7 @@ const styles = StyleSheet.create({
   headingText: {
     color: 'white',
     fontFamily: 'Poppins Medium',
-    fontSize: wp('10'),
+    fontSize: wp('9'),
     
     lineHeight: 50 * 0.75,
     paddingTop: 40 - 35 * 0.75,
@@ -450,7 +538,7 @@ const styles = StyleSheet.create({
   },
   inputFields:{
 marginVertical:12,
-marginTop:Platform.OS === 'ios'?40:30
+marginTop:Platform.OS === 'ios'?60:30
 
   },
   input: {
@@ -531,5 +619,19 @@ hint:{
   fontFamily: 'Poppins Light',
   fontSize: 12,
   lineHeight: 13
+},
+appleBtnContainer:{
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#c4c4c460',
+  borderRadius: 50,
+  padding: 9.75,
+  marginLeft: 10
+
+},
+appleButton: {
+  height: 26,
+  width: 26,
 }
 });

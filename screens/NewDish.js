@@ -136,10 +136,12 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
         // else if(desc.trim().length < 1){
         //     seterr("Enter Valid Description")
         //     return
-        }else if(!photo){
-            seterr("Enter Image of the Item")
-            return
-        }else if(has_variants === 1 && variants.length < 1){
+        }
+        // else if(!photo){
+        //     seterr("Enter Image of the Item")
+        //     return
+        // }
+        else if(has_variants === 1 && variants.length < 1){
             seterr("Enter atleast one varient.")
             return
         }else{
@@ -153,11 +155,13 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
         bodyFormData.append('menu_id', menu_id); 
         bodyFormData.append('name', name); 
         bodyFormData.append('description', desc);
-        bodyFormData.append('image', {
-            name: name,
-            type: photo.mime,
-            uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
-        });
+        if(photo){
+            bodyFormData.append('image', {
+                name: name,
+                type: photo.mime,
+                uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+            });
+        }
         bodyFormData.append('has_variants', has_variants); 
         bodyFormData.append('price', has_variants===0?parseFloat(price):""); 
         bodyFormData.append('variants', has_variants!==0?JSON.stringify({variants:variants}):"");

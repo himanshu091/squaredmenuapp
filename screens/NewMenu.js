@@ -66,10 +66,11 @@ const handleSubmit = async () => {
     if(menu.trim().length < 1){
         setErr("Enter Valid Menu Name")
         return
-    }else if(!photo){
-        setErr("Please select an Image")
-        return
     }
+    // else if(!photo){
+    //     setErr("Please select an Image")
+    //     return
+    // }
     // else if(note.trim().length < 1){
     //   setErr("Please enter Note/Description")
     //   return
@@ -80,11 +81,11 @@ const handleSubmit = async () => {
     bodyFormData.append('token', token);
     bodyFormData.append('name', menu);
     bodyFormData.append('restaurant_id', route.params.restaurant_id);
-    bodyFormData.append('image', {
+    if(photo){bodyFormData.append('image', {
         name: menu,
         type: photo.mime,
         uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
-      });
+      });}
     bodyFormData.append('active', isOn?1:0);
     bodyFormData.append('description', menu);
     const res = await addMenu(bodyFormData)

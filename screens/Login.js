@@ -37,6 +37,12 @@ import {
 import NetInfo from "@react-native-community/netinfo";
 import Offline from '../components/Offline'
 import { SafeAreaView } from 'react-native';
+import appleAuth, {
+  AppleButton,
+  AppleAuthError,
+  AppleAuthRequestScope,
+  AppleAuthRequestOperation,
+} from '@invertase/react-native-apple-authentication'
 
 GoogleSignin.configure({
   webClientId:"955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
@@ -68,7 +74,32 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
           unsubscribe();
       }
   }, [])
-
+  const onAppleButtonPress = async () => {
+    /* Sign in logic will go here */
+    try {
+      const appleAuthRequestResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+      });
+      console.log("response =>",appleAuthRequestResponse)
+      // get current authentication state for user
+      // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+      const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
+    
+      // use credentialState response to ensure the user is authenticated
+      if (credentialState === appleAuth.State.AUTHORIZED) {
+        // user is authenticated
+        alert(JSON.stringify(appleAuthRequestResponse))
+      }
+    }catch (error) {
+      if (error.code === AppleAuthError.CANCELED) {
+        console.log("User Cancelled Login with Apple")
+    
+      } else {
+        console.log("error apple login =>", error)
+      }
+    }
+ }
   const signinWithGoogle = async () => {
     try{
       await GoogleSignin.hasPlayServices()
@@ -335,6 +366,13 @@ const Login = ({ navigation,login, signInAPIGoogle }) => {
             source={require('../assets/images/icons/google.png')}
             />
           </TouchableOpacity>
+          {Platform.OS === "ios" && <TouchableOpacity onPress={onAppleButtonPress} style={styles.appleBtnContainer}>
+            <Image
+             style={styles.appleButton}
+
+            source={require('../assets/images/icons/apple.png')}
+            />
+          </TouchableOpacity>}
         </View>
         <Text style={styles.bottomText} onPress={() => navigation.navigate('RegistrationScreen')} >I don't have an account</Text>
 
@@ -455,5 +493,19 @@ icon:{
     marginHorizontal:10,
     height:46,
     width:46
+},
+appleBtnContainer:{
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  backgroundColor: '#c4c4c460',
+  borderRadius: 50,
+  padding: 9.75,
+  marginLeft: 10
+
+},
+appleButton: {
+  height: 26,
+  width: 26,
 }
 });

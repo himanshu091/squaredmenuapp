@@ -28,7 +28,7 @@ const data = [
         content: "You can add up to 14 allergens, plus 4 dietary restrictions: gluten free, lactose free, vegan and vegetarian"
     },
     {
-        heading: "Preview, style it and get your QR Code menu!",
+        heading: "Style it and get your QR Code menu!",
         content: "Preview your menu and choose between free style template. And get your free QR code and place it on the table"
     },
 

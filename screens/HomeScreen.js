@@ -94,9 +94,9 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
                 <View style={styles.forwardArrow}></View>
             </ScrollView>
             {!online && <Offline/>}
-            <TouchableOpacity style={styles.qrbutton}  onPress={()=>navigation.navigate("Menu",{restaurant_id:data[0].restaurant_id, brandImage:data[0].cover, themeURL: data[0].theme_url, public_url: data[0].public_url})}>
+            {data.length > 0 && <TouchableOpacity style={styles.qrbutton}  onPress={()=>navigation.navigate("Menu",{restaurant_id:data[0].restaurant_id, brandImage:data[0].cover, themeURL: data[0].theme_url, public_url: data[0].public_url})}>
                 <Image source={require('../assets/images/icons/forward.png')} style={{ height: 60, width: 60 }} />
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </SafeAreaView>
         
         

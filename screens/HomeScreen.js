@@ -91,9 +91,15 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
                     </> : <View style={styles.loading}><Text style={styles.loadingText}></Text></View>}
                 </View>
                 <View style={{ marginBottom: 50 }}></View>
+                <View style={styles.forwardArrow}></View>
             </ScrollView>
             {!online && <Offline/>}
+            <TouchableOpacity style={styles.qrbutton}  onPress={()=>navigation.navigate("Menu",{restaurant_id:data[0].restaurant_id, brandImage:data[0].cover, themeURL: data[0].theme_url, public_url: data[0].public_url})}>
+                <Image source={require('../assets/images/icons/forward.png')} style={{ height: 60, width: 60 }} />
+            </TouchableOpacity>
         </SafeAreaView>
+        
+        
     )
 }
 const mapStataeToProps = state => {
@@ -161,6 +167,23 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#fff',
         backgroundColor:'#fff'
+    },
+    qrbutton: {
+        position: 'absolute',
+        right: 25,
+        top: heightPercentageToDP(84),
+    
+
+        borderRadius: 100,
+        elevation: 5,
+        //ios
+        shadowColor: "#d4d4d4",
+        shadowOffset: {
+            width: 0,
+            height: 0,
+        },
+        shadowOpacity: 0.05,
+        shadowRadius: 3.84,
     }
 
 })

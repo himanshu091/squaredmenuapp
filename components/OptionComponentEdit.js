@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     },
     inactive:{
         flexDirection: 'row',
-        backgroundColor:'#C4C4C420',
+        backgroundColor:'#7f7f7f40',
         // justifyContent: 'space-between',
         alignItems:'center',
         paddingHorizontal: 12,
@@ -66,9 +66,8 @@ const styles = StyleSheet.create({
         marginLeft: 10
     },
     jar:{
-        height: 18.95,
-        width: 15.83
-    },
+        height: 24,
+        width: 24    },
     tick:{
         height: 13.7,
         width: 18

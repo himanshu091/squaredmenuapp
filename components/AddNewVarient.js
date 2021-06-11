@@ -20,8 +20,11 @@ const AddNewVarient = ({closeFunc, addVariant}) => {
         if(value === ""){
             setprice(value)
         }
-        if(!isNaN(value) && Number(value) > 0){
-            setprice(value)
+        let newValue = value.replace(',','.')
+       
+        if(!isNaN(newValue) && Number(newValue) > 0){
+         
+            setprice(newValue);
         }
     }
     return (

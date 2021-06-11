@@ -232,12 +232,22 @@ const EditDish = ({navigation,route,getItemDetail, user_id, token, addNewItem}) 
             <TouchableOpacity onPress={() => refRBSheet.current.open()}>
                 <Image source={!photo?(!defaultImage?require('../assets/images/banners/imageUpload.png'):{uri: defaultImage}):{uri:`data:${photo.mime};base64,${photo.data}`}} style={styles.imageupload}/>                  
             </TouchableOpacity>
+
+        <View style={styles.topElements}>
             <TouchableOpacity 
                 style={styles.bell}
                 onPress={()=>navigation.goBack()}
             >
                 <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
             </TouchableOpacity>
+            <TouchableOpacity style={styles.previewBTN} onPress={() => refRBSheet.current.open()}>
+                                    <Text style={styles.preview}>Change Image</Text>
+                                </TouchableOpacity>
+            
+            </View>
+
+
+
             <View style={styles.part1}>
                 <View style={styles.dishNameContainer}>
                     <TextInput
@@ -444,14 +454,24 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
+    topElements: {
+  
+        position: 'absolute',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginHorizontal: 15,
+        marginTop: 30,
+        width:"100%"
+      },
     dishImage:{
         width: widthPercentageToDP(100),
         height: heightPercentageToDP(30),
     },
     bell:{
-        position:'absolute',
-        top: heightPercentageToDP(5),
-        left:widthPercentageToDP(3.5),
+      
+     
         transform: [{ rotate: '180deg'}]
     },
     part1:{
@@ -476,6 +496,18 @@ const styles = StyleSheet.create({
         fontSize: widthPercentageToDP(100)/8,
         lineHeight: 60 * 0.75,
         paddingTop: 60 - 35 * 0.75,
+    },
+    previewBTN: {
+        backgroundColor: '#fff',
+        paddingHorizontal: 18,
+        paddingVertical: 7,
+        borderRadius: 23,
+        marginHorizontal:30
+    },
+    preview: {
+        fontFamily: 'Poppins Medium',
+        fontSize: 16,
+        color: '#635CC9'
     },
     tm1:{
         width: widthPercentageToDP(3.5),

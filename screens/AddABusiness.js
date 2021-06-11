@@ -95,16 +95,12 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
     }else if(address.trim().length < 1){
       setErr("Enter Valid Address")
       return
-    }else if(city.trim().length < 1){
-      setErr("Enter Valid City")
-      return
-    }else if(states.trim().length < 1){
-      setErr("Enter Valid State")
-      return
-    }else if(!photo){
-      setErr("Please select an Image")
-      return
-    }else if(curr.trim().length < 1){
+    }
+    // else if(!photo){
+    //   setErr("Please select an Image")
+    //   return
+    // }
+    else if(curr.trim().length < 1){
       setErr("Enter Valid Currency")
       return
     }
@@ -117,19 +113,22 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
     bodyFormData.append('user_id', user_id);
     bodyFormData.append('currency', curr);
     bodyFormData.append('name', name);
-    bodyFormData.append('address', `${address}, ${city}, ${states}`);
+    bodyFormData.append('address', `${address}`);
     bodyFormData.append('lat', lat);
     bodyFormData.append('lng', long);
-    bodyFormData.append('image', {
-      name: name,
-      type: photo.mime,
-      uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
-    });
-    bodyFormData.append('cover', {
-      name: name,
-      type: photo.mime,
-      uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
-    });
+    if(photo){
+      bodyFormData.append('image', {
+        name: name,
+        type: photo.mime,
+        uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+      });
+    
+      bodyFormData.append('cover', {
+        name: name,
+        type: photo.mime,
+        uri: Platform.OS === 'android' ? photo.path : photo.path.replace('file://', ''),
+      });
+    }
     if(table.trim().length > 0){
       bodyFormData.append('total_tables', table);
     }
@@ -155,11 +154,14 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
     // let tempAddress = "lorem, epsim, 870 Market St #1277, San Francisco, CA 94102, USA"
     console.log(address.split(","))
     // console.log("Address",address.split(",").slice(0,address.split(",").length-3).join(","))
-    onChangeAddress(address.split(",").slice(0,address.split(",").length-3).join(","))
-    onChangeCity(address.split(",").slice(-3)[0])
-    onChangeState(address.split(",").slice(-2)[0])
-    setlat(lat);
-    setlong(long);
+    // onChangeAddress(address.split(",").slice(0,address.split(",").length-3).join(","))
+    // onChangeCity(address.split(",").slice(-3)[0])
+    // onChangeState(address.split(",").slice(-2)[0])
+    // setlat(lat);
+    // setlong(long);
+    onChangeAddress(address)
+    setlat(lat)
+    setlong(long)
     console.log(lat, long)
     hideMap()
   }
@@ -243,15 +245,17 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
             {locationLoading && <ActivityIndicator size="small" color="#635cc9" />}
           </TouchableOpacity>
           <TextInput
-            style={styles.input}
+            style={styles.inputAddress}
             onChangeText={onChangeAddress}
             value={address}
             placeholder="Address"
             textAlign="center"
+            textAlignVertical="center"
             placeholderTextColor="#635CC9"
-
+            multiline={true}
+            numberOfLines={4}
           />
-          <TextInput
+          {/* <TextInput
             style={styles.input}
             onChangeText={onChangeCity}
             value={city}
@@ -267,7 +271,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
             placeholder="State"
             textAlign="center"
             placeholderTextColor="#635CC9"
-          />
+          /> */}
           
           <TextInput
             style={styles.input}
@@ -419,6 +423,19 @@ const styles = StyleSheet.create({
     height: 50,
     marginVertical: 5,
     marginHorizontal: 40,
+    borderWidth: 1,
+    borderRadius: 25,
+    fontSize: 15,
+    backgroundColor: "#E7E6F3",
+    fontFamily: "Poppins Regular",
+    borderColor: "#E7E6F3",
+  },
+  inputAddress: {
+    marginVertical: 5,
+    marginHorizontal: 40,
+    paddingHorizontal: 10,
+    paddingTop: 15,
+    paddingBottom: 15,
     borderWidth: 1,
     borderRadius: 25,
     fontSize: 15,

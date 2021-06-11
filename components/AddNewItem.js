@@ -83,8 +83,11 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
         if(value === ""){
             setPrice(value)
         }
-        if(!isNaN(value) && Number(value) > 0){
-            setPrice(value)
+        let newValue = value.replace(',','.')
+       
+        if(!isNaN(newValue) && Number(newValue) > 0){
+          
+            setPrice(newValue);
         }
     }
     return (

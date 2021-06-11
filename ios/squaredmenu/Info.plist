@@ -17,7 +17,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleURLTypes</key>
@@ -38,7 +38,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>FacebookAppID</key>
 	<string>2918878758345037</string>
 	<key>FacebookDisplayName</key>
@@ -70,12 +70,12 @@
 			</dict>
 		</dict>
 	</dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>App requires access to your camera to allow to take photo for user profile picture, business cover image, menu and item</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>App requires access to your location take the location of bussines</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>App requires access to your photo gallery to allow to upload photo for user profile picture, business cover image, menu and item</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Poppins Black Italic.otf</string>

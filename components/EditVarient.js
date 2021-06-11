@@ -24,8 +24,11 @@ const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) =
         if(value === ""){
             setnprice(value)
         }
-        if(!isNaN(value) && Number(value) > 0){
-            setnprice(value)
+        let newValue = value.replace(',','.')
+       
+        if(!isNaN(newValue) && Number(newValue) > 0){
+           
+            setnprice(newValue);
         }
     }
     return (

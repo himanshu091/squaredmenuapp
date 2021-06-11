@@ -158,7 +158,11 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
             source={require('../assets/images/topbar/back.png')}
             style={styles.button_image}
           />
+
         </TouchableOpacity>
+        <TouchableOpacity style={styles.previewBTN} onPress={() => refRBSheet.current.open()}>
+                                    <Text style={styles.preview}>Change Image</Text>
+                                </TouchableOpacity>
 
         {/* <TouchableOpacity
           style={styles.button}
@@ -281,6 +285,7 @@ const styles = StyleSheet.create({
   },
   button: {},
   topElements: {
+  
     position: 'absolute',
     display: 'flex',
     flexDirection: 'row',
@@ -288,6 +293,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 15,
     marginTop: 30,
+    width:"100%"
   },
   logoflat: {
     marginHorizontal: 55,
@@ -329,6 +335,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: heightPercentageToDP(10),
   },
+  previewBTN: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 18,
+    paddingVertical: 7,
+    borderRadius: 23,
+    marginHorizontal:30
+},
+preview: {
+    fontFamily: 'Poppins Medium',
+    fontSize: 16,
+    color: '#635CC9'
+},
   nameText: {
     fontSize: 48,
     color: '#000000',

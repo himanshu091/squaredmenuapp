@@ -23,11 +23,14 @@ const NonVarientPrice = ({closeFunc, O_price, editPrice}) => {
         if(value === ""){
             setprice(value)
         }
-        if(!isNaN(value) && Number(value) > 0){
+        let newValue = value.replace(',','.')
+       
+        if(!isNaN(newValue) && Number(newValue) > 0){
             setChanged(true);
-            setprice(value);
+            setprice(newValue);
         }
     }
+   
     return (
         <View style={styles.box}>
             <View>

@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
         position: 'relative',
         width: widthPercentageToDP(100),
         height: heightPercentageToDP(30),
-        marginBottom: 25
+        marginBottom: 45
     },
     logoContainer: {
         display: 'flex',

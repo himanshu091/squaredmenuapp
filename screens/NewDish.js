@@ -116,7 +116,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             price: parseFloat(price)
         })
         setVariants(temp)
-        console.log("Add Varient",temp)
+        console.log("Add Variant",temp)
     }
     const editVariant = (name,price, pos) => {
         const temp = [...variants]
@@ -205,7 +205,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
                 style={styles.bell}
                 onPress={()=>navigation.goBack()}
             >
-                <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
+                <Image source={require('../assets/images/topbar/back.png')} style={{height:42, width:42}}/>
             </TouchableOpacity>
             <View style={styles.part1}>
                 <View style={styles.dishNameContainer}>
@@ -413,7 +413,7 @@ const styles = StyleSheet.create({
         position:'absolute',
         top: heightPercentageToDP(5),
         left:widthPercentageToDP(3.5),
-        transform: [{ rotate: '180deg'}]
+       // transform: [{ rotate: '180deg'}]
     },
     part1:{
         flexDirection: 'row',

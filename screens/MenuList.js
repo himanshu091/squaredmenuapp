@@ -100,7 +100,7 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
                                         style={styles.bell}
                                         onPress={() => navigation.goBack()}
                                     >
-                                        <Image source={require('../assets/images/onboarding/next.png')} style={{ height: 42, width: 42 }} />
+                                        <Image source={require('../assets/images/topbar/back.png')} style={{ height: 42, width: 42 }} />
                                     </TouchableOpacity>
                                     <TouchableOpacity style={styles.previewBTN} onPress={() => navigation.navigate('MenuPreview', { themeURL: route.params.themeURL })}>
                                         <Text style={styles.preview}>Change Style</Text>
@@ -124,7 +124,7 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
                     />
                 </SafeAreaView>
             <TouchableOpacity style={styles.qrbutton} onPress={() => navigation.navigate('QR', { restaurant_id: route.params.restaurant_id, img: route.params.brandImage,  url: route.params.public_url })}>
-                <Image source={require('../assets/images/icons/qr.png')} style={{ height: 33, width: 33 }} />
+                <Image source={require('../assets/images/icons/qr.png')} style={{ height: 100, width: 100 }} />
             </TouchableOpacity>
             <RBSheet
                 ref={refRBSheet}
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: heightPercentageToDP(5),
         left: widthPercentageToDP(3.5),
-        transform: [{ rotate: '180deg' }]
+        //transform: [{ rotate: '180deg' }]
     },
     info: {
         marginTop: heightPercentageToDP(14),
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     previewBTN: {
-        backgroundColor: '#fff',
+        backgroundColor: '#635CC9',
         paddingHorizontal: 18,
         paddingVertical: 7,
         borderRadius: 23,
@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
     preview: {
         fontFamily: 'Poppins Medium',
         fontSize: 16,
-        color: '#635CC9'
+        color: '#fff'
     },
     subBox: {
         display: 'flex',
@@ -308,18 +308,18 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 25,
         top: heightPercentageToDP(84),
-        backgroundColor: '#fff',
-        padding: 22,
-        borderRadius: 100,
-        elevation: 5,
+        //backgroundColor: '#fff',
+        padding: 0,
+        borderRadius: 0,
+        elevation: 3,
         //ios
-        shadowColor: "#d4d4d4",
+        //shadowColor: "#d4d4d4",
         shadowOffset: {
             width: 0,
             height: 0,
         },
-        shadowOpacity: 0.05,
-        shadowRadius: 3.84,
+        shadowOpacity: 0.02,
+        //shadowRadius: 0.84,
     }
 
 })

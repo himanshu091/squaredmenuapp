@@ -8,6 +8,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
+  SafeAreaView,
 
 } from 'react-native';
 import { Button } from 'react-native-elements'
@@ -37,6 +38,7 @@ const ForgotPassword = ({ navigation,forgotPassword }) => {
     }
   }
   return (
+    <SafeAreaView style={{flex:1}}>
     <ScrollView>
       {/* <Bg1
         height={hp('40%')}
@@ -103,6 +105,7 @@ const ForgotPassword = ({ navigation,forgotPassword }) => {
       </View>
 
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

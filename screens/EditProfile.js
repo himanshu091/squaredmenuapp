@@ -8,7 +8,8 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  AlertIOS
+  AlertIOS,
+  SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button } from 'react-native-elements';
@@ -148,6 +149,7 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
     
   };
   return (
+    <SafeAreaView style={{flex:1}}>
     <ScrollView>
       <View>
         <ImageBackground source={require('../assets/images/banners/lands.png')} style={{ width: wp(100), height:wp(100)*224/375 }}>
@@ -251,6 +253,7 @@ const EditProfile = ({ navigation, changePassword, name, user_id, token, updateP
         />
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 };
 const mapSatateToProps = state => {

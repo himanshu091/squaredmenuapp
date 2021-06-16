@@ -46,7 +46,7 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
                 style={styles.bell}
                 onPress={()=>navigation.goBack()}
             >
-                <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
+                <Image source={require('../assets/images/topbar/back.png')} style={{height:42, width:42}}/>
             </TouchableOpacity>
             <TouchableOpacity 
                 style={styles.edit}
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
         position:'absolute',
         top: heightPercentageToDP(5),
         left:widthPercentageToDP(3.5),
-        transform: [{ rotate: '180deg'}]
+        
     },
     edit:{
         position:'absolute',

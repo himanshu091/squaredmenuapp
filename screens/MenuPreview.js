@@ -18,7 +18,7 @@ const MenuPreview = ({navigation, route}) => {
         <SafeAreaView style={{backgroundColor:'#fff', flex:1, overflow:'hidden'}}>
             {!loading && <View style={styles.exitBtn}>
                 <TouchableOpacity style={styles.exbt} onPress={()=>{navigation.goBack()}}>
-                    <Text style={styles.btnText}>Exit Preview</Text>
+                    <Text style={styles.btnText}>Exit Change Style</Text>
                 </TouchableOpacity>
             </View>}
             {/* {loading && <View style={{flexDirection:'column', justifyContent:'center', height:'100%'}}>

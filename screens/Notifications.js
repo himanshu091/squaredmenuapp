@@ -45,7 +45,7 @@ const Notifications = ({ navigation, logout, user_id, token, image, getNotificat
                             style={styles.bell}
                             onPress={()=>navigation.goBack()}
                         >
-                            <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
+                            <Image source={require('../assets/images/topbar/back.png')} style={{height:42, width:42}}/>
                         </TouchableOpacity>
                         <View style={styles.info}>
                             <View style={styles.nameContainer}>
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: heightPercentageToDP(5),
         left: widthPercentageToDP(3.5),
-        transform: [{ rotate: '180deg'}]
+        //transform: [{ rotate: '180deg'}]
     },
     info: {
         marginTop: 20,

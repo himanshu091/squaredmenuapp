@@ -7,7 +7,7 @@ const AddNewVarient = ({closeFunc, addVariant}) => {
     const [err, seterr] = useState("")
     const handleSubmit = () => {
         if(name.trim().length < 1){
-            seterr("Enter Valid Varient Name")
+            seterr("Enter Valid Variant Name")
             return
         }else if(price.trim().length < 1 ){
             seterr("Enter Valid price")
@@ -30,13 +30,13 @@ const AddNewVarient = ({closeFunc, addVariant}) => {
     return (
         <View style={styles.box}>
             <View>
-                <Text style={styles.title}>Add Varient</Text>
+                <Text style={styles.title}>Add Variant</Text>
                 <Text style={{textAlign: 'center', fontFamily: 'Poppins Medium', color: 'red'}}>{err}</Text>
                 <TextInput
                     style={styles.input}
                     onChangeText={setname}
                     value={name}
-                    placeholder="ex. medium, large, small"
+                    placeholder="ex. small, medium, large"
                     textAlign="center"
                     placeholderTextColor="#635CC9"
                     

@@ -343,6 +343,7 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
           <Image
             source={require('../assets/images/logoinapp/logoflat.png')}
             style={styles.logo}
+            resizeMode='contain'
           />
         </View>
       </View>

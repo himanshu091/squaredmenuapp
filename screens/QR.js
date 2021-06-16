@@ -60,7 +60,7 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
                         style={styles.bell}
                         onPress={()=>navigation.goBack()}
                     >
-                        <Image source={require('../assets/images/onboarding/next.png')} style={{height:42, width:42}}/>
+                        <Image source={require('../assets/images/topbar/back.png')} style={{height:42, width:42}}/>
                     </TouchableOpacity>
                     <View style={styles.logoContainer}><Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo} /></View>
                     <TouchableOpacity style={styles.previewBTN} onPress={() => Linking.openURL(route.params.url)}>
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         position:'absolute',
         top: heightPercentageToDP(5),
         left:widthPercentageToDP(3.5),
-        transform: [{ rotate: '180deg'}]
+        //transform: [{ rotate: '180deg'}]
     },
     info:{
         marginTop:heightPercentageToDP(8),

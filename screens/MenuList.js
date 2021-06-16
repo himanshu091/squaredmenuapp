@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
         //backgroundColor: '#fff',
         padding: 0,
         borderRadius: 0,
-        elevation: 3,
+        // elevation: 3,
         //ios
         //shadowColor: "#d4d4d4",
         shadowOffset: {

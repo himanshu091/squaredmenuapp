@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     },
     exitBtn:{
         position: 'absolute',
-        top: Platform.OS==='ios'?75:42,
+        top: Platform.OS==='ios'?55:45,
         right: 3,
         zIndex: 1
     },

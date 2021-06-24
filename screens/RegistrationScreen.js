@@ -479,7 +479,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
         <TouchableOpacity onPress={()=>{Linking.openURL("https://www.squaredmenu.com/privacy.html")}}>
           <Text style={styles.registerText}>Policy </Text>
         </TouchableOpacity>
-        <Text style={styles.registerText}>and</Text>
+        <Text style={{...styles.registerText, color :'gray'}}>and</Text>
         <TouchableOpacity onPress={()=>{Linking.openURL("https://www.squaredmenu.com/terms.html")}}>
           <Text style={styles.registerText}> T&C</Text>
         </TouchableOpacity>
@@ -586,10 +586,11 @@ marginTop:Platform.OS === 'ios'?60:30
     fontFamily:"Poppins Medium"
   },
   registerText:{
-    fontSize:15,
-    color:"#757575",
+    fontSize:17,
+    color:"#635CC9",
     fontFamily:"Poppins Regular",
     textAlign:'center',
+   // fontWeight:'bold',
     marginTop:15 
   },
   socialMedia:{

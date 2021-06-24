@@ -88,7 +88,7 @@ const DishDetail = ({navigation, route, user_id, token, getItemDetail}) => {
                     }
                 })}
             </View>
-            {allergensAvailable && <Text  style={{fontFamily: 'Poppins Medium', fontSize: 18, color: '#000', marginTop: 20,marginBottom:20, marginLeft: widthPercentageToDP(4)}}>allergens</Text>}
+            {allergensAvailable && <Text  style={{fontFamily: 'Poppins Medium', fontSize: 18, color: '#000', marginTop: 20,marginBottom:20, marginLeft: widthPercentageToDP(4)}}>Allergens</Text>}
             <View style={{display:'flex', flexDirection:'row', flexWrap:'wrap'}}>
                 {data.extra_options.map(opt => {
                     console.log(opt.is_checked)
@@ -237,8 +237,8 @@ const styles = StyleSheet.create({
         color: '#fff'
     },
     jar:{
-        height: 18.95,
-        width: 15.83
+        height: 24,
+        width: 24
     },
     tick:{
         height: 13.7,

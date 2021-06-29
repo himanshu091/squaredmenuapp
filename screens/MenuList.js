@@ -18,15 +18,18 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
     const [data1, setdata] = useState(null)
     const [dataItems, setDataItems] = useState([])
     const [currency, setCurrency] = useState('$')
+    const [updateFlatlist, setUpdateFlatlist] = useState(1)
     useEffect(async () => {
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
         bodyFormData.append('token', token);
         bodyFormData.append('menu_id', route.params.menu_id);
         const res = await getMenuItems(bodyFormData)
+        console.log("Item Detail =>", res.data.data)
         setdata(res.data.data)
-        setDataItems(res.data.data.items)
         setCurrency(res.data.data.menu.currency)
+        setDataItems(res.data.data.items)
+        
 
     }, [])
     useEffect(() => {
@@ -53,21 +56,25 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
         setDataItems(res.data.data.items)
         setCurrency(res.data.data.menu.currency)
     }
+    useEffect(() => {
+        setUpdateFlatlist(updateFlatlist + 1)
+        console.log(currency)
+    }, [data1, currency])
     const close1andRefresh = () => {
 
     }
-    const renderItem = useCallback(
-        ({ item, index, drag, isActive }: RenderItemParams<Item>) => {
+    const renderItem = ({ item, index, drag, isActive }) => {
+            console.log("rendering")
             return (
                 <View style={{ backgroundColor: isActive ? "#635CC925" : "transparent" }}>
                     <MenuSection key={index} drag={drag} refresh={() => refresh()} currency={currency} menuName={item.name} variants={item.variants} menu_id={route.params.menu_id} data={item} successClose={() => { close1andRefresh() }} addNew={() => refRBSheet2.current.open()} navigation={navigation} />
                 </View>
-            );
-        },
-        []
-    );
-    const handleSorting = async (data) =>{
-        const new_order = data.map(item=>item.item_id);
+            )
+        
+        }
+    
+    const handleSorting = async (data) => {
+        const new_order = data.map(item => item.item_id);
 
         var bodyFormData = new FormData();
         bodyFormData.append('user_id', user_id);
@@ -77,53 +84,53 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
     }
     return (
         <SafeAreaView style={{ flex: 1 }}>
-                {/* {   
+            {/* {   
                     data1 && data1.items.map((menu, idx) => {
                         return <MenuSection key={idx} refresh={()=>refresh()} currency={data1.menu.currency} menuName={menu.name} variants={menu.variants} menu_id={route.params.menu_id} data={menu} successClose={()=>{close1andRefresh()}} addNew={() => refRBSheet2.current.open()} navigation={navigation}/>
                     })
                 } */}
-                <SafeAreaView style={{ flex: 1 }}>
-                    <DraggableFlatList
-                        nestedScrollEnabled
-                        data={dataItems}
-                        renderItem={renderItem}
-                        dragItemOverflow={true}
-                        keyExtractor={(item, index) => `draggable-item-${index}`}
-                        onDragEnd={({ data }) => {setDataItems(data),handleSorting(data)}}
-                        extraData={data1} //to update on state change
+            <SafeAreaView style={{ flex: 1 }}>
+                <DraggableFlatList
+                    nestedScrollEnabled
+                    data={dataItems}
+                    renderItem={renderItem}
+                    dragItemOverflow={true}
+                    keyExtractor={(item, index) => `draggable-item-${index}`}
+                    onDragEnd={({ data }) => { setDataItems(data), handleSorting(data) }}
+                    extraData={data1} //to update on state change
 
-                        ListHeaderComponent={() => {
-                            return <>
-                                <HeaderSVG uri={data1 && data1.menu.cat_image} />
-                                <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
-                                    <TouchableOpacity
-                                        style={styles.bell}
-                                        onPress={() => navigation.goBack()}
-                                    >
-                                        <Image source={require('../assets/images/topbar/back.png')} style={{ height: 42, width: 42 }} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity style={styles.previewBTN} onPress={() => navigation.navigate('MenuPreview', { themeURL: route.params.themeURL })}>
-                                        <Text style={styles.preview}>Change Style</Text>
-                                    </TouchableOpacity>
-                                    <View style={styles.info}>
-                                        <View style={styles.nameContainer}>
-                                            <Text numberOfLines={1} style={styles.name}>{data1 && data1.menu.restorant_name}</Text>
-                                            <Text numberOfLines={1} style={styles.menuName}>{data1 && data1.menu.cat_name}</Text>
-                                        </View>
-
+                    ListHeaderComponent={() => {
+                        return <>
+                            <HeaderSVG uri={data1 && data1.menu.cat_image} />
+                            <View source={require('../assets/images/banners/mask.png')} style={styles.banner} resizeMode="stretch">
+                                <TouchableOpacity
+                                    style={styles.bell}
+                                    onPress={() => navigation.goBack()}
+                                >
+                                    <Image source={require('../assets/images/topbar/back.png')} style={{ height: 42, width: 42 }} />
+                                </TouchableOpacity>
+                                <TouchableOpacity style={styles.previewBTN} onPress={() => navigation.navigate('MenuPreview', { themeURL: route.params.themeURL })}>
+                                    <Text style={styles.preview}>Change Style</Text>
+                                </TouchableOpacity>
+                                <View style={styles.info}>
+                                    <View style={styles.nameContainer}>
+                                        <Text numberOfLines={1} style={styles.name}>{data1 && data1.menu.restorant_name}</Text>
+                                        <Text numberOfLines={1} style={styles.menuName}>{data1 && data1.menu.cat_name}</Text>
                                     </View>
+
                                 </View>
-                            </>
-                        }}
-                        ListFooterComponent={() => {
-                            return <TouchableOpacity style={styles.newSection} onPress={() => refRBSheet.current.open()}>
-                                <Text style={styles.sectionName}>Add New Menu Item</Text>
-                                <Image style={styles.plus} source={require('../assets/images/icons/plus.png')} />
-                            </TouchableOpacity>
-                        }}
-                    />
-                </SafeAreaView>
-            <TouchableOpacity style={styles.qrbutton} onPress={() => navigation.navigate('QR', { restaurant_id: route.params.restaurant_id, img: route.params.brandImage,  url: route.params.public_url })}>
+                            </View>
+                        </>
+                    }}
+                    ListFooterComponent={() => {
+                        return <TouchableOpacity style={styles.newSection} onPress={() => refRBSheet.current.open()}>
+                            <Text style={styles.sectionName}>Add New Menu Item</Text>
+                            <Image style={styles.plus} source={require('../assets/images/icons/plus.png')} />
+                        </TouchableOpacity>
+                    }}
+                />
+            </SafeAreaView>
+            <TouchableOpacity style={styles.qrbutton} onPress={() => navigation.navigate('QR', { restaurant_id: route.params.restaurant_id, img: route.params.brandImage, url: route.params.public_url })}>
                 <Image source={require('../assets/images/icons/qr.png')} style={{ height: 80, width: 80 }} />
             </TouchableOpacity>
             <RBSheet
@@ -218,7 +225,7 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         lineHeight: 40,
         textTransform: 'capitalize',
-        marginBottom:5
+        marginBottom: 5
     },
     menuName: {
         flexWrap: 'wrap',
@@ -237,8 +244,8 @@ const styles = StyleSheet.create({
         padding: 10,
         marginHorizontal: widthPercentageToDP(8),
         marginTop: 40,
-        elevation:2,
-//ios
+        elevation: 2,
+        //ios
         shadowColor: "#d4d4d4",
         shadowOffset: {
             width: 0,
@@ -285,8 +292,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 25,
         borderRadius: 17,
         marginBottom: 50,
-        elevation:2,
-//ios
+        elevation: 2,
+        //ios
         shadowColor: "#d4d4d4",
         shadowOffset: {
             width: 0,

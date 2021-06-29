@@ -36,9 +36,16 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
         <View style={styles.mainContainer}>
             <View style={styles.sectionHeader}>
                 <TouchableOpacity onPressIn={drag}><Image source={require('../assets/images/icons/drag_icon.png')} style={{width: 18, height: 18}}/></TouchableOpacity>
-                <TouchableOpacity style={styles.delete} onPress={createTwoButtonAlert}>
-                    <Image source={require('../assets/images/icons/delete.png')} style={{height: 16, width: 14}}/>
-                </TouchableOpacity>
+                <View style={styles.actionBtns}>
+                    <TouchableOpacity style={styles.delete} 
+                        onPress={()=>navigation.navigate('EditDish', {item_id:data.item_id, menu_id:menu_id, currency:currency})}
+                    >
+                        <Image source={require('../assets/images/icons/edit_transparent.png')} style={{height: 30, width: 30}}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.delete} onPress={createTwoButtonAlert}>
+                        <Image source={require('../assets/images/icons/delete.png')} style={{height: 16, width: 14}}/>
+                    </TouchableOpacity>
+                </View>
             </View>
                 <View style={styles.menuItem}>
                     <View style={styles.menuSubItem}>
@@ -94,6 +101,10 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.1,
         shadowRadius: 3.84,
+    },
+    actionBtns:{
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     sectionHeader:{
         flexDirection: 'row',

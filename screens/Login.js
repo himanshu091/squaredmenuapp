@@ -12,6 +12,7 @@ import {
   AlertIOS,
 
 } from 'react-native';
+import Clipboard from '@react-native-clipboard/clipboard';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Button } from 'react-native-elements'
 import {
@@ -20,9 +21,9 @@ import {
 } from 'react-native-responsive-screen';
 import SocialMediaIcon from '../components/SocialMediaIcon';
 import Bg1 from '../assets/images/banners/bg1.svg'
-import { login, signInAPIGoogle , signInAPIApple} from '../store/action';
+import { login, signInAPIGoogle, signInAPIApple } from '../store/action';
 import { connect } from 'react-redux';
-import { getBaseOs,getModel,getDeviceName } from 'react-native-device-info';
+import { getBaseOs, getModel, getDeviceName } from 'react-native-device-info';
 import { Platform } from 'react-native';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import Google from '../assets/images/icons/googleicon.svg'
@@ -42,37 +43,39 @@ import appleAuth, {
   AppleAuthError,
   AppleAuthRequestScope,
   AppleAuthRequestOperation,
-} from '@invertase/react-native-apple-authentication'
+} from '@invertase/react-native-apple-authentication';
+import { ServiceConstant } from './ServiceConstant'
 
 GoogleSignin.configure({
-  webClientId:"955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
-  
+  webClientId: "955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
+
   // offlineAccess: true
 })
-const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
+const Login = ({ navigation, login, signInAPIGoogle, signInAPIApple }) => {
   const [iceye, setIceye] = React.useState("visibility-off");
   const [showPassword, setShowPassword] = React.useState(true);
   const [email, onChangeEmail] = React.useState("");
   const [password, onChangePassword] = React.useState("");
   const [error, setError] = React.useState("");
   const [clicked, setclicked] = React.useState(false);
-  
+
   const [userGoogleInfo, setUserGoogleInfo] = React.useState({});
   const [loaded, setLoaded] = React.useState(false);
   const [userFacebookInfo, setUserFacebookInfo] = React.useState({});
   const [online, setonline] = useState(true)
-   
+
   useEffect(() => {
-        // Subscribe
-      const unsubscribe = NetInfo.addEventListener(state => {
-          console.log("Connection type", state.type);
-          console.log("Is connected?", state.isConnected);
-          setonline(state.isConnected)
-      });
-      return () => {
-          // Unsubscribe
-          unsubscribe();
-      }
+    console.log('from login -', ServiceConstant.get_fcm_Token())
+    // Subscribe
+    const unsubscribe = NetInfo.addEventListener(state => {
+      console.log("Connection type", state.type);
+      console.log("Is connected?", state.isConnected);
+      setonline(state.isConnected)
+    });
+    return () => {
+      // Unsubscribe
+      unsubscribe();
+    }
   }, [])
   const onAppleButtonPress = async () => {
     try {
@@ -80,11 +83,11 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
         requestedOperation: appleAuth.Operation.LOGIN,
         requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
       });
-      console.log("response =>",appleAuthRequestResponse)
+      console.log("response =>", appleAuthRequestResponse)
       // get current authentication state for user
       // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
       const credentialState = await appleAuth.getCredentialStateForUser(appleAuthRequestResponse.user);
-    
+
       // use credentialState response to ensure the user is authenticated
       if (credentialState === appleAuth.State.AUTHORIZED) {
         // user is authenticated
@@ -104,49 +107,49 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
         bodyFormData.append('name', userInfo.name);
         bodyFormData.append('email', userInfo.email);
         // bodyFormData.append('image', "");
-        bodyFormData.append('firebase_token', userInfo.identityToken);
+        bodyFormData.append('firebase_token', ServiceConstant.get_fcm_Token());
         bodyFormData.append('device_name', device_name);
         bodyFormData.append('device_modal', device_model);
         bodyFormData.append('device_os', device_os);
 
         const res = await signInAPIApple(bodyFormData)
-        if(res.data.status){
-          if(Platform.OS === 'android'){
+        if (res.data.status) {
+          if (Platform.OS === 'android') {
             ToastAndroid.showWithGravity(
-            res.data.message,
-            ToastAndroid.SHORT,
-            ToastAndroid.BOTTOM
-          )
-          }else{
+              res.data.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM
+            )
+          } else {
             AlertIOS.alert(res.data.message)
           }
-        }else{
-          if(Platform.OS === 'android'){
+        } else {
+          if (Platform.OS === 'android') {
             ToastAndroid.showWithGravity(
-            res.data.message,
-            ToastAndroid.SHORT,
-            ToastAndroid.BOTTOM
-          )
-          }else{
+              res.data.message,
+              ToastAndroid.SHORT,
+              ToastAndroid.BOTTOM
+            )
+          } else {
             AlertIOS.alert(res.data.message)
           }
         }
       }
-    }catch (error) {
+    } catch (error) {
       if (error.code === AppleAuthError.CANCELED) {
         console.log("User Cancelled Login with Apple")
-    
+
       } else {
         console.log("error apple login =>", error)
       }
     }
- }
+  }
   const signinWithGoogle = async () => {
-    try{
+    try {
       await GoogleSignin.hasPlayServices()
       const userInfo = await GoogleSignin.signIn()
       setUserGoogleInfo(userInfo)
-      console.log("Google Success =>",userInfo)
+      console.log("Google Success =>", userInfo)
 
       //Begin Signin to API
       let device_os = Platform.OS;
@@ -158,34 +161,34 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
       bodyFormData.append('name', userInfo.user.name);
       bodyFormData.append('email', userInfo.user.email);
       bodyFormData.append('image', userInfo.user.photo);
-      bodyFormData.append('firebase_token', userInfo.idToken);
+      bodyFormData.append('firebase_token', ServiceConstant.get_fcm_Token());
       bodyFormData.append('device_name', device_name);
       bodyFormData.append('device_modal', device_model);
       bodyFormData.append('device_os', device_os);
       const res = await signInAPIGoogle(bodyFormData, "google")
-      if(res.data.status){
-        if(Platform.OS === 'android'){
+      if (res.data.status) {
+        if (Platform.OS === 'android') {
           ToastAndroid.showWithGravity(
-          res.data.message,
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
-        )
-        }else{
+            res.data.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM
+          )
+        } else {
           AlertIOS.alert(res.data.message)
         }
-      }else{
-        if(Platform.OS === 'android'){
+      } else {
+        if (Platform.OS === 'android') {
           ToastAndroid.showWithGravity(
-          res.data.message,
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
-        )
-        }else{
+            res.data.message,
+            ToastAndroid.SHORT,
+            ToastAndroid.BOTTOM
+          )
+        } else {
           AlertIOS.alert(res.data.message)
         }
       }
-  
-    }catch(err){
+
+    } catch (err) {
       console.log("Error Google Signin =>", err)
     }
   }
@@ -197,7 +200,7 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
     };
     const profileRequest = new GraphRequest(
       '/me',
-      {token, parameters: PROFILE_REQUEST_PARAMS},
+      { token, parameters: PROFILE_REQUEST_PARAMS },
       async (error, user) => {
         if (error) {
           console.log('login info has error: ' + error);
@@ -213,33 +216,33 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
           bodyFormData.append('name', user.name);
           bodyFormData.append('email', user.email);
           bodyFormData.append('image', user.picture.data.url);
-          bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
+          bodyFormData.append('firebase_token', ServiceConstant.get_fcm_Token());
           bodyFormData.append('device_name', device_name);
           bodyFormData.append('device_modal', device_model);
           bodyFormData.append('device_os', device_os);
           const res = await signInAPIGoogle(bodyFormData, "facebook")
-          if(res.data.status){
-            if(Platform.OS === 'android'){
+          if (res.data.status) {
+            if (Platform.OS === 'android') {
               ToastAndroid.showWithGravity(
-              res.data.message,
-              ToastAndroid.SHORT,
-              ToastAndroid.BOTTOM
-            )
-            }else{
+                res.data.message,
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM
+              )
+            } else {
               AlertIOS.alert(res.data.message)
             }
-          }else{
-            if(Platform.OS === 'android'){
+          } else {
+            if (Platform.OS === 'android') {
               ToastAndroid.showWithGravity(
-              res.data.message,
-              ToastAndroid.SHORT,
-              ToastAndroid.BOTTOM
-            )
-            }else{
+                res.data.message,
+                ToastAndroid.SHORT,
+                ToastAndroid.BOTTOM
+              )
+            } else {
               AlertIOS.alert(res.data.message)
             }
           }
-        
+
         }
       },
     );
@@ -248,7 +251,7 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
 
   const loginWithFacebook = () => {
     // Attempt a login using the Facebook login dialog asking for default permissions.
-    LoginManager.logInWithPermissions(['public_profile','email']).then(
+    LoginManager.logInWithPermissions(['public_profile', 'email']).then(
       login => {
         if (login.isCancelled) {
           console.log('Login cancelled');
@@ -265,10 +268,10 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
     );
   };
   const startLogin = async () => {
-    if(email.trim().length < 1){
+    if (email.trim().length < 1) {
       setError("Enter Email")
       return
-    }else if(password.trim().length < 1){
+    } else if (password.trim().length < 1) {
       setError("Enter Password")
       return
     }
@@ -279,30 +282,30 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
     var bodyFormData = new FormData();
     bodyFormData.append('email', email);
     bodyFormData.append('password', password);
-    bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
+    bodyFormData.append('firebase_token', ServiceConstant.get_fcm_Token());
     bodyFormData.append('device_name', device_name);
     bodyFormData.append('device_modal', device_model);
     bodyFormData.append('device_os', device_os);
     const res = await login(bodyFormData)
     setclicked(false)
-    if(res.data.status){
-      if(Platform.OS === 'android'){
+    if (res.data.status) {
+      if (Platform.OS === 'android') {
         ToastAndroid.showWithGravity(
-        res.data.message,
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM
-      )
-      }else{
+          res.data.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        )
+      } else {
         AlertIOS.alert(res.data.message)
       }
-    }else{
-      if(Platform.OS === 'android'){
+    } else {
+      if (Platform.OS === 'android') {
         ToastAndroid.showWithGravity(
-        res.data.message,
-        ToastAndroid.SHORT,
-        ToastAndroid.BOTTOM
-      )
-      }else{
+          res.data.message,
+          ToastAndroid.SHORT,
+          ToastAndroid.BOTTOM
+        )
+      } else {
         AlertIOS.alert(res.data.message)
       }
     }
@@ -316,10 +319,17 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
       setShowPassword(true)
     }
   };
+
+
+  const fetchCopiedText = async () => {
+    const text = await Clipboard.getString();
+    AlertIOS.alert(text);
+
+  };
   return (
-    <SafeAreaView style={{flex:1}}>
-    <ScrollView>
-      {/* <Bg1
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView>
+        {/* <Bg1
         height={hp('40%')}
         width={wp('100%')}
         style={{
@@ -330,102 +340,103 @@ const Login = ({ navigation,login, signInAPIGoogle, signInAPIApple }) => {
 
 
       /> */}
-                <Image source={require('../assets/images/banners/addABuisness.png')} style={styles.banner}/>
+        <Image source={require('../assets/images/banners/addABuisness.png')} style={styles.banner} />
 
-      <View style={styles.topElements}>
-        {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RegistrationScreen')}>
+        <View style={styles.topElements}>
+          {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('RegistrationScreen')}>
           <Image
             source={require('../assets/images/topbar/back.png')}
             style={styles.button_image}
           />
         </TouchableOpacity> */}
-        <View style={styles.logoflat}>
-          <Image
-            source={require('../assets/images/logoinapp/logoflat.png')}
-            style={styles.logo}
-            resizeMode='contain'
+          <View style={styles.logoflat}>
+            <Image
+              source={require('../assets/images/logoinapp/logoflat.png')}
+              style={styles.logo}
+              resizeMode='contain'
+            />
+          </View>
+        </View>
+
+        <View style={styles.heading}>
+          <Text style={styles.headingText}>Welcome Back</Text>
+        </View>
+
+        <View style={styles.inputFields}>
+          <Text style={{ textAlign: 'center', color: 'red', fontFamily: 'Poppins Bold' }}>{error}</Text>
+          <TextInput
+            style={styles.input}
+            onChangeText={onChangeEmail}
+            value={email}
+            placeholder="Email Address"
+            textAlign="center"
+            placeholderTextColor="#635CC9"
+            autoCapitalize="none"
+
           />
-        </View>
-      </View>
+          <View style={{ position: 'relative' }}>
+            <TextInput
+              style={styles.input}
+              onChangeText={onChangePassword}
+              value={password}
+              placeholder="Password"
+              textAlign="center"
+              placeholderTextColor="#635CC9"
+              secureTextEntry={showPassword}
 
-      <View style={styles.heading}>
-        <Text style={styles.headingText}>Welcome Back</Text>
-      </View>
+            />
+            <Icon style={styles.showicon}
+              name={iceye}
+              size={26}
+              color='#635CC9'
+              onPress={changePwdType}
+            />
+          </View>
 
-      <View style={styles.inputFields}>
-        <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{error}</Text>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangeEmail}
-          value={email}
-          placeholder="Email Address"
-          textAlign="center"
-          placeholderTextColor="#635CC9"
-          autoCapitalize="none"
+          <Button
+            onPress={startLogin}
+            title="Login"
+            titleStyle={{ fontSize: 15 }}
+            buttonStyle={styles.btn1}
+            containerStyle={{ marginTop: 10 }}
+            loading={clicked}
+          />
+          <Text style={styles.forgotText} onPress={() => navigation.navigate('ForgotPassword')}>Forgot password?</Text>
+          <Text style={styles.forgotText}>or login using</Text>
 
-        />
-        <View style={{position:'relative'}}>
-        <TextInput
-          style={styles.input}
-          onChangeText={onChangePassword}
-          value={password}
-          placeholder="Password"
-          textAlign="center"
-          placeholderTextColor="#635CC9"
-          secureTextEntry={showPassword}
-
-        />
-        <Icon style={styles.showicon}
-            name={iceye}
-            size={26}
-            color='#635CC9'
-            onPress={changePwdType}
-        />
-        </View>
-        
-        <Button
-          onPress={startLogin}
-          title="Login"
-          titleStyle={{ fontSize: 15 }}
-          buttonStyle={styles.btn1}
-          containerStyle={{ marginTop: 10 }}
-          loading={clicked}
-        />
-        <Text style={styles.forgotText} onPress={() => navigation.navigate('ForgotPassword')}>Forgot password?</Text>
-        <Text style={styles.forgotText}>or login using</Text>
-        
-        <View style={styles.socialMedia}>
-          <TouchableOpacity onPress={loginWithFacebook}>
-            <Image
+          <View style={styles.socialMedia}>
+            <TouchableOpacity onPress={loginWithFacebook}>
+              <Image
                 style={styles.icon}
-              source={require('../assets/images/icons/facebook.png')}
+                source={require('../assets/images/icons/facebook.png')}
               />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={signinWithGoogle}>
-            <Image
-             style={styles.icon}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={signinWithGoogle}>
+              <Image
+                style={styles.icon}
 
-            source={require('../assets/images/icons/google.png')}
-            />
-          </TouchableOpacity>
-          {Platform.OS === "ios" && <TouchableOpacity onPress={onAppleButtonPress} style={styles.appleBtnContainer}>
-            <Image
-             style={styles.appleButton}
+                source={require('../assets/images/icons/google.png')}
+              />
+            </TouchableOpacity>
+            {Platform.OS === "ios" && <TouchableOpacity onPress={onAppleButtonPress} style={styles.appleBtnContainer}>
+              <Image
+                style={styles.appleButton}
 
-            source={require('../assets/images/icons/apple.png')}
-            />
-          </TouchableOpacity>}
+                source={require('../assets/images/icons/apple.png')}
+              />
+            </TouchableOpacity>}
+          </View>
+          <Text style={styles.bottomText} onPress={() => navigation.navigate('RegistrationScreen')} >I don't have an account</Text>
+
         </View>
-        <Text style={styles.bottomText} onPress={() => navigation.navigate('RegistrationScreen')} >I don't have an account</Text>
 
-      </View>
-      {!online && <Offline/>}
-    </ScrollView>
+        {!online && <Offline />}
+      </ScrollView>
     </SafeAreaView>
   );
 };
 
-export default connect(null, {login, signInAPIGoogle, signInAPIApple})(Login);
+export default connect(null, { login, signInAPIGoogle, signInAPIApple })(Login);
 
 const styles = StyleSheet.create({
   banner: {
@@ -464,14 +475,14 @@ const styles = StyleSheet.create({
   logo: {
     width: 167,
     height: 22.5
-},
+  },
   button_image: {
     height: 42,
     width: 42,
   },
   inputFields: {
     marginVertical: 15,
-    marginTop: Platform.OS === 'ios'? hp(10):90
+    marginTop: Platform.OS === 'ios' ? hp(10) : 90
   },
   input: {
     height: 50,
@@ -492,7 +503,7 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins Regular",
     textAlign: 'center',
     marginTop: 20
-    
+
   },
   btn1: {
 
@@ -518,36 +529,36 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Poppins Medium"
   },
-  socialMedia:{
-    display:'flex',
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'center',
-    marginTop:10
+  socialMedia: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 10
 
-},
-showicon: {
-  position: 'absolute',
-  top: 16,
-  right: 60
-},
-icon:{
-    marginHorizontal:10,
-    height:46,
-    width:46
-},
-appleBtnContainer:{
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  backgroundColor: '#c4c4c460',
-  borderRadius: 50,
-  padding: 9.75,
-  marginLeft: 10
+  },
+  showicon: {
+    position: 'absolute',
+    top: 16,
+    right: 60
+  },
+  icon: {
+    marginHorizontal: 10,
+    height: 46,
+    width: 46
+  },
+  appleBtnContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#c4c4c460',
+    borderRadius: 50,
+    padding: 9.75,
+    marginLeft: 10
 
-},
-appleButton: {
-  height: 26,
-  width: 26,
-}
+  },
+  appleButton: {
+    height: 26,
+    width: 26,
+  }
 });

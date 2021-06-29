@@ -41,6 +41,7 @@ import appleAuth, {
   AppleAuthRequestScope,
   AppleAuthRequestOperation,
 } from '@invertase/react-native-apple-authentication'
+import { ServiceConstant } from './ServiceConstant'
 
 GoogleSignin.configure({
   webClientId:"955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
@@ -96,7 +97,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
           bodyFormData.append('name', userInfo.name);
           bodyFormData.append('email', userInfo.email);
           // bodyFormData.append('image', "");
-          bodyFormData.append('firebase_token', userInfo.identityToken);
+          bodyFormData.append('firebase_token', ServiceConstant.get_fcm_Token());
           bodyFormData.append('device_name', device_name);
           bodyFormData.append('device_modal', device_model);
           bodyFormData.append('device_os', device_os);
@@ -150,7 +151,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
         bodyFormData.append('name', userInfo.user.name);
         bodyFormData.append('email', userInfo.user.email);
         bodyFormData.append('image', userInfo.user.photo);
-        bodyFormData.append('firebase_token', userInfo.idToken);
+        bodyFormData.append('firebase_token', ServiceConstant.get_fcm_Token());
         bodyFormData.append('device_name', device_name);
         bodyFormData.append('device_modal', device_model);
         bodyFormData.append('device_os', device_os);
@@ -205,7 +206,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
             bodyFormData.append('name', user.name);
             bodyFormData.append('email', user.email);
             bodyFormData.append('image', user.picture.data.url);
-            bodyFormData.append('firebase_token', 'sdkf8768dFWERdsfsdf8sd98f7dg23444');
+            bodyFormData.append('firebase_token', ServiceConstant.get_fcm_Token());
             bodyFormData.append('device_name', device_name);
             bodyFormData.append('device_modal', device_model);
             bodyFormData.append('device_os', device_os);
@@ -270,7 +271,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
         setError("Password does not match.")
         return
       }else if(!strongRegex.test(password)){
-        setError("Please Choose Strong Password.")
+        setError("Please choose a stronger password, e.g. John@123, Smith$456")
         return
       }else if(number.trim().length < 1){
         setError("Enter Contact Number")
@@ -401,7 +402,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
           style={styles.input}
           onChangeText={onChangePassword}
           value={password}
-          placeholder="Password"
+          placeholder="Password e.g. John@123"
           textAlign="center"
           placeholderTextColor="#635CC9"
           secureTextEntry={showPassword}

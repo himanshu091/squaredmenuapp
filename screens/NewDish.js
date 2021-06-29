@@ -289,17 +289,39 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             </View>
             <View style={styles.line2}></View>
             {err.trim().length > 0 && <Text style={{textAlign: 'center', fontFamily: 'Poppins Medium', color: 'red'}}>{err}</Text>}
-            <View style={styles.btnContainer}>
-                <Button
-                    onPress={handleSubmit}
-                    title="Save"
-                    titleStyle={styles.btnText}
-                    buttonStyle={styles.btn}
-                    loading={clicked}
-                />
-            </View>
+            
             <View style={{marginBottom: 50}}></View>
             </ScrollView>
+            
+
+            {
+                    Platform.OS == 'android'
+                        ?
+                        <View style={{ position: 'absolute', zindex: 1, bottom: 0 ,marginHorizontal:20}}>
+                            <Button
+                                onPress={handleSubmit}
+                                title="Save"
+                                titleStyle={styles.btnText}
+                                buttonStyle={styles.btn}
+                                loading={clicked}
+                            />
+                        </View>
+                        :
+                        <View style={{justifyContent:'center', alignItems:'center', marginVertical:5}}>
+                        <Button
+                            onPress={handleSubmit}
+                            title="Save"
+                            titleStyle={styles.btnText}
+                            buttonStyle={styles.btn}
+                            loading={clicked}
+                        />
+                    </View>
+                }
+
+
+
+
+
             <RBSheet
                 ref={refRBSheet1}
                 closeOnDragDown={true}

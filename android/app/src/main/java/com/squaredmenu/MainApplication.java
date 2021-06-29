@@ -1,5 +1,6 @@
 package com.squaredmenu;
 
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import android.app.Application;
 import android.content.Context;
 import com.facebook.react.PackageList;

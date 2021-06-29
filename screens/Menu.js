@@ -95,7 +95,7 @@ const Menu = ({ navigation, user_id, token, getMenu, route, updateMenuOrder }) =
                 />
             </SafeAreaView>
             <TouchableOpacity style={styles.qrbutton} onPress={() => navigation.navigate('QR', { restaurant_id: route.params.restaurant_id, img: route.params.brandImage, url: route.params.public_url})}>
-                <Image source={require('../assets/images/icons/qr.png')} style={{ height: 100, width: 100 }} />
+                <Image source={require('../assets/images/icons/qr.png')} style={{ height: 80, width: 80 }} />
             </TouchableOpacity>
         </SafeAreaView>
     )

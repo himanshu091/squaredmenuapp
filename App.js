@@ -21,7 +21,7 @@ import type {Node} from 'react';
 import SplashScreen from 'react-native-splash-screen';
 
 import 'react-native-gesture-handler';
-
+import{Call_Notification} from './screens/Notification'
 
 
 
@@ -69,6 +69,7 @@ const App = () => {
   console.log("persiistor", store.getState())
   useEffect(() => {
     SplashScreen.hide()
+    Call_Notification()
     
   }, [])
   const backgroundStyle = {

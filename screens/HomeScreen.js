@@ -10,6 +10,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import NetInfo from "@react-native-community/netinfo";
 import Offline from '../components/Offline'
+import { strings } from '../locales/i18n'
 
 const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants }) => {
     const [data, setdata] = useState(null)
@@ -67,7 +68,7 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
                         </View>
                         <View style={styles.info}>
                             <View style={styles.nameContainer}>
-                                <Text style={styles.name}>Your Business</Text>
+                                <Text style={styles.name}>{strings('Home Screen1')}</Text>
                             </View>
                             <TouchableOpacity onPress={() => navigation.navigate('UserProfile')}>
                                 {image.trim().length < 1 && <Image style={styles.profilePic} source={require('../assets/images/profile/profile.png')} />}
@@ -87,7 +88,7 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
                         {data && data.map((item, idx) => {
                             return <RestaurantCard key={idx} name='Menu' navigation={navigation} data={item} />
                         })}
-                        {data.length < 1 && <AddNewButton name='AddABusiness' navigation={navigation} />}
+                        {data.length < 1 && <AddNewButton name='AddABusiness' title={strings('Home Screen2')} navigation={navigation} />}
                     </> : <View style={styles.loading}><Text style={styles.loadingText}></Text></View>}
                 </View>
                 <View style={{ marginBottom: 50 }}></View>

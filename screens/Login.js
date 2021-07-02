@@ -28,6 +28,7 @@ import { Platform } from 'react-native';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import Google from '../assets/images/icons/googleicon.svg'
 import Facebook from '../assets/images/icons/facebookicon.svg'
+
 import {
   LoginButton,
   AccessToken,
@@ -45,6 +46,7 @@ import appleAuth, {
   AppleAuthRequestOperation,
 } from '@invertase/react-native-apple-authentication';
 import { ServiceConstant } from './ServiceConstant'
+import { strings } from '../locales/i18n';
 
 GoogleSignin.configure({
   webClientId: "955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
@@ -359,7 +361,7 @@ const Login = ({ navigation, login, signInAPIGoogle, signInAPIApple }) => {
         </View>
 
         <View style={styles.heading}>
-          <Text style={styles.headingText}>Welcome Back</Text>
+          <Text style={styles.headingText}>{strings('Login Screen4')}</Text>
         </View>
 
         <View style={styles.inputFields}>
@@ -368,7 +370,7 @@ const Login = ({ navigation, login, signInAPIGoogle, signInAPIApple }) => {
             style={styles.input}
             onChangeText={onChangeEmail}
             value={email}
-            placeholder="Email Address"
+            placeholder={strings('Login Screen1')}
             textAlign="center"
             placeholderTextColor="#635CC9"
             autoCapitalize="none"
@@ -379,7 +381,7 @@ const Login = ({ navigation, login, signInAPIGoogle, signInAPIApple }) => {
               style={styles.input}
               onChangeText={onChangePassword}
               value={password}
-              placeholder="Password"
+              placeholder={strings('Login Screen2')}
               textAlign="center"
               placeholderTextColor="#635CC9"
               secureTextEntry={showPassword}
@@ -395,14 +397,14 @@ const Login = ({ navigation, login, signInAPIGoogle, signInAPIApple }) => {
 
           <Button
             onPress={startLogin}
-            title="Login"
+            title={strings('Login Screen3')}
             titleStyle={{ fontSize: 15 }}
             buttonStyle={styles.btn1}
             containerStyle={{ marginTop: 10 }}
             loading={clicked}
           />
-          <Text style={styles.forgotText} onPress={() => navigation.navigate('ForgotPassword')}>Forgot password?</Text>
-          <Text style={styles.forgotText}>or login using</Text>
+          <Text style={styles.forgotText} onPress={() => navigation.navigate('ForgotPassword')}>{strings('Login Screen5')}</Text>
+          <Text style={styles.forgotText}>{strings('Login Screen6')}</Text>
 
           <View style={styles.socialMedia}>
             <TouchableOpacity onPress={loginWithFacebook}>
@@ -426,7 +428,7 @@ const Login = ({ navigation, login, signInAPIGoogle, signInAPIApple }) => {
               />
             </TouchableOpacity>}
           </View>
-          <Text style={styles.bottomText} onPress={() => navigation.navigate('RegistrationScreen')} >I don't have an account</Text>
+          <Text style={styles.bottomText} onPress={() => navigation.navigate('RegistrationScreen')} >{strings('Login Screen7')}</Text>
 
         </View>
 

@@ -29,6 +29,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
 import {Picker} from '@react-native-picker/picker';
 import { ActivityIndicator } from 'react-native';
+import { strings } from '../locales/i18n';
 
 const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , getCurrency}) => {
   const refRBSheet = useRef();
@@ -219,7 +220,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
           style={styles.input}
           onChangeText={onChangeName}
           value={name}
-          placeholder="Name"
+          placeholder={strings('Add Business1')}
           textAlign="center"
           placeholderTextColor="#635CC9"
 
@@ -229,14 +230,14 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
           source={require("../assets/images/icons/location.png")}
           style={{height: 20, width: 20}}
         />
-        <Text style={styles.locationText}>Locate me</Text>
+        <Text style={styles.locationText}>{strings('Add Business2')}</Text>
         {locationLoading && <ActivityIndicator size="small" color="#635cc9" />}
       </TouchableOpacity>
         <TextInput
           style={styles.inputAddress}
           onChangeText={onChangeAddress}
           value={address}
-          placeholder="Address"
+          placeholder={strings('Add Business3')}
           textAlign="center"
           placeholderTextColor="#635CC9"
           multiline={true}
@@ -265,7 +266,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
           style={styles.input}
           onChangeText={value=>onChangeTable(value.replace(/[^0-9]/g, ''))}
           value={table}
-          placeholder="Number of tables (optional)"
+          placeholder={strings('Add Business4')}
           textAlign="center"
           placeholderTextColor="#635CC9"
           keyboardType="number-pad"
@@ -278,7 +279,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
       </TouchableOpacity>
       <Button
         onPress={() => { handleSubmit()}}
-        title="Update"
+        title={strings('Edit Business')}
         titleStyle={{ fontSize: 15 }}
         buttonStyle={styles.btn1}
         containerStyle={{ marginVertical: 15 }}

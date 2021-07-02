@@ -20,6 +20,8 @@ import {
 } from 'react-native-responsive-screen';
 import { connect } from 'react-redux';
 import {forgotPassword} from '../store/action'
+import { strings } from '../locales/i18n';
+
 const ForgotPassword = ({ navigation,forgotPassword }) => {
 
   const [email, onChangeEmail] = React.useState("");
@@ -71,7 +73,7 @@ const ForgotPassword = ({ navigation,forgotPassword }) => {
       </View>
 
       <View style={styles.heading}>
-        <Text style={styles.headingText}>Forgot Password ?</Text>
+        <Text style={styles.headingText}>{strings('Login Screen5')}</Text>
       </View>
       <View style={styles.inputFields}>
         <Text style={styles.emailText}>Enter your registered email address and we will reset your password</Text>
@@ -80,7 +82,7 @@ const ForgotPassword = ({ navigation,forgotPassword }) => {
           style={styles.input}
           onChangeText={onChangeEmail}
           value={email}
-          placeholder="Email Address"
+          placeholder={strings('Forgot Password Screen1')}
           textAlign="center"
           placeholderTextColor="#635CC9"
           keyboardType="email-address"
@@ -90,7 +92,7 @@ const ForgotPassword = ({ navigation,forgotPassword }) => {
 
         <Button
 
-          title="Send Reset Link"
+          title={strings('Forgot Password Screen2')}
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
           containerStyle={{ marginTop: 10 }}
@@ -129,7 +131,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Poppins Medium',
     fontSize: 30,
-    width: wp('60%'),
+    width: wp('100%'),
     lineHeight: 50 * 0.75,
     paddingTop: 40 - 35 * 0.75,
   },

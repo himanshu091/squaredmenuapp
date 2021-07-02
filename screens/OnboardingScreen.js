@@ -4,6 +4,7 @@ import { StyleSheet, Text, View,SafeAreaView, Image, TouchableOpacity } from 're
 import {widthPercentageToDP as wp, heightPercentageToDP as hp} from 'react-native-responsive-screen';
 import GestureRecognizer, {swipeDirections} from 'react-native-swipe-gestures';
 import { connect } from 'react-redux';
+import { strings } from '../locales/i18n';
 
 import i1 from '../assets/images/onboarding/part1.png'
 import i2 from '../assets/images/onboarding/part2.png'
@@ -16,23 +17,21 @@ const slideImages = [
 ]
 const data = [
     {
-        heading: "Create your business",
-        content: "Add your business name, details and the number of tables."
+        heading: strings('onboarding.part1.heading'),
+        content: strings('onboarding.part1.description')
     },
     {
-        heading: "Add sections and Items",
-        content: "Now add sections (e.g. Breakfast, Hot Drinks, Burgers, Pizzas, ...). Each section contains items (i.e. your food/drink or product). Each item can have a single price or different price (variant) (e.g. Coke: small, medium, large)."
+        heading: strings('onboarding.part2.heading'),
+        content: strings('onboarding.part2.description')
     },
     {
-        heading: "Show allergens and dietary restrictions",
-        content: "You can add up to 14 allergens, plus 4 dietary restrictions: gluten free, lactose free, vegan and vegetarian."
+        heading: strings('onboarding.part3.heading'),
+        content: strings('onboarding.part3.description')
     },
     {
-        heading: "Preview, style it and get your QR Code menu!",
-        content: "Preview your menu and choose between free style template. And get your free QR code and place it on the table."
+        heading: strings('onboarding.part4.heading'),
+        content: strings('onboarding.part4.description')
     },
-
-    
 ]
 const config = {
     velocityThreshold: 0.3,
@@ -71,11 +70,11 @@ const OnboardingScreen = ({navigation, beginAuth}) => {
                 </View>
                 <View style={styles.start_button_container}>
                     {slide === 3 && <TouchableOpacity style={styles.start_button} onPress={()=>{beginAuth()}}>
-                        <Text style={styles.text}>Let's Start</Text>
+                        <Text style={styles.text}>{strings('onboarding.finish')}</Text>
                     </TouchableOpacity>}
                 </View>
                 {slide !== 3 && <TouchableOpacity style={styles.skip_button} onPress={()=>{setslide(3)}}>
-                        <Text style={styles.skip}>Skip</Text>
+                        <Text style={styles.skip}>{strings('onboarding.skip')}</Text>
                     </TouchableOpacity>}
                 
             </View>

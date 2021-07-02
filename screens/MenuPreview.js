@@ -9,6 +9,7 @@ import RBSheet from "react-native-raw-bottom-sheet";
 import ThemeChooser from '../components/ThemeChooser'
 import { WebView } from 'react-native-webview';
 import { Platform } from 'react-native'
+import { strings } from '../locales/i18n'
 
 const MenuPreview = ({navigation, route}) => {
     const [loading, setloading] = useState(true)
@@ -18,7 +19,7 @@ const MenuPreview = ({navigation, route}) => {
         <SafeAreaView style={{backgroundColor:'#fff', flex:1, overflow:'hidden'}}>
             {!loading && <View style={styles.exitBtn}>
                 <TouchableOpacity style={styles.exbt} onPress={()=>{navigation.goBack()}}>
-                    <Text style={styles.btnText}>Exit Change Style</Text>
+                    <Text style={styles.btnText}>{strings('Business Home Screen3')}</Text>
                 </TouchableOpacity>
             </View>}
             {/* {loading && <View style={{flexDirection:'column', justifyContent:'center', height:'100%'}}>

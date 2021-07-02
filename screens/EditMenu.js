@@ -28,6 +28,7 @@ import { Platform } from 'react-native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
 import { SafeAreaView } from 'react-native';
+import { strings } from '../locales/i18n';
 
 const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => {
   const refRBSheet = useRef();
@@ -121,16 +122,16 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
   }
   const createTwoButtonAlert = () =>
         Alert.alert(
-        "Delete Menu",
-        "Are you sure to delete this item?",
+          `${strings('Delete Item1')}`,
+        `${strings('Delete Item2')}`,
         [
             {
-            text: "Yes",
+            text: `${strings('Delete Item3')}`,
             onPress: () => deleteThisMenu(),
             style: "destructive"
             },
             { 
-                text: "No", 
+                text: `${strings('Delete Item4')}`, 
                 onPress: () => console.log("No Pressed"),
                 style: "cancel"
              }
@@ -184,7 +185,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
             value={menu}
             width={wp(100)}
             multiline={true}
-            placeholder="Ex. Breakfast, Lunch, Dinner"
+            placeholder={strings('Add Menu Section1')}
             opacity={0.45}
             placeholderTextColor="#000000"
           />
@@ -201,7 +202,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
         /> */}
         <View style={styles.bottomSection}>
           <View style={styles.switch}>
-            <Text style={styles.activeText}>Active</Text>
+            <Text style={styles.activeText}>{strings('Add Menu Section2')}</Text>
             <ToggleSwitch
               isOn={isOn}
               onColor="#635CC9"
@@ -213,7 +214,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
           </View>
           <Button
             onPress={() => handleSubmit()}
-            title="Save"
+            title={strings('Add Menu Section3')}
             titleStyle={{fontSize: 15}}
             buttonStyle={styles.btn1}
             containerStyle={{marginTop: 20}}

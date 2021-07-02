@@ -18,6 +18,7 @@ import AddNewVarient from '../components/AddNewVarient';
 import EditVarient from '../components/EditVarient';
 import ImageChoice from '../components/ImageChoice';
 import NonVarientPrice from '../components/NonVarientPrice';
+import { strings } from '../locales/i18n';
 
 const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) => {
     const refRBSheet = useRef();
@@ -233,7 +234,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
                     style={styles.desc}
                     onChangeText={setDesc}
                     value={desc}
-                    placeholder="Enter Description"
+                    placeholder={strings('Item Details Screen1')}
                     // textAlign="center"
                     placeholderTextColor="#00000050"
                     numberOfLines={4}
@@ -242,7 +243,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             </View>
             <View style={{marginTop: 20}}></View>
             {has_variants===0 && <View style={styles.varientBody}>
-                            <Text style={styles.varientName}>Price</Text>
+                            <Text style={styles.varientName}>{strings('Item Details Screen2')}</Text>
                             <View style={styles.part2}>
                                 <Text style={styles.varientCost}>{route.params.currency.toUpperCase()} {parseFloat(price).toFixed(2).toString().replace('.',',')}</Text>
                                 <TouchableOpacity onPress={()=>{refRBSheet3.current.open();}}><Image style={styles.editIcon} source={require('../assets/images/icons/edit.png')}/></TouchableOpacity>
@@ -276,7 +277,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             <View style={styles.line}></View>
 
             <View style={styles.hide}>
-                <Text style={styles.compText}>Active</Text>
+                <Text style={styles.compText}>{strings('Item Details Screen22')}</Text>
                 <ToggleSwitch
                     isOn={isOn}
                     onColor="#635CC9"
@@ -300,7 +301,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
                         <View style={{ position: 'absolute', zindex: 1, bottom: 0 ,marginHorizontal:20}}>
                             <Button
                                 onPress={handleSubmit}
-                                title="Save"
+                                title={strings('Item Details Screen23')}
                                 titleStyle={styles.btnText}
                                 buttonStyle={styles.btn}
                                 loading={clicked}
@@ -310,7 +311,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
                         <View style={{justifyContent:'center', alignItems:'center', marginVertical:5}}>
                         <Button
                             onPress={handleSubmit}
-                            title="Save"
+                            title={strings('Item Details Screen23')}
                             titleStyle={styles.btnText}
                             buttonStyle={styles.btn}
                             loading={clicked}

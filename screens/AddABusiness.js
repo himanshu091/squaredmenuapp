@@ -31,6 +31,7 @@ import ImageChoice from '../components/ImageChoice';
 import {Picker} from '@react-native-picker/picker';
 import Geolocation from '@react-native-community/geolocation';
 import { ActivityIndicator } from 'react-native';
+import { strings } from '../locales/i18n';
 
 const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrency }) => {
   const refRBSheet = useRef();
@@ -231,7 +232,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
             style={styles.input}
             onChangeText={onChangeName}
             value={name}
-            placeholder="Business Name"
+            placeholder={strings('Add Business1')}
             textAlign="center"
             placeholderTextColor="#635CC9"
 
@@ -241,14 +242,14 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
               source={require("../assets/images/icons/location.png")}
               style={{height: 20, width: 20}}
             />
-            <Text style={styles.locationText}>Locate me</Text>
+            <Text style={styles.locationText}>{strings('Add Business2')}</Text>
             {locationLoading && <ActivityIndicator size="small" color="#635cc9" />}
           </TouchableOpacity>
           <TextInput
             style={styles.inputAddress}
             onChangeText={onChangeAddress}
             value={address}
-            placeholder="Address"
+            placeholder={strings('Add Business3')}
             textAlign="center"
             textAlignVertical="center"
             placeholderTextColor="#635CC9"
@@ -277,7 +278,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
             style={styles.input}
             onChangeText={value=>onChangeTable(value.replace(/[^0-9]/g, ''))}
             value={table}
-            placeholder="Number of tables (optional)"
+            placeholder={strings('Add Business4')}
             textAlign="center"
             placeholderTextColor="#635CC9"
             keyboardType="number-pad"
@@ -293,7 +294,7 @@ const AddABusiness = ({ navigation, user_id, token, addNewRestaurant, getCurrenc
         
         <Button
           onPress={() => { handleSubmit()}}
-          title="Add"
+          title={strings('Add Business8')}
           titleStyle={{ fontSize: 15 }}
           buttonStyle={styles.btn1}
           containerStyle={{ marginVertical: 15 }}

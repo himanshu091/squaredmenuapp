@@ -9,6 +9,7 @@ import { getMenu, updateMenuOrder } from '../store/action'
 import DraggableFlatList, {
     RenderItemParams,
 } from "react-native-draggable-flatlist";
+import { strings } from '../locales/i18n'
 
 const Menu = ({ navigation, user_id, token, getMenu, route, updateMenuOrder }) => {
     const [data, setdata] = useState(null)
@@ -76,7 +77,7 @@ const Menu = ({ navigation, user_id, token, getMenu, route, updateMenuOrder }) =
                                     <Image source={require('../assets/images/topbar/back.png')} style={{ height: 42, width: 42 }} />
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.previewBTN} onPress={() => navigation.navigate('MenuPreview', { themeURL: route.params.themeURL })}>
-                                    <Text style={styles.preview}>Change Style</Text>
+                                    <Text style={styles.preview}>{strings('Business Home Screen2')}</Text>
                                 </TouchableOpacity>
                                 <View style={styles.info}>
                                     <View style={styles.nameContainer}>

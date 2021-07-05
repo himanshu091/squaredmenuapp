@@ -1,17 +1,18 @@
 import React from 'react'
 import { Image, TouchableOpacity } from 'react-native'
 import { StyleSheet, Text, View } from 'react-native'
+import { strings } from '../locales/i18n'
 
 const ImageChoice = ({camerapick, imagepick}) => {
     return (
         <View style={styles.main}>
             <TouchableOpacity style={styles.main2} onPress={camerapick}>
                 <Image source={require('../assets/images/icons/camImg.png')} style={styles.img}/>
-                <Text style={styles.txt}>Open Camera</Text>
+                <Text style={styles.txt}>{strings('Add Business6')}</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.main2} onPress={imagepick}>
                 <Image source={require('../assets/images/icons/gallery.png')} style={styles.img}/>
-                <Text style={styles.txt}>Choose from Gallery</Text>
+                <Text style={styles.txt}>{strings('Add Business7')}</Text>
             </TouchableOpacity>
         </View>
     )

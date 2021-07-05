@@ -2,13 +2,13 @@ import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
 
-const AddNewButton = ({navigation, name}) => {
+const AddNewButton = ({navigation, name, title}) => {
     return (
         <TouchableOpacity style={styles.card} onPress={()=>navigation.navigate(name)}>
             <View style={styles.subBox}>
                 <Image source={require('../assets/images/icons/plus.png')} style={styles.plus} />
             </View>
-            <Text style={styles.new}>Add New Business</Text>
+            <Text style={styles.new}>{title}</Text>
         </TouchableOpacity>
     )
 }

@@ -25,6 +25,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
 import { SafeAreaView } from 'react-native';
+import { strings } from '../locales/i18n';
 
 const NewMenu = ({navigation, route, user_id, token, addMenu}) => {
   const refRBSheet = useRef();
@@ -147,7 +148,7 @@ const handleSubmit = async () => {
             value={menu}
             width={wp(100)}
             multiline={true}
-            placeholder="e.g. Breakfast, Lunch, Dinner"
+            placeholder={strings('Add Menu Section1')}
             opacity={0.45}
             placeholderTextColor="#000000"
           />
@@ -165,7 +166,7 @@ const handleSubmit = async () => {
         /> */}
         <View style={styles.bottomSection}>
           <View style={styles.switch}>
-            <Text style={styles.activeText}>Active</Text>
+            <Text style={styles.activeText}>{strings('Add Menu Section2')}</Text>
             <ToggleSwitch
               isOn={isOn}
               onColor="#635CC9"
@@ -177,7 +178,7 @@ const handleSubmit = async () => {
           </View>
           <Button
             onPress={handleSubmit}
-            title="Save"
+            title={strings('Add Menu Section3')}
             titleStyle={{fontSize: 15}}
             buttonStyle={styles.btn1}
             containerStyle={{marginTop: 20}}

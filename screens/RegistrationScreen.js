@@ -42,6 +42,7 @@ import appleAuth, {
   AppleAuthRequestOperation,
 } from '@invertase/react-native-apple-authentication'
 import { ServiceConstant } from './ServiceConstant'
+import { strings } from '../locales/i18n';
 
 GoogleSignin.configure({
   webClientId:"955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
@@ -357,7 +358,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
         </View>
 
         <View style={styles.heading}>
-          <Text style={styles.headingText}>Welcome to Squared Menu</Text>
+          <Text style={styles.headingText}>{strings('Sign Up Screen8')}</Text>
         </View>
     
     <View style={styles.inputFields}>
@@ -366,7 +367,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
         style={styles.input}
         onChangeText={onChangeName}
         value={name}
-        placeholder="Full Name"
+        placeholder={strings('Sign Up Screen1')}
         textAlign="center"
         placeholderTextColor="#635CC9"
         
@@ -375,7 +376,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
         style={styles.input}
         onChangeText={onChangeEmail}
         value={email}
-        placeholder="Email Address"
+        placeholder={strings('Sign Up Screen2')}
         textAlign="center"
         placeholderTextColor="#635CC9"
         autoCapitalize="none"
@@ -384,7 +385,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
         style={styles.input}
         onChangeText={onChangeNumber}
         value={number}
-        placeholder="Contact Number"
+        placeholder={strings('Sign Up Screen3')}
         textAlign="center"
         placeholderTextColor="#635CC9"
         keyboardType="phone-pad"
@@ -402,7 +403,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
           style={styles.input}
           onChangeText={onChangePassword}
           value={password}
-          placeholder="Password e.g. John@123"
+          placeholder={`${strings('Sign Up Screen4')} e.g. John@123`}
           textAlign="center"
           placeholderTextColor="#635CC9"
           secureTextEntry={showPassword}
@@ -420,7 +421,7 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
           style={styles.input}
           onChangeText={onChangePassword1}
           value={password1}
-          placeholder="Confirm Password"
+          placeholder={strings('Sign Up Screen5')}
           textAlign="center"
           placeholderTextColor="#635CC9"
           secureTextEntry={showPassword1}
@@ -437,14 +438,14 @@ const RegistrationScreen = ({navigation, register, signInAPIGoogle, signInAPIApp
         style={styles.input}
         onChangeText={onChangePromocode}
         value={promocode}
-        placeholder="Referral Code"
+        placeholder={strings('Sign Up Screen6')}
         textAlign="center"
         placeholderTextColor="#635CC9"
         
       />
      <Button
   
-        title="Register"
+        title={strings('Sign Up Screen7')}
         titleStyle={{ fontSize: 15 }}
         buttonStyle={styles.btn1}
         containerStyle={{marginTop:10}} 

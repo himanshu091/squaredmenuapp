@@ -11,6 +11,7 @@ import AddNewVarient from '../components/AddNewVarient'
 import DraggableFlatList, {
     RenderItemParams,
 } from "react-native-draggable-flatlist";
+import { strings } from '../locales/i18n'
 
 const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemOrder }) => {
     const refRBSheet = useRef();
@@ -110,7 +111,7 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
                                     <Image source={require('../assets/images/topbar/back.png')} style={{ height: 42, width: 42 }} />
                                 </TouchableOpacity>
                                 <TouchableOpacity style={styles.previewBTN} onPress={() => navigation.navigate('MenuPreview', { themeURL: route.params.themeURL })}>
-                                    <Text style={styles.preview}>Change Style</Text>
+                                    <Text style={styles.preview}>{strings('Add Item2')}</Text>
                                 </TouchableOpacity>
                                 <View style={styles.info}>
                                     <View style={styles.nameContainer}>
@@ -124,7 +125,7 @@ const MenuList = ({ navigation, user_id, token, getMenuItems, route, updateItemO
                     }}
                     ListFooterComponent={() => {
                         return <TouchableOpacity style={styles.newSection} onPress={() => refRBSheet.current.open()}>
-                            <Text style={styles.sectionName}>Add New Menu Item</Text>
+                            <Text style={styles.sectionName}>{strings('Add Item1')}</Text>
                             <Image style={styles.plus} source={require('../assets/images/icons/plus.png')} />
                         </TouchableOpacity>
                     }}

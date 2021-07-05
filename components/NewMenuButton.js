@@ -1,6 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { widthPercentageToDP } from 'react-native-responsive-screen'
+import { strings } from '../locales/i18n'
 
 const NewMenuButton = ({navigation, uri, title,action}) => {
     return (
@@ -8,7 +9,7 @@ const NewMenuButton = ({navigation, uri, title,action}) => {
                 <View style={styles.subBox}>
                     <Image source={require('../assets/images/icons/plus.png')} style={styles.plus} />
                 </View>
-                <Text style={styles.new}>Add Menu Section</Text>
+                <Text style={styles.new} numberOfLines={1}>{strings('Business Home Screen1')}</Text>
         </TouchableOpacity>
     )
 }
@@ -54,8 +55,9 @@ const styles = StyleSheet.create({
     new:{
         fontFamily: 'Poppins Medium',
         color: '#635CC9',
-        fontSize: 15,
-        marginLeft: 15
+        fontSize: 14,
+        marginLeft: 15,
+        marginRight: 15
     },
     plus:{
         height: 25,

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native'
 import { connect } from 'react-redux'
+import { strings } from '../locales/i18n'
 import { deleteItem } from '../store/action'
 
 const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, token, refresh, menu_id, currency, drag}) => {
@@ -17,16 +18,16 @@ const MenuSection = ({menuName, data, addNew, navigation, deleteItem, user_id, t
     }
     const createTwoButtonAlert = () =>
         Alert.alert(
-        "Delete Item",
-        "Are you sure to delete this item?",
+          `${strings('Delete Item1')}`,
+        `${strings('Delete Item2')}`,
         [
             {
-            text: "Yes",
+            text: `${strings('Delete Item3')}`,
             onPress: () => deleteThisItem(),
             style: "destructive"
             },
             { 
-                text: "No", 
+                text: `${strings('Delete Item4')}`, 
                 onPress: () => console.log("No Pressed"),
                 style: "cancel"
              }

@@ -8,6 +8,7 @@ import { generateQR, sendQrOverMail } from '../store/action'
 import { connect } from 'react-redux'
 import { Button } from 'react-native-elements'
 import Clipboard from '@react-native-clipboard/clipboard';
+import { strings } from '../locales/i18n'
 
 
 const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => {
@@ -59,7 +60,7 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
         const res = await sendQrOverMail(bodyFormData)
         setloading(false)
         if(res.data.status){
-            alert(res.data.message)
+            alert(strings('Alert1'))
         }else{
             alert(res.data.message)
         }
@@ -77,11 +78,11 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
                     </TouchableOpacity>
                     <View style={styles.logoContainer}><Image source={require('../assets/images/logoinapp/logoflat.png')} style={styles.logo} /></View>
                     <TouchableOpacity style={styles.previewBTN} onPress={() => Linking.openURL(route.params.url)}>
-                        <Text style={styles.preview}>Open Menu</Text>
+                        <Text style={styles.preview}>{strings('QR Code Screen2')}</Text>
                     </TouchableOpacity>
                     <View style={styles.info}>
                         <View style={styles.nameContainer}>
-                            <Text style={styles.name}>Your QR Code</Text>
+                            <Text style={styles.name}>{strings('QR Code Screen1')}</Text>
                         </View>
                     </View>
                 </View>
@@ -92,12 +93,12 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
                         
                     />
                 </TouchableOpacity>
-                <Text style={styles.hint}>Tap to view printable version</Text>
+                <Text style={styles.hint}>{strings('QR Code Screen3')}</Text>
                 <TouchableOpacity style={styles.btn1} onPress={browseQR}>
-                    <Text style={styles.btnText1}>Copy URL</Text>
+                    <Text style={styles.btnText1}>{strings('QR Code Screen4')}</Text>
                 </TouchableOpacity>
                 {!loading && <TouchableOpacity style={styles.btn2} onPress={getQRByMail}>
-                    <Text style={styles.btnText2}>Get the printable PDF</Text>
+                    <Text style={styles.btnText2}>{strings('QR Code Screen5')}</Text>
                 </TouchableOpacity>}
                 {loading && <TouchableOpacity style={styles.btn2} onPress={getQRByMail}>
                     <Text style={styles.btnText2}>Generating...</Text>

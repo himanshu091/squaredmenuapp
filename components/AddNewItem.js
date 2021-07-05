@@ -5,6 +5,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 import { addNewItem } from '../store/action';
+import { strings } from '../locales/i18n';
 
 const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClose, navigation, currency}) => {
     const [isOn, setisOn] = useState(false)
@@ -93,7 +94,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
     return (
         <View style={styles.box}>
             <View>
-                <Text style={styles.title}>Add Item</Text>
+                <Text style={styles.title}>{strings('Add Item4')}</Text>
                 <Text style={{textAlign:'center', color:'red', fontFamily: 'Poppins Bold'}}>{err}</Text>
 
                 {/* <View style={{flexDirection: 'row', justifyContent:'center'}}>
@@ -106,7 +107,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                         isOn={isOn}
                         onColor="#635CC9"
                         offColor="#635CC920"
-                        label="Has multiple prices"
+                        label={strings('Add Item5')}
                         labelStyle={{ color: "black", fontFamily: 'Poppins Medium', marginRight:30}}
                         size='medium'
                         onToggle={() => setisOn(!isOn)}
@@ -116,7 +117,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                     style={styles.input}
                     onChangeText={setName}
                     value={name}
-                    placeholder="Name"
+                    placeholder={strings('Add Item6')}
                     textAlign="center"
                     placeholderTextColor="#635CC9"
                     
@@ -126,7 +127,7 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
                     style={styles.input}
                     onChangeText={value=>checkPrice(value)}
                     value={price}
-                    placeholder="Price"
+                    placeholder={strings('Add Item7')}
                     textAlign="center"
                     placeholderTextColor="#635CC9"
                     keyboardType="decimal-pad"
@@ -135,11 +136,11 @@ const AddNewItem = ({closeFunc, user_id, token, menu_id, addNewItem, successClos
             </View>
             <View style={styles.allBtn}>
                 <TouchableOpacity style={styles.btn1} onPress={closeFunc}>
-                    <Text style={styles.btnText1}>Cancel</Text>
+                    <Text style={styles.btnText1}>{strings('Add Item9')}</Text>
                 </TouchableOpacity>
                 {!clicked && <TouchableOpacity style={styles.btn2} onPress={beginCreation}>
                     <Image source={require('../assets/images/icons/tick.png')} />
-                    <Text style={styles.btnText2}>Add</Text>
+                    <Text style={styles.btnText2}>{strings('Add Item8')}</Text>
                 </TouchableOpacity>}
                 {clicked && <Button
                     title="Add"

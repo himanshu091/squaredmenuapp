@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity, ScrollView, Linking } from 'react-native'
 import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsive-screen'
 import HeaderSVG from '../components/HeaderSVG'
@@ -12,15 +12,28 @@ import Clipboard from '@react-native-clipboard/clipboard';
 
 const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => {
     console.log("brandimage",route.params)
+    console.log('user_id', user_id)
+    console.log('token', token)
+    console.log('restaurant_id', route.params.restaurant_id)
     const [myQrLink, setMyQrLink] = useState(null)
     const [loading, setloading] = useState(false)
     const [copiedText, setCopiedText] = useState('');
+    
+    useEffect(() => {
+        getQR()
+    }, []);
+
     const getQR = async () => {
+       
         var bodyFormData = new FormData();
+        console.log('user_id', user_id)
+        console.log('token', token)
+        console.log('restaurant_id', route.params.restaurant_id)
         bodyFormData.append('user_id', user_id);
         bodyFormData.append('token', token);
         bodyFormData.append('restaurant_id', route.params.restaurant_id);
         const res = await generateQR(bodyFormData)
+        console.log('res qr', res.data)
         setMyQrLink(res.data.data)
     }
     const browseQR = async () => {
@@ -75,8 +88,8 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
                 <TouchableOpacity style={styles.QRcontainer} onPress={getQRByMail}>
                     <FastImage
                         style={styles.qrBox}
-                        source={require('../assets/images/icons/qr-code.png')}
-                        resizeMode={FastImage.resizeMode.contain}
+                        source={{uri : myQrLink ? myQrLink.qrcode_url : ''}}
+                        
                     />
                 </TouchableOpacity>
                 <Text style={styles.hint}>Tap to view printable version</Text>
@@ -186,15 +199,16 @@ const styles = StyleSheet.create({
     QRcontainer:{
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 15
+        marginTop: 15,
     },
     qrBox:{
-        width: widthPercentageToDP(65), 
-        height: widthPercentageToDP(65),
+        width: widthPercentageToDP(70), 
+        height: widthPercentageToDP(70),
         borderWidth: 3,
         borderColor: '#726AE9',
-        borderRadius: 37,
-        elevation: 3
+        borderRadius: 30,
+        elevation: 3, 
+       
     },
     hint: {
         fontFamily: 'Poppins Regular',

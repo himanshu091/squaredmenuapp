@@ -5,11 +5,14 @@ import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsi
 import { connect } from 'react-redux'
 import AddNewButton from '../components/AddNewButton'
 import RestaurantCard from '../components/RestaurantCard'
-import { getRestaurants, logout } from '../store/action'
+import { getRestaurants, logout, getNotifications } from '../store/action'
 import { useFocusEffect } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import NetInfo from "@react-native-community/netinfo";
-import Offline from '../components/Offline'
+import Offline from '../components/Offline';
+import axios from 'axios';
+import {ServiceConstant} from './ServiceConstant';
+
 
 const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants }) => {
     const [data, setdata] = useState(null)
@@ -35,6 +38,8 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
         const res = await getRestaurants(bodyFormData)
         setdata(res)
         console.log(res[0].logo)
+        getNotification()
+      
     }, [])
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', async () => {
@@ -44,10 +49,25 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
             bodyFormData.append('token', token);
             const res = await getRestaurants(bodyFormData)
             setdata(res)
+            getNotification()
         });
 
         return unsubscribe;
     }, [navigation]);
+
+    const getNotification = async () => {
+        var bodyFormData = new FormData();
+        bodyFormData.append('user_id', user_id);
+        bodyFormData.append('token', token);
+        const res = await axios({
+            method: 'post',
+            url: `https://admin.squaredmenu.com/api/restaurant/get-notifications`, data: bodyFormData,
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+        console.log("Home Notif response =>", res.data)
+        ServiceConstant.set_notf_count(res.data.unread_count)
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView>
@@ -56,9 +76,9 @@ const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants 
                         {data && data.length > 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:data[0].logo})}>
                             <View>
                                 <Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} />
-                                {/* <View style={{position:'absolute', height: 20, width: 20, backgroundColor:'#FF3A44', top: -4, right: 1, flexDirection:'row', alignItems:'center', justifyContent:'center', borderRadius: 50}}>
-                                    <Text style={{color:'#fff', fontFamily: 'Poppins Medium', fontSize:13, textAlign:'center', marginBottom:1}}>2</Text>
-                                </View> */}
+                                <View style={{position:'absolute', height: 20, width: 20, backgroundColor:'#FF3A44', top: -4, right: 1, flexDirection:'row', alignItems:'center', justifyContent:'center', borderRadius: 50}}>
+                                    <Text style={{color:'#fff', fontFamily: 'Poppins Medium', fontSize:13, textAlign:'center', marginBottom:1}}>{ServiceConstant.get_notf_count()}</Text>
+                                </View>
                             </View>
                             </TouchableOpacity>}
                         {data && data.length === 0 && <TouchableOpacity style={styles.bell} onPress={()=>navigation.navigate('Notification',{brandImage:null})}><Image style={{height:53, width: 53}} source={require('../assets/images/icons/bell.png')} /></TouchableOpacity>}
@@ -109,7 +129,7 @@ const mapStataeToProps = state => {
         image: state.auth.image
     }
 }
-export default connect(mapStataeToProps, { logout, getRestaurants, getRestaurants })(HomeScreen)
+export default connect(mapStataeToProps, { logout, getRestaurants, getRestaurants, getNotifications })(HomeScreen)
 
 const styles = StyleSheet.create({
     banner: {

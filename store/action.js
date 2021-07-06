@@ -7,6 +7,14 @@ import axios from 'axios'
 // Production API URL
 const API_URL = "https://admin.squaredmenu.com/api/restaurant";
 
+export const CHANGE_LANGUAGE = 'CHANGE_LANGUAGE';
+export const changeMyLanguage = (language) => async (dispatch, getState) => {
+    dispatch({
+        type: CHANGE_LANGUAGE,
+        payload: language
+    })
+}
+
 export const SIGNIN= 'SIGNIN';
 export const login = (data) => async (dispatch, getState) => {
     try{

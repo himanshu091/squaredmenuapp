@@ -29,7 +29,7 @@ import LocationTest from './components/LocationTest';
 import NewMenu from './screens/NewMenu';
 import NewDish from './screens/NewDish';
 import EditABusiness from './screens/EditABusiness';
-
+import I18n from 'react-native-i18n';
 
 function OnboardingStack(){
     const Onboard = createStackNavigator()
@@ -97,7 +97,8 @@ function MainStack(){
     )
 }
 
-function Navigator({token, new_device, plan_expired, plan_id}) {
+function Navigator({token, new_device, plan_expired, plan_id, lang}) {
+    I18n.locale = lang
     console.log("New Device:", new_device, "Token:",token)
     if(new_device){
         return <OnboardingScreen/>
@@ -120,7 +121,8 @@ const mapStateToProps = state => {
         token: state.auth.token,
         new_device: state.auth.new_device,
         plan_expired: state.auth.plan_expired,
-        plan_id: state.auth.plan_id
+        plan_id: state.auth.plan_id,
+        lang: state.auth.language
     }
 }
 export default connect(mapStateToProps, null)(Navigator)

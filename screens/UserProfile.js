@@ -29,9 +29,12 @@ import { Linking } from 'react-native';
 import RBSheet from "react-native-raw-bottom-sheet";
 import ImageChoice from '../components/ImageChoice';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import LanguageChoice from '../components/LanguageChoice';
+import { strings } from '../locales/i18n';
 
-const UserProfile = ({ navigation, name, email, logout, user_id,updatePic, token, profileInfo, updateProfilePic, user_type }) => {
+const UserProfile = ({ navigation, name, email, logout, user_id,updatePic, token, profileInfo, updateProfilePic, user_type, lang }) => {
   const refRBSheet = useRef();
+  const languageRBSheet = useRef();
   const [data, setdata] = useState(null)
   useEffect(async () => {
     var bodyFormData = new FormData();
@@ -232,6 +235,34 @@ const refresh = async () => {
             </View>
             {/* {data && <Text style={styles.smallBottomText} onPress={() => Linking.openURL(data.web_url)}>{data.web_url}</Text>} */}
           </View>
+          <View style={styles.featuresView}>
+            <View   >
+              <View>
+                <Text style={styles.smallHeadingText}>{strings('Change Language')}</Text>
+                
+              </View>
+              {lang === 'en' && <TouchableOpacity style={styles.languageBTN} onPress={()=>languageRBSheet.current.open()}>
+                <Image style={styles.languageIMG} source={require('../assets/images/flags/united-kingdom.png')}/>
+                <Text style={styles.languageTXT}>English</Text>
+              </TouchableOpacity>}
+              {lang === 'de' && <TouchableOpacity style={styles.languageBTN} onPress={()=>languageRBSheet.current.open()}>
+                <Image style={styles.languageIMG} source={require('../assets/images/flags/germany.png')}/>
+                <Text style={styles.languageTXT}>German</Text>
+              </TouchableOpacity>}
+              {lang === 'es' && <TouchableOpacity style={styles.languageBTN} onPress={()=>languageRBSheet.current.open()}>
+                <Image style={styles.languageIMG} source={require('../assets/images/flags/spain.png')}/>
+                <Text style={styles.languageTXT}>Spanish</Text>
+              </TouchableOpacity>}
+              {lang === 'fr' && <TouchableOpacity style={styles.languageBTN} onPress={()=>languageRBSheet.current.open()}>
+                <Image style={styles.languageIMG} source={require('../assets/images/flags/france.png')}/>
+                <Text style={styles.languageTXT}>French</Text>
+              </TouchableOpacity>}
+              {lang === 'it' && <TouchableOpacity style={styles.languageBTN} onPress={()=>languageRBSheet.current.open()}>
+                <Image style={styles.languageIMG} source={require('../assets/images/flags/italy.png')}/>
+                <Text style={styles.languageTXT}>Italian</Text>
+              </TouchableOpacity>}
+            </View>
+            </View>
           
         </View>
           <View style={styles.bottomBtn}>
@@ -270,6 +301,26 @@ const refresh = async () => {
       >
         <ImageChoice imagepick={()=>imagepick()} camerapick={()=>camerapick()}/>
     </RBSheet>
+      <RBSheet
+        ref={languageRBSheet}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
+        customStyles={{
+          container: {
+            ...styles.container,
+            height: 500,
+            backgroundColor: '#fff'
+          },
+          wrapper: {
+            backgroundColor: "#00000028"
+          },
+          draggableIcon: {
+            backgroundColor: "#f4f4f4"
+          }
+        }}
+      >
+        <LanguageChoice closeFunc={()=>languageRBSheet.current.close()}/>
+    </RBSheet>
     </SafeAreaView>
   );
 };
@@ -279,7 +330,8 @@ const mapStateToProps = state => {
     email: state.auth.email,
     user_id: state.auth.user_id,
     token: state.auth.token,
-    user_type: state.auth.user_type
+    user_type: state.auth.user_type,
+    lang: state.auth.language
   }
 }
 export default connect(mapStateToProps, { logout, profileInfo, updateProfilePic, updatePic })(UserProfile);
@@ -479,6 +531,21 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins Medium',
     fontSize: 16,
     color: '#635CC9'
+  },
+  languageBTN:{
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  languageIMG:{
+    height: 24,
+    width: 24,
+    marginRight: 7
+  },
+  languageTXT:{
+    color: '#000',
+    opacity: 0.3,
+    fontSize: 15,
+    fontFamily: 'Poppins Medium'
   }
 
 });

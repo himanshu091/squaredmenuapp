@@ -5,11 +5,15 @@ import { heightPercentageToDP, widthPercentageToDP } from 'react-native-responsi
 import { connect } from 'react-redux'
 import AddNewButton from '../components/AddNewButton'
 import RestaurantCard from '../components/RestaurantCard'
-import { getRestaurants, logout } from '../store/action'
+import { getRestaurants, logout, getNotifications } from '../store/action'
 import { useFocusEffect } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import NetInfo from "@react-native-community/netinfo";
-import Offline from '../components/Offline'
+import Offline from '../components/Offline';
+import axios from 'axios';
+import {ServiceConstant} from './ServiceConstant';
+
+//import Offline from '../components/Offline'
 import { strings } from '../locales/i18n'
 
 const HomeScreen = ({ navigation, logout, user_id, token, image, getRestaurants }) => {

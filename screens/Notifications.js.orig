@@ -165,13 +165,10 @@ const Notifications = ({ navigation, logout, user_id, token, image, getNotificat
 
                         </>
                     })}
-<<<<<<< HEAD
                     {data && data.length === 0 && <View style={{ flexDirection: 'column', justifyContent: 'center', height: 300 }}>
                         <Text style={{ textAlign: 'center', fontFamily: 'Poppins Medium', color: '#00000050' }}>No Notifications Available</Text>
-=======
                     {data && data.length === 0 && <View style={{flexDirection: 'column', justifyContent:'center', height: 300}}>
                         <Text style={{textAlign: 'center', fontFamily: 'Poppins Medium', color: '#00000050'}}>{strings('Notificaitions2')}</Text>
->>>>>>> 8fc5dc3b4dd59f65a316a7f18cb8e150a522ae01
                     </View>}
                 </View>
                 <View style={{ marginBottom: 50 }}></View>

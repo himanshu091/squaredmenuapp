@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import React, { useEffect, useState, useCallback } from 'react'
 import { ScrollView } from 'react-native'
 import { StyleSheet, Text, View, SafeAreaView, Image, ImageBackground, TouchableOpacity } from 'react-native'
@@ -11,7 +10,9 @@ import { useFocusEffect } from '@react-navigation/native';
 import FastImage from 'react-native-fast-image'
 import moment from 'moment'
 import HeaderSVG from '../components/HeaderSVG'
-import { strings } from '../locales/i18n'
+import axios from 'axios';
+import { ServiceConstant } from './ServiceConstant';
+
 
 const Notifications = ({ navigation, logout, user_id, token, image, getNotifications, route }) => {
 
@@ -134,7 +135,7 @@ const Notifications = ({ navigation, logout, user_id, token, image, getNotificat
                         </TouchableOpacity>
                         <View style={styles.info}>
                             <View style={styles.nameContainer}>
-                                <Text style={styles.name}>{strings('Notifications1')}</Text>
+                                <Text style={styles.name}>Notifications</Text>
                             </View>
                             <TouchableOpacity onPress={() => deleteAllNotifications()}>
                                 <Image style={styles.profilePic} source={require('../assets/images/icons/notif.png')} />
@@ -163,8 +164,8 @@ const Notifications = ({ navigation, logout, user_id, token, image, getNotificat
 
                         </>
                     })}
-                    {data && data.length === 0 && <View style={{flexDirection: 'column', justifyContent:'center', height: 300}}>
-                        <Text style={{textAlign: 'center', fontFamily: 'Poppins Medium', color: '#00000050'}}>{strings('Notificaitions2')}</Text>
+                    {data && data.length === 0 && <View style={{ flexDirection: 'column', justifyContent: 'center', height: 300 }}>
+                        <Text style={{ textAlign: 'center', fontFamily: 'Poppins Medium', color: '#00000050' }}>No Notifications Available</Text>
                     </View>}
                 </View>
                 <View style={{ marginBottom: 50 }}></View>

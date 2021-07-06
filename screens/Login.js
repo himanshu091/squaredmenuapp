@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -28,7 +28,7 @@ import { Platform } from 'react-native';
 import { GoogleSignin } from '@react-native-community/google-signin';
 import Google from '../assets/images/icons/googleicon.svg'
 import Facebook from '../assets/images/icons/facebookicon.svg'
-
+import RBSheet from "react-native-raw-bottom-sheet";
 import {
   LoginButton,
   AccessToken,
@@ -47,13 +47,17 @@ import appleAuth, {
 } from '@invertase/react-native-apple-authentication';
 import { ServiceConstant } from './ServiceConstant'
 import { strings } from '../locales/i18n';
+import LanguageChoice from '../components/LanguageChoice';
+import I18n from 'react-native-i18n';
 
 GoogleSignin.configure({
   webClientId: "955337206220-m86af8e49jddlbqllk3bo3gm2aqegho8.apps.googleusercontent.com",
 
   // offlineAccess: true
 })
-const Login = ({ navigation, login, signInAPIGoogle, signInAPIApple }) => {
+const Login = ({ navigation, login, signInAPIGoogle, signInAPIApple, lang }) => {
+  I18n.locale = lang
+  const languageRBSheet = useRef()
   const [iceye, setIceye] = React.useState("visibility-off");
   const [showPassword, setShowPassword] = React.useState(true);
   const [email, onChangeEmail] = React.useState("");
@@ -433,12 +437,40 @@ const Login = ({ navigation, login, signInAPIGoogle, signInAPIApple }) => {
         </View>
 
         {!online && <Offline />}
+
+        <TouchableOpacity style={styles.langPicker} onPress={()=>languageRBSheet.current.open()}>
+          <Image source={require('../assets/images/flags/globe.png')} style={{height:39, width: 39}}/>
+        </TouchableOpacity>
       </ScrollView>
+      <RBSheet
+        ref={languageRBSheet}
+        closeOnDragDown={true}
+        closeOnPressMask={true}
+        customStyles={{
+          container: {
+            ...styles.container,
+            height: 500,
+            backgroundColor: '#fff'
+          },
+          wrapper: {
+            backgroundColor: "#00000028"
+          },
+          draggableIcon: {
+            backgroundColor: "#f4f4f4"
+          }
+        }}
+      >
+        <LanguageChoice closeFunc={()=>languageRBSheet.current.close()}/>
+    </RBSheet>
     </SafeAreaView>
   );
 };
-
-export default connect(null, { login, signInAPIGoogle, signInAPIApple })(Login);
+const mapStateToProps = state => {
+  return{
+    lang: state.auth.language
+  }
+}
+export default connect(mapStateToProps, { login, signInAPIGoogle, signInAPIApple })(Login);
 
 const styles = StyleSheet.create({
   banner: {
@@ -562,5 +594,10 @@ const styles = StyleSheet.create({
   appleButton: {
     height: 26,
     width: 26,
+  },
+  langPicker:{
+    position: 'absolute',
+    top: 32,
+    right: 19
   }
 });

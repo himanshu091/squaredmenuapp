@@ -7,10 +7,16 @@ const initialState = {
     plan_id: null,
     image: "",
     new_device: true,
-    user_type: "normal"
+    user_type: "normal",
+    language: 'en',
 }
 export default (state = initialState, action) => {
     switch (action.type) {
+        case 'CHANGE_LANGUAGE':
+            return {
+                ...state,
+                language: action.payload
+            }
         case 'SIGNIN':
             return {
                 ...state,

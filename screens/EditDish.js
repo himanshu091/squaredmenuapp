@@ -242,7 +242,7 @@ const EditDish = ({ navigation, route, getItemDetail, user_id, token, addNewItem
                             <Image source={require('../assets/images/topbar/back.png')} style={{ height: 42, width: 42 }} />
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.previewBTN} onPress={() => refRBSheet.current.open()}>
-                            <Text style={styles.preview}>Change Image</Text>
+                            <Text style={styles.preview}>{strings("Change Image")}</Text>
                         </TouchableOpacity>
 
                     </View>
@@ -302,7 +302,7 @@ const EditDish = ({ navigation, route, getItemDetail, user_id, token, addNewItem
                     })}
 
                     {has_variants === 1 && <TouchableOpacity style={styles.newVarientBtn} onPress={() => { refRBSheet1.current.open() }}>
-                        <Text style={styles.newVarient}>Add New Variant</Text>
+                        <Text style={styles.newVarient}>{strings("Add New Variant")}</Text>
                         <Text style={styles.newVarient}>+</Text>
                     </TouchableOpacity>}
                     {has_variants === 1 && <View style={styles.line}></View>}

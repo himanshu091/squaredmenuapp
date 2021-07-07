@@ -101,7 +101,7 @@ const QR = ({navigation, generateQR, sendQrOverMail, token, user_id, route}) => 
                     <Text style={styles.btnText2}>{strings('QR Code Screen5')}</Text>
                 </TouchableOpacity>}
                 {loading && <TouchableOpacity style={styles.btn2} onPress={getQRByMail}>
-                    <Text style={styles.btnText2}>Generating...</Text>
+                    <Text style={styles.btnText2}>{strings("Generating")}</Text>
                 </TouchableOpacity>}
                 <View style={{marginBottom:97}}></View>
             </ScrollView>

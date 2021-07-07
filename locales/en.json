@@ -106,5 +106,23 @@
     "QR Code Screen5": "Get the printable PDF",
     "Alert1": "Great! We have sent the QR code on email",
     "Change Language": "Change Language",
-    "Choose a Language": "Choose a Language"
+    "Choose a Language": "Choose a Language",
+    "Move the map for location":"Move the map for location",
+    "PICK THIS LOCATION":"PICK THIS LOCATION",
+    "LOCATION":"LOCATION",
+    "Edit Business Heading": "Edit Business",
+    "Change Image":"Change Image",
+    "ex small medium large":"ex. small, medium, large",
+    "Cancel": "Cancel",
+    "Add":"Add",
+    "Add New Variant":"Add New Variant",
+    "Add Variant" :"Add Variant",
+    "Edit Variant":"Edit Variant",
+    "Generating":"Generating",
+    "Share the app with your friends":"Share the app with your friends",
+    "Open Menu":"Open Menu",
+    "Logout":"Logout"
+
+
+    
 }

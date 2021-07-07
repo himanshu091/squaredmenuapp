@@ -203,7 +203,7 @@ const EditABusiness = ({ navigation, user_id, token, addNewRestaurant, route , g
       </View>
 
       <View style={styles.heading}>
-        <Text style={styles.headingText}>Edit Business</Text>
+        <Text style={styles.headingText}>{strings('Edit Business Heading')}</Text>
       </View>
 
       <View style={styles.inputFields}>

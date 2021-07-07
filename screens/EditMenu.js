@@ -162,7 +162,7 @@ const EditMenu = ({navigation, route, user_id, token, editMenu, deleteMenu}) => 
 
         </TouchableOpacity>
         <TouchableOpacity style={styles.previewBTN} onPress={() => refRBSheet.current.open()}>
-                                    <Text style={styles.preview}>Change Image</Text>
+                                    <Text style={styles.preview}>{strings("Change Image")}</Text>
                                 </TouchableOpacity>
 
         {/* <TouchableOpacity

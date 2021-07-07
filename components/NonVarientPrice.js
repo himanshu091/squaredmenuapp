@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Switch, TouchableOpacity, Image } from 'react-native'
 import ToggleSwitch from 'toggle-switch-react-native'
+import { strings } from '../locales/i18n'
 const NonVarientPrice = ({closeFunc, O_price, editPrice}) => {
     const [price, setprice] = useState(O_price)
     const [err, seterr] = useState("")
@@ -48,11 +49,11 @@ const NonVarientPrice = ({closeFunc, O_price, editPrice}) => {
             </View>
             <View style={styles.allBtn}>
                 <TouchableOpacity style={styles.btn1} onPress={closeFunc}>
-                    <Text style={styles.btnText1}>Cancel</Text>
+                    <Text style={styles.btnText1}>{strings("Cancel")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn2} onPress={handleSubmit}>
                     <Image source={require('../assets/images/icons/tick.png')} />
-                    <Text style={styles.btnText2}>Update</Text>
+                    <Text style={styles.btnText2}>{strings("Edit Business")}</Text>
                 </TouchableOpacity>
             </View>
         </View>

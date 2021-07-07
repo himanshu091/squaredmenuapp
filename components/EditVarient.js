@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, TextInput, Switch, TouchableOpacity, Image } from 'react-native'
+import { strings } from '../locales/i18n'
 
 const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) => {
     console.log("DEfault Price =", defaultprice)
@@ -34,7 +35,7 @@ const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) =
     return (
         <View style={styles.box}>
             <View>
-                <Text style={styles.title}>Edit Variant</Text>
+                <Text style={styles.title}>{styles("Edit Variant")}</Text>
                 <Text style={{textAlign: 'center', fontFamily: 'Poppins Medium', color: 'red'}}>{err}</Text>
                 <TextInput
                     style={styles.input}
@@ -60,11 +61,11 @@ const EditVarient = ({defaultname, defaultprice, pos, closeFunc, editVariant}) =
             </View>
             <View style={styles.allBtn}>
                 <TouchableOpacity style={styles.btn1} onPress={closeFunc}>
-                    <Text style={styles.btnText1}>Cancel</Text>
+                    <Text style={styles.btnText1}>{strings("Cancel")}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.btn2} onPress={handleSubmit}>
                     <Image source={require('../assets/images/icons/tick.png')} />
-                    <Text style={styles.btnText2}>Update</Text>
+                    <Text style={styles.btnText2}>{strings("Edit Business")}</Text>
                 </TouchableOpacity>
             </View>
         </View>

@@ -3,6 +3,7 @@ import { Text, View, ActivityIndicator, Button,StyleSheet,Dimensions, TouchableO
 import MapView from "react-native-maps";
 import Geolocation from '@react-native-community/geolocation';
 import { Image } from 'react-native';
+import { strings } from '../locales/i18n';
 
 
 // Disable yellow box warning messages
@@ -121,13 +122,13 @@ export default class LocationTest extends Component {
 
           </View>
           <View style={styles.deatilSection}>
-            <Text style={{ fontSize: 16, fontWeight: "bold", fontFamily: "Poppins Medium", marginBottom: 20 }}>Move map for location</Text>
-            <Text style={{ fontSize: 10, color: "#999" }}>LOCATION</Text>
+            <Text style={{ fontSize: 16, fontWeight: "bold", fontFamily: "Poppins Medium", marginBottom: 20 }}>{strings("Move the map for location") }</Text>
+            <Text style={{ fontSize: 10, color: "#999" }}>{strings("LOCATION")}</Text>
             <Text numberOfLines={2} style={{ fontSize: 14, paddingVertical: 10, borderBottomColor: "silver", borderBottomWidth: 0.5 }}>
               {!this.state.regionChangeProgress ? this.state.userLocation : "Identifying Location..."}</Text>
             <View style={styles.btnContainer}>
               <Button
-                title="PICK THIS LOCATION"
+                title={strings("PICK THIS LOCATION")}
                 disabled={this.state.regionChangeProgress}
                 onPress={this.onLocationSelect}
                 color='#635CC9'

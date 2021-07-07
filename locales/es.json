@@ -106,5 +106,21 @@
     "QR Code Screen5": "Obtenga el PDF imprimible",
     "Alert1": "Genial! Hemos enviado el código QR por correo electrónico.",
     "Change Language": "Cambiar idioma",
-    "Choose a Language": "Elija un idioma"
+    "Choose a Language": "Elija un idioma",
+    "Move the map for location":"Mover el mapa para ubicarlo",
+    "PICK THIS LOCATION":"ELIJA ESTA UBICACIÓN",
+    "LOCATION":"LOCALIZACIÓN",
+    "Edit Business Heading": "Editar negocio",
+    "Change Image":"Cambiar imagen",
+    "ex small medium large":"ex. pequeño mediano Grande" ,
+    "Cancel":"Cancelar",
+    "Add":"Agregar",
+    "Add New Variant":"Agregar nueva variante",
+    "Add Variant":"Agregar variante",
+    "Edit Variant":"Editar variante",
+    "Generating":"Generando ...",
+    "Share the app with your friends":"Comparte la aplicación con tus amigos",
+    "Open Menu":"Menú abierto",
+    "Logout":"Cerrar sesión"
+
 }

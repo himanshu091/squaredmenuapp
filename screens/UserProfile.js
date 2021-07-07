@@ -222,7 +222,7 @@ const refresh = async () => {
           <View style={styles.featuresView}>
             <View style={styles.share}>
               <View>
-                <Text style={styles.smallHeadingText}>Share the app with your friends 💜</Text>
+                <Text style={styles.smallHeadingText}>{strings("Share the app with your friends")} 💜</Text>
                 {/* <Text style={styles.smallShareText}>Share this code and get 1 month free premium features</Text> */}
                 
               </View>
@@ -268,7 +268,7 @@ const refresh = async () => {
           <View style={styles.bottomBtn}>
             {data && <TouchableOpacity onPress={() => data.has_restaurant===1?Linking.openURL(data.web_url):alert("Please create a restaurant.")} style={styles.shareBtn}>
               <Image style={styles.styleImg} source={require('../assets/images/icons/share2.png')}/>
-              <Text style={styles.styleTxt}>Open Menu</Text>
+              <Text style={styles.styleTxt}>{strings("Open Menu")}</Text>
             </TouchableOpacity>}
             {!data && <TouchableOpacity onPress={() => {}} style={styles.shareBtn}>
               <Image style={styles.styleImg} source={require('../assets/images/icons/share2.png')}/>
@@ -276,7 +276,7 @@ const refresh = async () => {
             </TouchableOpacity>}
             <TouchableOpacity onPress={logout} style={styles.shareBtn}>
               <Icon style={styles.styleImg} name="logout" size={25} color="#635CC9"/>
-              <Text style={styles.styleTxt}>Logout</Text>
+              <Text style={styles.styleTxt}>{strings("Logout")}</Text>
             </TouchableOpacity>
             {/* <TouchableOpacity onPress={} style={styles.logoutbtn}><Text style={styles.logoutTxt} >Logout</Text></TouchableOpacity> */}
           </View>

@@ -261,7 +261,7 @@ const NewDish = ({navigation,route,getItemTypes, user_id, token, addNewItem}) =>
             })}
             
             {has_variants===1 && <TouchableOpacity style={styles.newVarientBtn} onPress={()=>{refRBSheet1.current.open()}}>
-                <Text style={styles.newVarient}>Add New Variant</Text>
+                <Text style={styles.newVarient}>{strings("Add New Variant")}</Text>
                 <Text style={styles.newVarient}>+</Text>
             </TouchableOpacity>}
             {has_variants===1 && <View style={styles.line}></View>}

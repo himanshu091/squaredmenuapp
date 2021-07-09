@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
         flexBasis: widthPercentageToDP(60),
     },
     name: {
-        lineHeight: 38,
+        lineHeight: 45,
         fontFamily: 'Poppins Medium',
         fontStyle: 'normal',
         fontSize: 37,

@@ -661,6 +661,7 @@
 				DEVELOPMENT_TEAM = XYD672K3R6;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = squaredmenu/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -693,6 +694,7 @@
 				CURRENT_PROJECT_VERSION = 1.6;
 				DEVELOPMENT_TEAM = XYD672K3R6;
 				INFOPLIST_FILE = squaredmenu/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
